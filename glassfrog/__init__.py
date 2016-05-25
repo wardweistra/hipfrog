@@ -42,7 +42,7 @@ def capabilities():
     return json.jsonify(capabilities_dict)
 
 
-@app.route('/installed')
+@app.route('/installed', methods=['GET', 'POST'])
 def installed():
     return ('', 200)
 
