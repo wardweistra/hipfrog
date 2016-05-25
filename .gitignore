@@ -1,0 +1,8 @@
+# Virtual environment
+venv*
+
+*.pyc
+dist/
+*.egg*
+build/
+.idea/
