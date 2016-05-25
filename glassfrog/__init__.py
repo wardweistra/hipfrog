@@ -44,6 +44,8 @@ def capabilities():
 
 @app.route('/installed', methods=['GET', 'POST'])
 def installed():
+    if request.method == 'POST':
+        print request
     return ('', 200)
 
 if __name__ == '__main__':
