@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, json
+from flask import Flask, json, request
 app = Flask(__name__)
 
 myserver = "http://5.157.82.115:45277"
@@ -44,8 +44,7 @@ def capabilities():
 
 @app.route('/installed', methods=['GET', 'POST'])
 def installed():
-    if request.method == 'POST':
-        print request
+    print(request)
     return ('', 200)
 
 if __name__ == '__main__':
