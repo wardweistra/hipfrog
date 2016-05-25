@@ -26,11 +26,13 @@ def try_port(port_number=None):
     else:
         port = port_number
 
+    host = 'localhost'
     if not args.debug:
+        host = '0.0.0.0'
         running_on = 'http://localhost:{}'.format(port)
         webbrowser.open(running_on, new=0, autoraise=True)
 
-    app.run(debug=args.debug, port=port)
+    app.run(debug=args.debug, port=port, host=host)
 
 
 try:
