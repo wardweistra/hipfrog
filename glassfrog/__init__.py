@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from flask import Flask, json, request
+import requests
 app = Flask(__name__)
 
 myserver = "http://5.157.82.115:45277"
