@@ -53,8 +53,11 @@ def capabilities():
 
 @app.route('/installed', methods=['GET', 'POST'])
 def installed():
-    print(request.get_data())
+    installdata = json.loads(request.get_data())
     # b'{"oauthId": "f3100c47-9936-40e8-a8aa-798b1e8da8f0", "capabilitiesUrl": "https://api.hipchat.com/v2/capabilities", "roomId": 2589171, "groupId": 46617, "oauthSecret": "Jgtf1Baj5KrSpXHZ7LbB0H3Krwr6cotrkQgkJm9C"}'
+    print installdata
+    capabilitiesdata = requests.get(installdata['capabilitiesUrl'])
+    print capabilitiesdata
     return ('', 200)
 
 
@@ -68,7 +71,6 @@ def test():
         "notify": false,
         "message_format": "text"
         }
-
     # return ('', 200)
     return json.jsonify(message_dict)
 
