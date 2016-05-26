@@ -77,7 +77,7 @@ def installed():
     app.token = tokendata['access_token']
     apiUrl = capabilitiesdata['capabilities']['hipchatApiProvider']['url']
     messageUrl = apiUrl+'/room/{}/notification'.format(room_id)
-    token_header = {"Authorization":"Bearer "+app.token}
+    token_header = {"Authorization": "Bearer "+app.token}
     data = {
         "color": "green",
         "message": "Installed (boris)",
@@ -94,14 +94,12 @@ def installed():
 def test():
     print(request.get_data())
     # b'{"event": "room_message", "item": {"message": {"date": "2016-05-26T15:32:43.700609+00:00", "from": {"id": 351107, "links": {"self": "https://api.hipchat.com/v2/user/351107"}, "mention_name": "WardWeistra", "name": "Ward Weistra", "version": "00000000"}, "id": "715f101f-1baa-4a5c-958a-9c6c7efaaa1f", "mentions": [], "message": "/test", "type": "message"}, "room": {"id": 2589171, "is_archived": false, "links": {"members": "https://api.hipchat.com/v2/room/2589171/member", "participants": "https://api.hipchat.com/v2/room/2589171/participant", "self": "https://api.hipchat.com/v2/room/2589171", "webhooks": "https://api.hipchat.com/v2/room/2589171/webhook"}, "name": "The Hyve - Holacracy", "privacy": "private", "version": "0XLIKALD"}}, "oauth_client_id": "ed8bb9f0-02d8-426b-9226-0d50fdcd47ea", "webhook_id": 4965523}'
-    token_header = {"Authorization":"Bearer "+app.token}
     message_dict = {
         "color": "green",
         "message": "Test! (natasha)",
         "notify": False,
         "message_format": "text"
         }
-    # return ('', 200)
     return json.jsonify(message_dict)
 
 
