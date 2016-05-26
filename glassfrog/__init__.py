@@ -45,8 +45,8 @@ def capabilities():
                         "name": "Test webhook",
                         "authentication": "jwt"
                     }
-                }
-            ]
+                ]
+            }
         }
     return json.jsonify(capabilities_dict)
 
@@ -59,7 +59,7 @@ def installed():
 
 
 @app.route('/test', methods=['GET', 'POST'])
-def installed():
+def test():
     print(request.get_data())
     # b'{"oauthId": "f3100c47-9936-40e8-a8aa-798b1e8da8f0", "capabilitiesUrl": "https://api.hipchat.com/v2/capabilities", "roomId": 2589171, "groupId": 46617, "oauthSecret": "Jgtf1Baj5KrSpXHZ7LbB0H3Krwr6cotrkQgkJm9C"}'
     return ('', 200)
