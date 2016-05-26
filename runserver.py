@@ -5,6 +5,7 @@ import webbrowser
 
 parser = argparse.ArgumentParser(description='Launch the Glassfrog Hipchat bot')
 parser.add_argument('--debug', action="store_true", default=False, help="Run in debug mode")
+parser.add_argument('--host', default='localhost', help="Set host to listen on.")
 parser.add_argument('--port', type=int, default=45277,
                     help="Set port to try to listen to. Tries 45277 by default. If busy "
                          "the OS is asked what port to use.")
@@ -26,13 +27,7 @@ def try_port(port_number=None):
     else:
         port = port_number
 
-    host = 'localhost'
-    if not args.debug:
-        host = '0.0.0.0'
-        running_on = 'http://localhost:{}'.format(port)
-        webbrowser.open(running_on, new=0, autoraise=True)
-
-    app.run(debug=args.debug, port=port, host=host)
+    app.run(debug=args.debug, port=port, host=args.host)
 
 
 try:
