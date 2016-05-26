@@ -36,8 +36,17 @@ def capabilities():
                     "allowGlobal": False,
                     "allowRoom": True,
                     "callbackUrl": myserver+"/installed"
+                },
+                "webhook": [
+                    {
+                        "event": "room_message",
+                        "pattern": "^\\/test$",
+                        "url": myserver+"/test",
+                        "name": "Test webhook",
+                        "authentication": "jwt"
+                    }
                 }
-            }
+            ]
         }
     return json.jsonify(capabilities_dict)
 
@@ -45,7 +54,16 @@ def capabilities():
 @app.route('/installed', methods=['GET', 'POST'])
 def installed():
     print(request.get_data())
+    # b'{"oauthId": "f3100c47-9936-40e8-a8aa-798b1e8da8f0", "capabilitiesUrl": "https://api.hipchat.com/v2/capabilities", "roomId": 2589171, "groupId": 46617, "oauthSecret": "Jgtf1Baj5KrSpXHZ7LbB0H3Krwr6cotrkQgkJm9C"}'
     return ('', 200)
+
+
+@app.route('/test', methods=['GET', 'POST'])
+def installed():
+    print(request.get_data())
+    # b'{"oauthId": "f3100c47-9936-40e8-a8aa-798b1e8da8f0", "capabilitiesUrl": "https://api.hipchat.com/v2/capabilities", "roomId": 2589171, "groupId": 46617, "oauthSecret": "Jgtf1Baj5KrSpXHZ7LbB0H3Krwr6cotrkQgkJm9C"}'
+    return ('', 200)
+
 
 if __name__ == '__main__':
     app.run()
