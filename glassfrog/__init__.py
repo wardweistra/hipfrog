@@ -55,9 +55,9 @@ def capabilities():
 def installed():
     installdata = json.loads(request.get_data())
     # b'{"oauthId": "f3100c47-9936-40e8-a8aa-798b1e8da8f0", "capabilitiesUrl": "https://api.hipchat.com/v2/capabilities", "roomId": 2589171, "groupId": 46617, "oauthSecret": "Jgtf1Baj5KrSpXHZ7LbB0H3Krwr6cotrkQgkJm9C"}'
-    print installdata
+    print(installdata)
     capabilitiesdata = requests.get(installdata['capabilitiesUrl'])
-    print capabilitiesdata
+    print(capabilitiesdata)
     return ('', 200)
 
 
