@@ -63,33 +63,10 @@ def test():
     print(request.get_data())
     # b'{"event": "room_message", "item": {"message": {"date": "2016-05-26T15:32:43.700609+00:00", "from": {"id": 351107, "links": {"self": "https://api.hipchat.com/v2/user/351107"}, "mention_name": "WardWeistra", "name": "Ward Weistra", "version": "00000000"}, "id": "715f101f-1baa-4a5c-958a-9c6c7efaaa1f", "mentions": [], "message": "/test", "type": "message"}, "room": {"id": 2589171, "is_archived": false, "links": {"members": "https://api.hipchat.com/v2/room/2589171/member", "participants": "https://api.hipchat.com/v2/room/2589171/participant", "self": "https://api.hipchat.com/v2/room/2589171", "webhooks": "https://api.hipchat.com/v2/room/2589171/webhook"}, "name": "The Hyve - Holacracy", "privacy": "private", "version": "0XLIKALD"}}, "oauth_client_id": "ed8bb9f0-02d8-426b-9226-0d50fdcd47ea", "webhook_id": 4965523}'
     message_dict = {
-          "style": "application",
-          "url": "https://www.application.com/an-object",
-          "format": "medium",
-          "id": "db797a68-0aff-4ae8-83fc-2e72dbb1a707",
-          "title": "Sample application card",
-          "description": "This is a description of an application object.\nwith 2 lines of text",
-          "icon": {
-            "url": "http://bit.ly/1S9Z5dF"
-          },
-          "attributes": [
-            {
-              "label": "attribute1",
-              "value": {
-                "label": "value1"
-              }
-            },
-            {
-              "label": "attribute2",
-              "value": {
-                "icon": {
-                  "url": "http://bit.ly/1S9Z5dF"
-                },
-                "label": "value2",
-                "style": "lozenge-complete"
-              }
-            }
-          ]
+        "color": "green",
+        "message": "My first notification (yey)",
+        "notify": false,
+        "message_format": "text"
         }
 
     # return ('', 200)
