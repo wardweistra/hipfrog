@@ -105,9 +105,9 @@ def getcircles():
     headers = {'X-Auth-Token': app.glassfrogtoken}
     circlesUrl = 'https://glassfrog.holacracy.org/api/v3/circles'
     circlesresponse = requests.post(circlesUrl, headers=headers)
-    print circlesresponse
+    print(circlesresponse)
     circles = circlesresponse.text
-    print circles
+    print(circles)
     return circles
 
 
