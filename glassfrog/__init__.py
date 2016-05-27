@@ -47,7 +47,10 @@ def capabilities():
                         "name": "Test webhook",
                         "authentication": "jwt"
                     }
-                ]
+                ],
+               "configurable": {
+  		"url": myserver+"/configure.html"
+	       }
             }
         }
     return json.jsonify(capabilities_dict)
@@ -102,6 +105,10 @@ def test():
         }
     return json.jsonify(message_dict)
 
+
+@app.route('/configure.html')
+def configure():
+    return 'Configure this!'
 
 if __name__ == '__main__':
     app.run()
