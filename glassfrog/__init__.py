@@ -11,7 +11,7 @@ app.glassfrogtoken = ''
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return '<a target="_blank" href="https://www.hipchat.com/addons/install?url='+myserver+"/capabilities.json"+'">Install Glassfrog HipChat Integration</a>'
 
 
 @app.route('/capabilities.json')
