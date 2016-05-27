@@ -60,38 +60,39 @@ def capabilities():
 
 @app.route('/installed', methods=['GET', 'POST'])
 def installed():
-    installdata = json.loads(request.get_data())
-    # b'{"oauthId": "f3100c47-9936-40e8-a8aa-798b1e8da8f0", "capabilitiesUrl": "https://api.hipchat.com/v2/capabilities", "roomId": 2589171, "groupId": 46617, "oauthSecret": "Jgtf1Baj5KrSpXHZ7LbB0H3Krwr6cotrkQgkJm9C"}'
-    print(installdata)
-    CLIENT_ID = installdata['oauthId']
-    CLIENT_SECRET = installdata['oauthSecret']
-    room_id = installdata['roomId']
+    if request.method == 'POST':
+        installdata = json.loads(request.get_data())
+        # b'{"oauthId": "f3100c47-9936-40e8-a8aa-798b1e8da8f0", "capabilitiesUrl": "https://api.hipchat.com/v2/capabilities", "roomId": 2589171, "groupId": 46617, "oauthSecret": "Jgtf1Baj5KrSpXHZ7LbB0H3Krwr6cotrkQgkJm9C"}'
+        print(installdata)
+        CLIENT_ID = installdata['oauthId']
+        CLIENT_SECRET = installdata['oauthSecret']
+        room_id = installdata['roomId']
 
-    capabilitiesdata = json.loads(requests.get(installdata['capabilitiesUrl']).text)
-    tokenUrl = capabilitiesdata['capabilities']['oauth2Provider']['tokenUrl']
-    print(tokenUrl)
+        capabilitiesdata = json.loads(requests.get(installdata['capabilitiesUrl']).text)
+        tokenUrl = capabilitiesdata['capabilities']['oauth2Provider']['tokenUrl']
+        print(tokenUrl)
 
-    client_auth = requests.auth.HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
-    post_data = {"grant_type": "client_credentials",
-                 "scope": "send_notification"}
-    tokendata = json.loads(requests.post(tokenUrl,
-                                         auth=client_auth,
-                                         data=post_data).text)
-    print(tokendata)
-    # {'expires_in': 431999999, 'group_name': 'tranSMART', 'access_token': 'qjVBeM4ckCYzrc2prQMwuRZnHB3xUVsBwZISP0TF', 'group_id': 46617, 'scope': 'send_notification', 'token_type': 'bearer'}
-    app.token = tokendata['access_token']
-    apiUrl = capabilitiesdata['capabilities']['hipchatApiProvider']['url']
-    messageUrl = apiUrl+'/room/{}/notification'.format(room_id)
-    token_header = {"Authorization": "Bearer "+app.token}
-    data = {
-        "color": "green",
-        "message": "Installed (boris)",
-        "notify": False,
-        "message_format": "text"
-        }
-    messageresponse = requests.post(messageUrl,
-                                    headers=token_header,
-                                    data=data)
+        client_auth = requests.auth.HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
+        post_data = {"grant_type": "client_credentials",
+                     "scope": "send_notification"}
+        tokendata = json.loads(requests.post(tokenUrl,
+                                             auth=client_auth,
+                                             data=post_data).text)
+        print(tokendata)
+        # {'expires_in': 431999999, 'group_name': 'tranSMART', 'access_token': 'qjVBeM4ckCYzrc2prQMwuRZnHB3xUVsBwZISP0TF', 'group_id': 46617, 'scope': 'send_notification', 'token_type': 'bearer'}
+        app.token = tokendata['access_token']
+        apiUrl = capabilitiesdata['capabilities']['hipchatApiProvider']['url']
+        messageUrl = apiUrl+'/room/{}/notification'.format(room_id)
+        token_header = {"Authorization": "Bearer "+app.token}
+        data = {
+            "color": "green",
+            "message": "Installed (boris)",
+            "notify": False,
+            "message_format": "text"
+            }
+        messageresponse = requests.post(messageUrl,
+                                        headers=token_header,
+                                        data=data)
     return ('', 200)
 
 
