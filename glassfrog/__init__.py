@@ -104,7 +104,10 @@ def uninstall(oauthId):
 def getcircles():
     headers = {'X-Auth-Token': app.glassfrogtoken}
     circlesUrl = 'https://glassfrog.holacracy.org/api/v3/circles'
-    circles = json.loads(requests.post(circlesUrl, headers=headers).text)
+    circlesresponse = requests.post(circlesUrl, headers=headers)
+    print circlesresponse
+    circles = circlesresponse.text
+    print circles
     return circles
 
 
