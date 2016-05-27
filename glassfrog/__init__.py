@@ -109,7 +109,7 @@ def test():
 
 @app.route('/configure.html')
 def configure():
-    return render_template('studiesoverview.html')
+    return render_template('configure.html')
 
 if __name__ == '__main__':
     app.run()
