@@ -95,16 +95,32 @@ def installed():
     return ('', 200)
 
 
+def getcircles():
+    headers = {'X-Auth-Token': app.glassfrogtoken}
+    circlesUrl = 'https://glassfrog.holacracy.org/api/v3/circles'
+    circles = json.loads(requests.post(circlesUrl, headers=headers).text)
+    return circles
+
+
 @app.route('/test', methods=['GET', 'POST'])
 def test():
     print(request.get_data())
     # b'{"event": "room_message", "item": {"message": {"date": "2016-05-26T15:32:43.700609+00:00", "from": {"id": 351107, "links": {"self": "https://api.hipchat.com/v2/user/351107"}, "mention_name": "WardWeistra", "name": "Ward Weistra", "version": "00000000"}, "id": "715f101f-1baa-4a5c-958a-9c6c7efaaa1f", "mentions": [], "message": "/test", "type": "message"}, "room": {"id": 2589171, "is_archived": false, "links": {"members": "https://api.hipchat.com/v2/room/2589171/member", "participants": "https://api.hipchat.com/v2/room/2589171/participant", "self": "https://api.hipchat.com/v2/room/2589171", "webhooks": "https://api.hipchat.com/v2/room/2589171/webhook"}, "name": "The Hyve - Holacracy", "privacy": "private", "version": "0XLIKALD"}}, "oauth_client_id": "ed8bb9f0-02d8-426b-9226-0d50fdcd47ea", "webhook_id": 4965523}'
-    message_dict = {
-        "color": "green",
-        "message": "Test! (natasha)",
-        "notify": False,
-        "message_format": "text"
-        }
+    if app.glassfrogtoken != '':
+        message = getcircles()
+        message_dict = {
+            "color": "green",
+            "message": message,
+            "notify": False,
+            "message_format": "text"
+            }
+    else:
+        message_dict = {
+            "color": "red",
+            "message": "Please set the Glassfrog token first in the plugin configuration",
+            "notify": False,
+            "message_format": "text"
+            }
     return json.jsonify(message_dict)
 
 
