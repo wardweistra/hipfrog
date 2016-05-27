@@ -95,6 +95,10 @@ def installed():
     return ('', 200)
 
 
+@app.route('/installed/<oauthId>/', methods=['GET', 'POST'])
+def uninstall(oauthId):
+    return ('', 200)
+
 def getcircles():
     headers = {'X-Auth-Token': app.glassfrogtoken}
     circlesUrl = 'https://glassfrog.holacracy.org/api/v3/circles'
