@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 myserver = "http://5.157.82.115:45277"
 app.token = ''
+app.glassfrogtoken = ''
 
 
 @app.route('/')
@@ -107,9 +108,11 @@ def test():
     return json.jsonify(message_dict)
 
 
-@app.route('/configure.html')
+@app.route('/configure.html', methods=['GET', 'POST'])
 def configure():
-    return render_template('configure.html')
+    if request.method == 'POST':
+        app.glassfrogtoken = request.form['glassfrogtoken']
+    return render_template('configure.html', glassfrogtoken=app.glassfrogtoken)
 
 if __name__ == '__main__':
     app.run()
