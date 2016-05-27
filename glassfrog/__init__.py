@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-from flask import Flask, json, request
+from flask import Flask, json, request, render_template
 import requests
+
 app = Flask(__name__)
 
 myserver = "http://5.157.82.115:45277"
@@ -48,9 +49,9 @@ def capabilities():
                         "authentication": "jwt"
                     }
                 ],
-               "configurable": {
-  		"url": myserver+"/configure.html"
-	       }
+                "configurable": {
+                    "url": myserver+"/configure.html"
+                }
             }
         }
     return json.jsonify(capabilities_dict)
@@ -108,7 +109,7 @@ def test():
 
 @app.route('/configure.html')
 def configure():
-    return 'Configure this!'
+    return render_template('studiesoverview.html')
 
 if __name__ == '__main__':
     app.run()
