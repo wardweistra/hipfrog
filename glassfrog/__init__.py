@@ -86,7 +86,7 @@ def installed():
         token_header = {"Authorization": "Bearer "+app.token}
         data = {
             "color": "green",
-            "message": "Installed (boris)",
+            "message": "Installed successfully. Type /hola to get started.",
             "notify": False,
             "message_format": "text"
             }
