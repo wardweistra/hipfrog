@@ -98,7 +98,14 @@ def installed():
 
 @app.route('/installed/<oauthId>/', methods=['GET', 'POST'])
 def uninstall(oauthId):
-    return ('', 200)
+    message_dict = {
+        "color": "green",
+        "message": "Deinstalled successfully. Goodbye!",
+        "notify": False,
+        "message_format": "text"
+        }
+    return json.jsonify(message_dict)
+    # return ('', 200)
 
 
 def getcircles():
