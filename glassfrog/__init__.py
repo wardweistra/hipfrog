@@ -150,8 +150,8 @@ def configure():
         else:
             flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'
             if 'message' in message:
-                flashmessage = flashmessage + ' Message given: '+message
-    flash(flashmessage)
+                flashmessage = flashmessage + ' Message given: \''+message['message']+'\'.'
+        flash(flashmessage)
     return render_template('configure.html', glassfrogtoken=app.glassfrogtoken)
 
 if __name__ == '__main__':
