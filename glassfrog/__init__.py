@@ -136,7 +136,7 @@ def helpInformation():
 
 @app.route('/hola', methods=['GET', 'POST'])
 def hola():
-    requestdata = request.get_data()
+    requestdata = json.loads(request.get_data())
     print(requestdata)
     callingMessage = requestdata['item']['message']['message'].split()
     if app.glassfrogToken == '':
