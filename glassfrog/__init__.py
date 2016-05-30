@@ -145,9 +145,9 @@ def hola():
 @app.route('/configure.html', methods=['GET', 'POST'])
 def configure():
     if request.method == 'POST':
+        app.glassfrogToken = request.form['glassfrogtoken']
         code, message = getCircles()
         if code == 200:
-            app.glassfrogToken = request.form['glassfrogtoken']
             flashmessage = 'Valid Glassfrog Token stored'
             sendMessage('green', "Configured successfully. Type /hola to get started!")
         else:
