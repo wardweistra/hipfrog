@@ -33,7 +33,9 @@ def capabilities():
                 "hipchatApiConsumer": {
                     "fromName": "Glassfrog Hipchat Bot",
                     "scopes": [
-                        "send_notification"
+                        "send_notification",
+                        "view_room",
+                        "view_group"
                     ]
                 },
                 "installable": {
@@ -102,14 +104,16 @@ def uninstall(oauthId):
     return ('', 200)
 
 
-def getcircles():
+def getCircles():
     headers = {'X-Auth-Token': app.glassfrogtoken}
     circlesUrl = 'https://glassfrog.holacracy.org/api/v3/circles'
     circlesresponse = requests.get(circlesUrl, headers=headers)
     print(circlesresponse)
-    circles = circlesresponse.text
+    code = circlesresponse.status_code
+    print(code)
+    circles = json.loads(circlesresponse.text)
     print(circles)
-    return circles
+    return code, circles
 
 
 @app.route('/hola', methods=['GET', 'POST'])
@@ -117,7 +121,7 @@ def hola():
     print(request.get_data())
     # b'{"event": "room_message", "item": {"message": {"date": "2016-05-26T15:32:43.700609+00:00", "from": {"id": 351107, "links": {"self": "https://api.hipchat.com/v2/user/351107"}, "mention_name": "WardWeistra", "name": "Ward Weistra", "version": "00000000"}, "id": "715f101f-1baa-4a5c-958a-9c6c7efaaa1f", "mentions": [], "message": "/test", "type": "message"}, "room": {"id": 2589171, "is_archived": false, "links": {"members": "https://api.hipchat.com/v2/room/2589171/member", "participants": "https://api.hipchat.com/v2/room/2589171/participant", "self": "https://api.hipchat.com/v2/room/2589171", "webhooks": "https://api.hipchat.com/v2/room/2589171/webhook"}, "name": "The Hyve - Holacracy", "privacy": "private", "version": "0XLIKALD"}}, "oauth_client_id": "ed8bb9f0-02d8-426b-9226-0d50fdcd47ea", "webhook_id": 4965523}'
     if app.glassfrogtoken != '':
-        message = getcircles()
+        code, message = getCircles()
         print(message)
         message_dict = {
             "color": "green",
@@ -139,6 +143,11 @@ def hola():
 def configure():
     if request.method == 'POST':
         app.glassfrogtoken = request.form['glassfrogtoken']
+        code, message = getCircles()
+        if code != 200:
+            print('ERROR'+str(code))
+        if 'message' in message:
+            print(message['message'])
     return render_template('configure.html', glassfrogtoken=app.glassfrogtoken)
 
 if __name__ == '__main__':
