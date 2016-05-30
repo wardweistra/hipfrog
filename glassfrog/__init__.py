@@ -107,7 +107,7 @@ def getCircles():
     if code == 200:
         message = 'The following circles are in your organization:'
         for circle in responsebody['circles']:
-            message = message + '\n- ' + circle['name'] + '(' + str(circle['id']) + ')'
+            message = message + '\n- ' + circle['name'] + ' (' + str(circle['id']) + ')'
     else:
         message = responsebody['message']
 
