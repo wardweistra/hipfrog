@@ -102,9 +102,17 @@ def getCircles():
     print(circlesresponse)
     code = circlesresponse.status_code
     print(code)
-    circles = json.loads(circlesresponse.text)
+
+    responsebody = json.loads(circlesresponse.text)
+    if code == 200:
+        message = 'The following circles are in your organization:'
+        for circle in circles['circles']:
+            message = message + '\n- ' + circle['name'] + '(' + circle['id'] + ')'
+    else:
+        message = responsebody['message']
+
     print(circles)
-    return code, circles
+    return code, message
 
 
 def createMessageDict(color, message):
@@ -147,7 +155,7 @@ def hola():
             code, message = getCircles()
             message_dict = createMessageDict('green', message)
         else:
-            message = "Sorry, the feature "+callingMessage[1]+" does not exist (yet)."
+            message = "Sorry, the feature \'"+callingMessage[1]+"\' does not exist (yet). Type /hola to get help information."
             message_dict = createMessageDict('red', message)
     return json.jsonify(message_dict)
 
@@ -162,8 +170,7 @@ def configure():
             sendMessage('green', "Configured successfully. Type /hola to get started!")
         else:
             flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'
-            if 'message' in message:
-                flashmessage = flashmessage + ' Message given: \''+message['message']+'\'.'
+            flashmessage = flashmessage + ' Message given: \''+message+'\'.'
         flash(flashmessage)
     return render_template('configure.html', glassfrogtoken=app.glassfrogToken)
 
