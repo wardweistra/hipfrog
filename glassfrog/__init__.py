@@ -3,6 +3,7 @@ from flask import Flask, json, request, render_template, flash
 import requests
 
 app = Flask(__name__)
+app.secret_key = 'not_so_secret'
 
 myserver = "http://5.157.82.115:45277"
 app.token = ''
