@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, json, request, render_template
+from flask import Flask, json, request, render_template, flash
 import requests
 
 app = Flask(__name__)
@@ -144,10 +144,13 @@ def configure():
     if request.method == 'POST':
         app.glassfrogtoken = request.form['glassfrogtoken']
         code, message = getCircles()
-        if code != 200:
-            print('ERROR'+str(code))
-        if 'message' in message:
-            print(message['message'])
+        if code == 200:
+            flashmessage = 'Valid Glassfrog Token stored'
+        else:
+            flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'
+            if 'message' in message:
+                flashmessage = flashmessage + ' Message given: '+message
+    flash(flashmessage)
     return render_template('configure.html', glassfrogtoken=app.glassfrogtoken)
 
 if __name__ == '__main__':

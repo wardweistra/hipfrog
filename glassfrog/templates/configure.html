@@ -4,6 +4,15 @@
     <link rel="stylesheet" href="https://www.hipchat.com/atlassian-connect/all.css">
   </head>
   <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="feedback">
+            {% for message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
     <form id="tokenform" method="post">
       <label for="glassfrogtoken">Glassfrog Token</label>
 			<input type="text" name="glassfrogtoken" value="{{glassfrogtoken}}" />
