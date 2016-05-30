@@ -106,12 +106,12 @@ def getCircles():
     responsebody = json.loads(circlesresponse.text)
     if code == 200:
         message = 'The following circles are in your organization:'
-        for circle in circles['circles']:
-            message = message + '\n- ' + circle['name'] + '(' + circle['id'] + ')'
+        for circle in responsebody['circles']:
+            message = message + '\n- ' + circle['name'] + '(' + str(circle['id']) + ')'
     else:
         message = responsebody['message']
 
-    print(circles)
+    print(message)
     return code, message
 
 
