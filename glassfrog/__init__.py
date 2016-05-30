@@ -126,15 +126,32 @@ def sendMessage(color, message):
                                     data=data)
 
 
+def helpInformation():
+    message = """Hola to you too!  Thanks for using the Glassfrog Hipchat Bot.\n
+    Please use one of the following commands to find out more:\n
+    - /hola circles -- List the circles in your organization
+    """
+    return message
+
+
 @app.route('/hola', methods=['GET', 'POST'])
 def hola():
-    print(request.get_data())
-    if app.glassfrogToken != '':
-        code, message = getCircles()
-        print(message)
+    requestdata = request.get_data()
+    print(requestdata)
+    callingMessage = requestdata['item']['message']['message'].split()
+    if app.glassfrogToken == '':
+        message = "Please set the Glassfrog token first in the plugin configuration"
+        message_dict = createMessageDict('red', message)
+    elif len(callingMessage) == 1:
+        message = helpInformation()
         message_dict = createMessageDict('green', message)
-    else:
-        message_dict = createMessageDict('red', "Please set the Glassfrog token first in the plugin configuration")
+    elif len(callingMessage) > 1:
+        if callingMessage[1] == 'circles' or callingMessage[1] == 'circle':
+            code, message = getCircles()
+            message_dict = createMessageDict('green', message)
+        else:
+            message = "Sorry, the feature "+callingMessage[1]+" does not exist (yet)."
+            message_dict = createMessageDict('red', message)
     return json.jsonify(message_dict)
 
 
