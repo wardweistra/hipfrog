@@ -95,15 +95,19 @@ def uninstall(oauthId):
     return ('', 200)
 
 
-def getCircles():
+def glassfrogApiCall(apiEndpoint):
     headers = {'X-Auth-Token': app.glassfrogToken}
-    circlesUrl = 'https://glassfrog.holacracy.org/api/v3/circles'
-    circlesresponse = requests.get(circlesUrl, headers=headers)
-    print(circlesresponse)
-    code = circlesresponse.status_code
-    print(code)
+    apiUrl = 'https://glassfrog.holacracy.org/api/v3/'+apiEndpoint
+    apiResponse = requests.get(apiUrl, headers=headers)
+    code = apiResponse.status_code
+    responsebody = json.loads(apiResponse.text)
+    return code, responsebody
 
-    responsebody = json.loads(circlesresponse.text)
+
+def getCircles():
+    apiEndpoint = 'circles'
+    code, responsebody = glassfrogApiCall(apiEndpoint)
+
     if code == 200:
         message = 'The following circles are in your organization:'
         for circle in responsebody['circles']:
@@ -111,8 +115,19 @@ def getCircles():
     else:
         message = responsebody['message']
 
-    print(message)
     return code, message
+
+
+def getCircleMembers(circleId):
+    apiEndpoint = 'circles/{}/people'.format(circleId)
+    code, responsebody = glassfrogApiCall(apiEndpoint)
+
+    if code == 200:
+        message = 'The following people are in your circle:'
+        for person in responsebody['people']:
+            message = message + '\n- ' + person['name'] + ' (' + str(person['id']) + ')'
+    else:
+        message = responsebody['message']
 
 
 def createMessageDict(color, message):
@@ -139,6 +154,11 @@ def helpInformation():
     return message
 
 
+def helpInformationCircle(circleId):
+    message = "Please use one of the following commands on your circle to find out more:\n- /hola circle "+circleId+" members -- List the members of this circle"
+    return message
+
+
 @app.route('/hola', methods=['GET', 'POST'])
 def hola():
     requestdata = json.loads(request.get_data())
@@ -152,10 +172,28 @@ def hola():
         message_dict = createMessageDict('green', message)
     elif len(callingMessage) > 1:
         if callingMessage[1] == 'circles' or callingMessage[1] == 'circle':
-            code, message = getCircles()
-            message_dict = createMessageDict('green', message)
+            if len(callingMessage) > 2:
+                circleId = callingMessage[2]
+                if len(callingMessage) > 3:
+                    if callingMessage[3] == 'people' or callingMessage[3] == 'members':
+                        # /hola [circles, circle] [circleId] [people, members]
+                        # TODO return list of members of circle
+                        pass
+                    else:
+                        # /hola [circles, circle] [circleId] something
+                        message = "Sorry, the feature \'"+callingMessage[3]+"\' does not exist (yet). Type /hola circle "+circleID+" to get a list of the available commands."
+                        message_dict = createMessageDict('red', message)
+                else:
+                    # /hola [circles, circle] [circleId]
+                    message = helpInformationCircle(circleId)
+                    message_dict = createMessageDict('green', message)
+            else:
+                # /hola [circles, circle]
+                code, message = getCircles()
+                message_dict = createMessageDict('green', message)
         else:
-            message = "Sorry, the feature \'"+callingMessage[1]+"\' does not exist (yet). Type /hola to get help information."
+            # /hola something
+            message = "Sorry, the feature \'"+callingMessage[1]+"\' does not exist (yet). Type /hola to get a list of the available commands."
             message_dict = createMessageDict('red', message)
     return json.jsonify(message_dict)
 
