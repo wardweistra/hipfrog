@@ -177,7 +177,8 @@ def hola():
                 if len(callingMessage) > 3:
                     if callingMessage[3] == 'people' or callingMessage[3] == 'members':
                         # /hola [circles, circle] [circleId] [people, members]
-                        # TODO return list of members of circle
+                        code, message = getCircleMembers()
+                        message_dict = createMessageDict('green', message)
                         pass
                     else:
                         # /hola [circles, circle] [circleId] something
