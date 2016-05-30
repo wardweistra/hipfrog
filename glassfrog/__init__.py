@@ -127,10 +127,7 @@ def sendMessage(color, message):
 
 
 def helpInformation():
-    message = """Hola to you too!  Thanks for using the Glassfrog Hipchat Bot.\n
-    Please use one of the following commands to find out more:\n
-    - /hola circles -- List the circles in your organization
-    """
+    message = "Hola to you too!  Thanks for using the Glassfrog Hipchat Bot.\nPlease use one of the following commands to find out more:\n- /hola circles -- List the circles in your organization"
     return message
 
 
@@ -140,7 +137,7 @@ def hola():
     print(requestdata)
     callingMessage = requestdata['item']['message']['message'].split()
     if app.glassfrogToken == '':
-        message = "Please set the Glassfrog token first in the plugin configuration"
+        message = "Please set the Glassfrog Token first in the plugin configuration"
         message_dict = createMessageDict('red', message)
     elif len(callingMessage) == 1:
         message = helpInformation()
