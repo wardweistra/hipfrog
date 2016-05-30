@@ -179,7 +179,6 @@ def hola():
                         # /hola [circles, circle] [circleId] [people, members]
                         code, message = getCircleMembers()
                         message_dict = createMessageDict('green', message)
-                        pass
                     else:
                         # /hola [circles, circle] [circleId] something
                         message = "Sorry, the feature \'"+callingMessage[3]+"\' does not exist (yet). Type /hola circle "+circleID+" to get a list of the available commands."
