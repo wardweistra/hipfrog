@@ -162,7 +162,6 @@ def helpInformationCircle(circleId):
 @app.route('/hola', methods=['GET', 'POST'])
 def hola():
     requestdata = json.loads(request.get_data())
-    print(requestdata)
     callingMessage = requestdata['item']['message']['message'].split()
     if app.glassfrogToken == '':
         message = "Please set the Glassfrog Token first in the plugin configuration"
@@ -181,7 +180,7 @@ def hola():
                         message_dict = createMessageDict('green', message)
                     else:
                         # /hola [circles, circle] [circleId] something
-                        message = "Sorry, the feature \'"+callingMessage[3]+"\' does not exist (yet). Type /hola circle "+circleID+" to get a list of the available commands."
+                        message = "Sorry, the feature \'"+callingMessage[3]+"\' does not exist (yet). Type /hola circle "+circleId+" to get a list of the available commands."
                         message_dict = createMessageDict('red', message)
                 else:
                     # /hola [circles, circle] [circleId]
