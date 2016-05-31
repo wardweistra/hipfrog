@@ -111,7 +111,7 @@ def getCircles():
     if code == 200:
         message = 'The following circles are in your organization:'
         for circle in responsebody['circles']:
-            message = message + '\n- ' + circle['name'] + ' (' + str(circle['id']) + ')'
+            message = message + '\n- ' + circle['name'] + ' (/hola circle ' + str(circle['id']) + ')'
     else:
         message = responsebody['message']
 
@@ -129,6 +129,7 @@ def getCircleMembers(circleId):
     else:
         message = responsebody['message']
 
+    return code, message
 
 def createMessageDict(color, message):
     message_dict = {
@@ -176,7 +177,7 @@ def hola():
                 if len(callingMessage) > 3:
                     if callingMessage[3] == 'people' or callingMessage[3] == 'members':
                         # /hola [circles, circle] [circleId] [people, members]
-                        code, message = getCircleMembers()
+                        code, message = getCircleMembers(circleId)
                         message_dict = createMessageDict('green', message)
                     else:
                         # /hola [circles, circle] [circleId] something
