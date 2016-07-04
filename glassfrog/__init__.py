@@ -202,7 +202,10 @@ def configure():
         if code == 200:
             flashmessage = 'Valid Glassfrog Token stored'
             hipchatApiHandler = apiCalls.HipchatApiHandler()
-            hipchatApiHandler.sendMessage('green', "Configured successfully. Type /hola to get started!")
+            hipchatApiHandler.sendMessage(
+                        color='green',
+                        message="Configured successfully. Type /hola to get started!",
+                        hipchatApiSettings=app.hipchatApiSettings)
         else:
             flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'
             flashmessage = flashmessage + ' Message given: \''+message+'\'.'
