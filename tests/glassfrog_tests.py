@@ -6,8 +6,10 @@ from flask import url_for, request, json, jsonify
 
 import glassfrog
 from glassfrog.functions import apiCalls
+from glassfrog.functions.messageFunctions import createMessageDict
 
 import test_values
+
 
 class GlassfrogTestCase(unittest.TestCase):
 
@@ -47,7 +49,31 @@ class GlassfrogTestCase(unittest.TestCase):
             color='green',
             message='Installed successfully. Please set Glassfrog Token in the Hipchat Integration Configure page.',
             hipchatApiSettings=mock_hipchatApiSettings)
-        pass
+
+    @mock.patch('glassfrog.apiCalls.requests')
+    def test_sendMessage(self, mock_requests):
+        mock_hipchatToken = 'TtqnpP9GREMNHIOSIYaXqM64hZ3YfQjEelxpLDeT'
+        mock_hipchatApiUrl = 'https://api.hipchat.com/v2/'
+        mock_hipchatRoomId = 2589171
+        mock_color = 'green'
+        mock_message = 'Test!'
+
+        hipchatApiHandler = apiCalls.HipchatApiHandler()
+        mock_hipchatApiSettings = apiCalls.HipchatApiSettings(
+                                    hipchatToken=mock_hipchatToken,
+                                    hipchatApiUrl=mock_hipchatApiUrl,
+                                    hipchatRoomId=mock_hipchatRoomId)
+        hipchatApiHandler.sendMessage(
+            color=mock_color,
+            message=mock_message,
+            hipchatApiSettings=mock_hipchatApiSettings)
+        mock_messageUrl = '{}/room/{}/notification'.format(mock_hipchatApiUrl, mock_hipchatRoomId)
+        mock_token_header = {"Authorization": "Bearer "+mock_hipchatToken}
+        mock_data = createMessageDict(mock_color, mock_message)
+
+        mock_requests.post.assert_called_with(mock_messageUrl,
+                                              headers=mock_token_header,
+                                              data=mock_data)
 
     def test_configure(self):
         # Set right glassfrogtoken
