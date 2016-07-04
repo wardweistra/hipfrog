@@ -150,6 +150,8 @@ def helpInformationCircle(circleId):
 @app.route('/hola', methods=['GET', 'POST'])
 def hola():
     requestdata = json.loads(request.get_data())
+    print("requestdata")
+    print(requestdata)
     callingMessage = requestdata['item']['message']['message'].split()
     if app.glassfrogToken == '':
         message = "Please set the Glassfrog Token first in the plugin configuration"

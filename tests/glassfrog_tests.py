@@ -83,6 +83,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
     def test_hola(self):
         mock_messagedata = test_values.mock_messagedata
+
+        # rv = self.app.post('/hola', follow_redirects=True, data=mock_jsoninstalldata)
         # Send hola message
         # Assert message back
         pass
