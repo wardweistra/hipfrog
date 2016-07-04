@@ -84,7 +84,7 @@ def installed():
         app.hipchatApiSettings = apiCalls.HipchatApiSettings(
                                     hipchatToken=tokendata['access_token'],
                                     hipchatApiUrl=capabilitiesdata['capabilities']['hipchatApiProvider']['url'],
-                                    hipchatRoomId=installdata['hipchatRoomId'])
+                                    hipchatRoomId=installdata['roomId'])
 
         hipchatApiHandler.sendMessage(
             color='green',

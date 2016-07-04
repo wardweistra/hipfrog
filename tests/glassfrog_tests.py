@@ -42,7 +42,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_hipchatApiSettings = apiCalls.HipchatApiSettings(
                                     hipchatToken=test_values.mock_tokenData['access_token'],
                                     hipchatApiUrl=test_values.mock_capabilitiesData['capabilities']['hipchatApiProvider']['url'],
-                                    roomId=test_values.mock_installdata['roomId'])
+                                    hipchatRoomId=test_values.mock_installdata['roomId'])
         mock_HipchatApiHandler.return_value.sendMessage.assert_called_with(
             color='green',
             message='Installed successfully. Please set Glassfrog Token in the Hipchat Integration Configure page.',
