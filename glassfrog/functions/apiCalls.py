@@ -4,6 +4,23 @@ import requests
 from .messageFunctions import createMessageDict
 
 
+class GlassfrogApiSettings(object):
+    def __init__(self, glassfrogToken):
+        self.glassfrogToken = glassfrogToken
+
+
+class GlassfrogApiHandler(object):
+    def __init__(self):
+        pass
+
+    def glassfrogApiCall(self, apiEndpoint, glassfrogApiSettings: GlassfrogApiSettings):
+        headers = {'X-Auth-Token': glassfrogApiSettings.glassfrogToken}
+        apiUrl = 'https://glassfrog.holacracy.org/api/v3/'+apiEndpoint
+        apiResponse = requests.get(apiUrl, headers=headers)
+        code = apiResponse.status_code
+        responsebody = json.loads(apiResponse.text)
+        return code, responsebody
+
 class HipchatApiSettings(object):
     def __init__(self, hipchatToken, hipchatApiUrl, hipchatRoomId):
         self.hipchatToken = hipchatToken

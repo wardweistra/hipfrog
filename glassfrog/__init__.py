@@ -10,7 +10,7 @@ app.secret_key = 'not_so_secret'
 
 myserver = "http://5.157.82.115:45277"
 app.hipchatApiSettings = None
-app.glassfrogToken = ''
+app.glassfrogApiSettings = None
 
 
 @app.route('/')
@@ -100,18 +100,10 @@ def uninstall(oauthId):
     return ('', 200)
 
 
-def glassfrogApiCall(apiEndpoint):
-    headers = {'X-Auth-Token': app.glassfrogToken}
-    apiUrl = 'https://glassfrog.holacracy.org/api/v3/'+apiEndpoint
-    apiResponse = requests.get(apiUrl, headers=headers)
-    code = apiResponse.status_code
-    responsebody = json.loads(apiResponse.text)
-    return code, responsebody
-
-
 def getCircles():
     apiEndpoint = 'circles'
-    code, responsebody = glassfrogApiCall(apiEndpoint)
+    glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint, app.glassfrogApiSettings)
 
     if code == 200:
         message = 'The following circles are in your organization:'
@@ -125,7 +117,8 @@ def getCircles():
 
 def getCircleMembers(circleId):
     apiEndpoint = 'circles/{}/people'.format(circleId)
-    code, responsebody = glassfrogApiCall(apiEndpoint)
+    glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint, app.glassfrogApiSettings)
 
     if code == 200:
         message = 'The following people are in your circle:'
@@ -150,10 +143,9 @@ def helpInformationCircle(circleId):
 @app.route('/hola', methods=['GET', 'POST'])
 def hola():
     requestdata = json.loads(request.get_data())
-    print("requestdata")
-    print(requestdata)
+
     callingMessage = requestdata['item']['message']['message'].split()
-    if app.glassfrogToken == '':
+    if app.glassfrogApiSettings is None:
         message = "Please set the Glassfrog Token first in the plugin configuration"
         message_dict = createMessageDict('red', message)
     elif len(callingMessage) == 1:
@@ -190,7 +182,8 @@ def hola():
 @app.route('/configure.html', methods=['GET', 'POST'])
 def configure():
     if request.method == 'POST':
-        app.glassfrogToken = request.form['glassfrogtoken']
+        app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(
+                                    glassfrogToken=request.form['glassfrogtoken'])
         code, message = getCircles()
         if code == 200:
             flashmessage = 'Valid Glassfrog Token stored'
@@ -203,7 +196,9 @@ def configure():
             flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'
             flashmessage = flashmessage + ' Message given: \''+message+'\'.'
         flash(flashmessage)
-    return render_template('configure.html', glassfrogtoken=app.glassfrogToken)
+    if app.glassfrogApiSettings is None:
+        glassfrogToken = ''
+    return render_template('configure.html', glassfrogtoken=glassfrogToken)
 
 if __name__ == '__main__':
     app.run()

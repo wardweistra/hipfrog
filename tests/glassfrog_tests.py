@@ -82,12 +82,16 @@ class GlassfrogTestCase(unittest.TestCase):
         pass
 
     def test_hola(self):
-        mock_messagedata = test_values.mock_messagedata
-
-        # rv = self.app.post('/hola', follow_redirects=True, data=mock_jsoninstalldata)
-        # Send hola message
-        # Assert message back
-        pass
+        mock_messagedata = json.dumps(test_values.mock_messagedata)
+        mock_color = 'green'
+        mock_message = 'Test!'
+        mock_messageDict = createMessageDict(mock_color, mock_message)
+        rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
+        return_messageDict = json.loads(rv.get_data())
+        print(return_messageDict)
+        print(mock_messageDict)
+        # print(self.app.glassfrogToken)
+        # assert return_messageDict == mock_messageDict
 
     def test_hola_circles(self):
         # Send '/hola circles' message
