@@ -2,6 +2,8 @@
 from flask import Flask, json, request, render_template, flash
 import requests
 
+from .functions import apiCalls
+
 app = Flask(__name__)
 app.secret_key = 'not_so_secret'
 
@@ -72,15 +74,19 @@ def installed():
         CLIENT_SECRET = installdata['oauthSecret']
         app.roomId = installdata['roomId']
 
-        capabilitiesdata = json.loads(requests.get(installdata['capabilitiesUrl']).text)
+        hipchatApiHandler = apiCalls.HipchatApiHandler()
+
+        capabilitiesdata = hipchatApiHandler.getCapabilitiesData(installdata['capabilitiesUrl'])
+        print("capabilitiesdata")
+        print(capabilitiesdata)
         tokenUrl = capabilitiesdata['capabilities']['oauth2Provider']['tokenUrl']
 
         client_auth = requests.auth.HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
         post_data = {"grant_type": "client_credentials",
                      "scope": "send_notification"}
-        tokendata = json.loads(requests.post(tokenUrl,
-                                             auth=client_auth,
-                                             data=post_data).text)
+        tokendata = hipchatApiHandler.getTokenData(tokenUrl, client_auth, post_data)
+        print("tokendata")
+        print(tokendata)
 
         app.hipchatToken = tokendata['access_token']
         app.hipchatApiUrl = capabilitiesdata['capabilities']['hipchatApiProvider']['url']
