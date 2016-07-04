@@ -8,10 +8,8 @@ app = Flask(__name__)
 app.secret_key = 'not_so_secret'
 
 myserver = "http://5.157.82.115:45277"
-app.hipchatToken = ''
+app.hipchatApiSettings = None
 app.glassfrogToken = ''
-app.hipchatApiUrl = ''
-app.roomId = ''
 
 
 @app.route('/')
@@ -72,26 +70,26 @@ def installed():
 
         CLIENT_ID = installdata['oauthId']
         CLIENT_SECRET = installdata['oauthSecret']
-        app.roomId = installdata['roomId']
 
         hipchatApiHandler = apiCalls.HipchatApiHandler()
 
         capabilitiesdata = hipchatApiHandler.getCapabilitiesData(installdata['capabilitiesUrl'])
-        print("capabilitiesdata")
-        print(capabilitiesdata)
         tokenUrl = capabilitiesdata['capabilities']['oauth2Provider']['tokenUrl']
 
         client_auth = requests.auth.HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
         post_data = {"grant_type": "client_credentials",
                      "scope": "send_notification"}
         tokendata = hipchatApiHandler.getTokenData(tokenUrl, client_auth, post_data)
-        print("tokendata")
-        print(tokendata)
 
-        app.hipchatToken = tokendata['access_token']
-        app.hipchatApiUrl = capabilitiesdata['capabilities']['hipchatApiProvider']['url']
+        app.hipchatApiSettings = apiCalls.HipchatApiSettings(
+                                    hipchatToken=tokendata['access_token'],
+                                    hipchatApiUrl=capabilitiesdata['capabilities']['hipchatApiProvider']['url'],
+                                    hipchatRoomId=installdata['hipchatRoomId'])
 
-        sendMessage('green', "Installed successfully. Please set Glassfrog Token in the Hipchat Integration Configure page.")
+        hipchatApiHandler.sendMessage(
+            color='green',
+            message="Installed successfully. Please set Glassfrog Token in the Hipchat Integration Configure page.",
+            hipchatApiSettings=app.hipchatApiSettings)
     return ('', 200)
 
 
@@ -137,6 +135,7 @@ def getCircleMembers(circleId):
 
     return code, message
 
+
 def createMessageDict(color, message):
     message_dict = {
         "color": color,
@@ -145,15 +144,6 @@ def createMessageDict(color, message):
         "message_format": "text"
         }
     return message_dict
-
-
-def sendMessage(color, message):
-    messageUrl = app.hipchatApiUrl+'/room/{}/notification'.format(app.roomId)
-    token_header = {"Authorization": "Bearer "+app.hipchatToken}
-    data = createMessageDict(color, message)
-    messageresponse = requests.post(messageUrl,
-                                    headers=token_header,
-                                    data=data)
 
 
 def helpInformation():
@@ -211,7 +201,8 @@ def configure():
         code, message = getCircles()
         if code == 200:
             flashmessage = 'Valid Glassfrog Token stored'
-            sendMessage('green', "Configured successfully. Type /hola to get started!")
+            hipchatApiHandler = apiCalls.HipchatApiHandler()
+            hipchatApiHandler.sendMessage('green', "Configured successfully. Type /hola to get started!")
         else:
             flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'
             flashmessage = flashmessage + ' Message given: \''+message+'\'.'
