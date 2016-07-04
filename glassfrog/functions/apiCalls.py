@@ -29,7 +29,7 @@ class HipchatApiHandler(object):
         return json.loads(requests.post(tokenUrl, auth=client_auth, data=post_data).text)
 
     def sendMessage(self, color, message, hipchatApiSettings: HipchatApiSettings):
-        messageUrl = hipchatApiSettings.hipchatApiUrl+'/room/{}/notification'.format(hipchatApiSettings.roomId)
+        messageUrl = hipchatApiSettings.hipchatApiUrl+'/room/{}/notification'.format(hipchatApiSettings.hipchatRoomId)
         token_header = {"Authorization": "Bearer "+hipchatApiSettings.hipchatToken}
         data = createMessageDict(color, message)
         messageresponse = requests.post(messageUrl,
