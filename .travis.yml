@@ -2,6 +2,10 @@ language: python
 python:
   - "3.5"
 # command to install dependencies
-install: python3 setup.py install
+install:
+  - python3 setup.py install
+  - pip install codecov
 # command to run tests
 script: python3 tests/glassfrog_tests.py
+after_success:
+    codecov
