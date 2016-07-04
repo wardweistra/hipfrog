@@ -1,6 +1,8 @@
 from flask import json
 import requests
 
+from .messageFunctions import createMessageDict
+
 
 class HipchatApiSettings(object):
     def __init__(self, hipchatToken, hipchatApiUrl, hipchatRoomId):

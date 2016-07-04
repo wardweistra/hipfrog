@@ -3,6 +3,7 @@ from flask import Flask, json, request, render_template, flash
 import requests
 
 from .functions import apiCalls
+from .functions.messageFunctions import createMessageDict
 
 app = Flask(__name__)
 app.secret_key = 'not_so_secret'
@@ -134,16 +135,6 @@ def getCircleMembers(circleId):
         message = responsebody['message']
 
     return code, message
-
-
-def createMessageDict(color, message):
-    message_dict = {
-        "color": color,
-        "message": str(message),
-        "notify": False,
-        "message_format": "text"
-        }
-    return message_dict
 
 
 def helpInformation():
