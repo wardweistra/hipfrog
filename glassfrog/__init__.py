@@ -196,8 +196,10 @@ def configure():
             flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'
             flashmessage = flashmessage + ' Message given: \''+message+'\'.'
         flash(flashmessage)
-    if app.glassfrogApiSettings is None:
-        glassfrogToken = ''
+
+    glassfrogToken = ''
+    if app.glassfrogApiSettings is not None:
+        glassfrogToken = app.glassfrogApiSettings.glassfrogToken
     return render_template('configure.html', glassfrogtoken=glassfrogToken)
 
 if __name__ == '__main__':
