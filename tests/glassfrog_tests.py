@@ -8,6 +8,7 @@ from flask import url_for, request, json, jsonify
 import glassfrog
 from glassfrog.functions import apiCalls
 from glassfrog.functions.messageFunctions import createMessageDict
+from glassfrog import strings
 
 import test_values
 
@@ -47,8 +48,8 @@ class GlassfrogTestCase(unittest.TestCase):
                                     hipchatApiUrl=test_values.mock_capabilitiesData['capabilities']['hipchatApiProvider']['url'],
                                     hipchatRoomId=test_values.mock_installdata['roomId'])
         mock_HipchatApiHandler.return_value.sendMessage.assert_called_with(
-            color='green',
-            message='Installed successfully. Please set Glassfrog Token in the Hipchat Integration Configure page.',
+            color=strings.succes_color,
+            message=strings.installed_successfully,
             hipchatApiSettings=mock_hipchatApiSettings)
 
     @mock.patch('glassfrog.apiCalls.requests')
@@ -56,7 +57,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_hipchatToken = 'TtqnpP9GREMNHIOSIYaXqM64hZ3YfQjEelxpLDeT'
         mock_hipchatApiUrl = 'https://api.hipchat.com/v2/'
         mock_hipchatRoomId = 2589171
-        mock_color = 'green'
+        mock_color = strings.succes_color
         mock_message = 'Test!'
 
         hipchatApiHandler = apiCalls.HipchatApiHandler()
@@ -81,17 +82,28 @@ class GlassfrogTestCase(unittest.TestCase):
         # Set wrong glassfrogtoken
         pass
 
-    def test_hola(self):
+    def test_hola_no_glassfrog_token(self):
         mock_messagedata = json.dumps(test_values.mock_messagedata)
-        mock_color = 'green'
-        mock_message = 'Test!'
+        mock_color = strings.error_color
+        mock_message = strings.set_token_first
         mock_messageDict = createMessageDict(mock_color, mock_message)
+
+        glassfrog.app.glassfrogApiSettings = None
         rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
         return_messageDict = json.loads(rv.get_data())
-        print(return_messageDict)
-        print(mock_messageDict)
-        # print(self.app.glassfrogToken)
-        # assert return_messageDict == mock_messageDict
+        assert return_messageDict == mock_messageDict
+
+    def test_hola(self):
+        mock_messagedata = json.dumps(test_values.mock_messagedata)
+        mock_color = strings.succes_color
+        mock_message = strings.help_information
+        mock_messageDict = createMessageDict(mock_color, mock_message)
+
+        mock_glassfrogToken = 'myglassfrogtoken'
+        glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+        rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
+        return_messageDict = json.loads(rv.get_data())
+        assert return_messageDict == mock_messageDict
 
     def test_hola_circles(self):
         # Send '/hola circles' message

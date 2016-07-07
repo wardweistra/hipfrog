@@ -3,7 +3,8 @@ from flask import Flask, json, request, render_template, flash
 import requests
 
 from .functions import apiCalls
-from .functions.messageFunctions import createMessageDict
+from .functions import messageFunctions as messageFunctions
+from .strings import *
 
 app = Flask(__name__)
 app.secret_key = 'not_so_secret'
@@ -88,8 +89,8 @@ def installed():
                                     hipchatRoomId=installdata['roomId'])
 
         hipchatApiHandler.sendMessage(
-            color='green',
-            message="Installed successfully. Please set Glassfrog Token in the Hipchat Integration Configure page.",
+            color=strings.succes_color,
+            message=strings.installed_successfully,
             hipchatApiSettings=app.hipchatApiSettings)
     return ('', 200)
 
@@ -131,12 +132,12 @@ def getCircleMembers(circleId):
 
 
 def helpInformation():
-    message = "Hola to you too!  Thanks for using the Glassfrog Hipchat Bot.\nPlease use one of the following commands to find out more:\n- /hola circles -- List the circles in your organization"
+    message = help_information
     return message
 
 
 def helpInformationCircle(circleId):
-    message = "Please use one of the following commands on your circle to find out more:\n- /hola circle "+circleId+" members -- List the members of this circle"
+    message = strings.help_circle.format(circleId)
     return message
 
 
@@ -146,11 +147,11 @@ def hola():
 
     callingMessage = requestdata['item']['message']['message'].split()
     if app.glassfrogApiSettings is None:
-        message = "Please set the Glassfrog Token first in the plugin configuration"
-        message_dict = createMessageDict('red', message)
+        message = strings.set_token_first
+        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     elif len(callingMessage) == 1:
         message = helpInformation()
-        message_dict = createMessageDict('green', message)
+        message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
     elif len(callingMessage) > 1:
         if callingMessage[1] == 'circles' or callingMessage[1] == 'circle':
             if len(callingMessage) > 2:
@@ -159,23 +160,23 @@ def hola():
                     if callingMessage[3] == 'people' or callingMessage[3] == 'members':
                         # /hola [circles, circle] [circleId] [people, members]
                         code, message = getCircleMembers(circleId)
-                        message_dict = createMessageDict('green', message)
+                        message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
                     else:
                         # /hola [circles, circle] [circleId] something
                         message = "Sorry, the feature \'"+callingMessage[3]+"\' does not exist (yet). Type /hola circle "+circleId+" to get a list of the available commands."
-                        message_dict = createMessageDict('red', message)
+                        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
                 else:
                     # /hola [circles, circle] [circleId]
                     message = helpInformationCircle(circleId)
-                    message_dict = createMessageDict('green', message)
+                    message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
             else:
                 # /hola [circles, circle]
                 code, message = getCircles()
-                message_dict = createMessageDict('green', message)
+                message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
         else:
             # /hola something
             message = "Sorry, the feature \'"+callingMessage[1]+"\' does not exist (yet). Type /hola to get a list of the available commands."
-            message_dict = createMessageDict('red', message)
+            message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     return json.jsonify(message_dict)
 
 
@@ -189,7 +190,7 @@ def configure():
             flashmessage = 'Valid Glassfrog Token stored'
             hipchatApiHandler = apiCalls.HipchatApiHandler()
             hipchatApiHandler.sendMessage(
-                        color='green',
+                        color=strings.succes_color,
                         message="Configured successfully. Type /hola to get started!",
                         hipchatApiSettings=app.hipchatApiSettings)
         else:
