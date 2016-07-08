@@ -108,7 +108,7 @@ class GlassfrogTestCase(unittest.TestCase):
         assert escape(test_values.mock_401_flash_message) in rv.data.decode('utf-8')
 
         # Right token
-        mock_getCircles.return_value = [200, test_values.mock_circles_message]
+        mock_getCircles.return_value = (200, test_values.mock_circles_message)
         rv = self.app.post('/configure.html', follow_redirects=True, data=dict(
             glassfrogtoken=mock_token
         ))
@@ -119,6 +119,15 @@ class GlassfrogTestCase(unittest.TestCase):
             color=strings.succes_color,
             message=strings.configured_successfully,
             hipchatApiSettings=mock_hipchatApiSettings)
+
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    def test_getCircles(self, mock_glassfrogApiHandler):
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (200, test_values.mock_circles_response)
+        mock_glassfrogToken = 'myglassfrogtoken'
+        glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+        rv = glassfrog.getCircles()
+        assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
+        assert rv == (200, test_values.mock_circles_message)
 
     def test_hola_no_glassfrog_token(self):
         mock_messagedata = json.dumps(test_values.mock_messagedata)

@@ -65,10 +65,6 @@ def getCircles():
     apiEndpoint = 'circles'
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
     code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint, app.glassfrogApiSettings)
-    print('code')
-    print(code)
-    print('responsebody')
-    print(responsebody)
 
     if code == 200:
         message = 'The following circles are in your organization:'
@@ -76,8 +72,7 @@ def getCircles():
             message = message + '\n- ' + circle['name'] + ' (/hola circle ' + str(circle['id']) + ')'
     else:
         message = responsebody['message']
-    print('message')
-    print(message)
+
     return code, message
 
 
@@ -85,10 +80,6 @@ def getCircleMembers(circleId):
     apiEndpoint = 'circles/{}/people'.format(circleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
     code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint, app.glassfrogApiSettings)
-    print('code')
-    print(code)
-    print('responsebody')
-    print(responsebody)
 
     if code == 200:
         message = 'The following people are in your circle:'
@@ -96,8 +87,7 @@ def getCircleMembers(circleId):
             message = message + '\n- ' + person['name'] + ' (' + str(person['id']) + ')'
     else:
         message = responsebody['message']
-    print('message')
-    print(message)
+
     return code, message
 
 
