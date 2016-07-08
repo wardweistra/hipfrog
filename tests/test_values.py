@@ -1,9 +1,9 @@
 mock_installdata = {
-    "oauthId": "f3100c47-9936-40e8-a8aa-798b1e8da8f0",
+    "oauthId": "f3100c47-9936-40e8-a8aa-12314e8da8f0",
     "capabilitiesUrl": "https://api.hipchat.com/v2/capabilities",
     "roomId": 2589171,
     "groupId": 46617,
-    "oauthSecret": "Jgtf1Baj5KrSpXHZ7LbB0H3Krwr6cotrkQgkJm9C"}
+    "oauthSecret": "Jgtf1Baj5KrSpXHZ7d7OkH3Krwr6cotspI7kJm9C"}
 
 mock_capabilitiesData = {
     'description': 'Group chat and IM built for teams', 'name': 'HipChat',
@@ -81,7 +81,7 @@ mock_tokenData = {
     'group_id': 46617,
     'group_name': 'tranSMART',
     'expires_in': 431999999,
-    'access_token': 'TtqnpP9GREMNHIOSIYaXqM64hZ3YfQjEelxpLDeT',
+    'access_token': 'Ttqaf9OGREMNHIOSIYaXqM64hZ3DHSAEelxpLDeT',
     'scope': 'send_notification',
     'token_type': 'bearer'
 }
@@ -122,3 +122,8 @@ mock_messagedata = {
     "oauth_client_id": "ed8bb9f0-02d8-426b-9226-0d50fdcd47ea",
     "webhook_id": 4965523
 }
+
+mock_401_flash_message = 'Encountered Error 401 when testing the Glassfrog Token.'
+' Message given: \'api key not specified or not valid\'.'
+mock_401_code = 401
+mock_401_responsebody = {'message': 'api key not specified or not valid'}

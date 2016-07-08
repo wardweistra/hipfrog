@@ -76,7 +76,8 @@ def getCircles():
             message = message + '\n- ' + circle['name'] + ' (/hola circle ' + str(circle['id']) + ')'
     else:
         message = responsebody['message']
-
+    print('message')
+    print(message)
     return code, message
 
 
