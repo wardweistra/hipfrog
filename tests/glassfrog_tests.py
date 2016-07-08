@@ -122,12 +122,30 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getCircles(self, mock_glassfrogApiHandler):
-        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (200, test_values.mock_circles_response)
         mock_glassfrogToken = 'myglassfrogtoken'
         glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+
+        # Succesfull call
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (200, test_values.mock_circles_response)
         rv = glassfrog.getCircles()
         assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
         assert rv == (200, test_values.mock_circles_message)
+
+        # TODO Failing call
+
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    def test_getCircleMembers(self, mock_glassfrogApiHandler):
+        mock_glassfrogToken = 'myglassfrogtoken'
+        mock_circleId = 1000
+        glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+
+        # Succesfull call
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (200, test_values.mock_circle_members_response)
+        rv = glassfrog.getCircleMembers(mock_circleId)
+        assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
+        assert rv == (200, test_values.mock_circle_members_message)
+
+        # TODO wrong circleID
 
     def test_hola_no_glassfrog_token(self):
         mock_messagedata = json.dumps(test_values.mock_messagedata)
