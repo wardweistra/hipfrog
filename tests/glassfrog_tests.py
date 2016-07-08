@@ -32,8 +32,13 @@ class GlassfrogTestCase(unittest.TestCase):
         assert b'Install Glassfrog HipChat Integration' in rv.data
 
     def test_capabilities(self):
-        # Get capabilities.json
-        pass
+        mock_myserver = 'http://localhost:45277'
+        mock_capabilitiesDict = apiCalls.getCapabilitiesDict(mock_myserver)
+
+        glassfrog.myserver = mock_myserver
+        rv = self.app.get('/capabilities.json', follow_redirects=True)
+        return_capabilitiesDict = json.loads(rv.get_data())
+        assert return_capabilitiesDict == mock_capabilitiesDict
 
     @mock.patch('glassfrog.apiCalls.HipchatApiHandler')
     def test_installed(self, mock_HipchatApiHandler):

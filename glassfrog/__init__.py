@@ -21,47 +21,7 @@ def hello_world():
 
 @app.route('/capabilities.json')
 def capabilities():
-    capabilities_dict = \
-        {
-            "name": "Glassfrog Hipchat Bot",
-            "description": "A Hipchat bot for accessing Glassfrog",
-            "key": "glassfrog-hipchat-bot",
-            "links": {
-                "homepage": myserver,
-                "self": myserver+"/capabilities.json"
-            },
-            "vendor": {
-                "name": "The Hyve",
-                "url": "https://www.thehyve.nl/"
-            },
-            "capabilities": {
-                "hipchatApiConsumer": {
-                    "fromName": "Glassfrog Hipchat Bot",
-                    "scopes": [
-                        "send_notification",
-                        "view_room",
-                        "view_group"
-                    ]
-                },
-                "installable": {
-                    "allowGlobal": False,
-                    "allowRoom": True,
-                    "callbackUrl": myserver+"/installed"
-                },
-                "webhook": [
-                    {
-                        "event": "room_message",
-                        "pattern": "\\A\\/hola\\b",
-                        "url": myserver+"/hola",
-                        "name": "Holacracy webhook",
-                        "authentication": "jwt"
-                    }
-                ],
-                "configurable": {
-                    "url": myserver+"/configure.html"
-                }
-            }
-        }
+    capabilities_dict = apiCalls.getCapabilitiesDict(myserver)
     return json.jsonify(capabilities_dict)
 
 
