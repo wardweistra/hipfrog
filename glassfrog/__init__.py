@@ -65,6 +65,10 @@ def getCircles():
     apiEndpoint = 'circles'
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
     code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint, app.glassfrogApiSettings)
+    print('code')
+    print(code)
+    print('responsebody')
+    print(responsebody)
 
     if code == 200:
         message = 'The following circles are in your organization:'
@@ -80,6 +84,10 @@ def getCircleMembers(circleId):
     apiEndpoint = 'circles/{}/people'.format(circleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
     code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint, app.glassfrogApiSettings)
+    print('code')
+    print(code)
+    print('responsebody')
+    print(responsebody)
 
     if code == 200:
         message = 'The following people are in your circle:'
@@ -87,18 +95,9 @@ def getCircleMembers(circleId):
             message = message + '\n- ' + person['name'] + ' (' + str(person['id']) + ')'
     else:
         message = responsebody['message']
-
+    print('message')
+    print(message)
     return code, message
-
-
-def helpInformation():
-    message = help_information
-    return message
-
-
-def helpInformationCircle(circleId):
-    message = strings.help_circle.format(circleId)
-    return message
 
 
 @app.route('/hola', methods=['GET', 'POST'])
@@ -110,7 +109,7 @@ def hola():
         message = strings.set_token_first
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     elif len(callingMessage) == 1:
-        message = helpInformation()
+        message = strings.help_information
         message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
     elif len(callingMessage) > 1:
         if callingMessage[1] == 'circles' or callingMessage[1] == 'circle':
@@ -127,7 +126,7 @@ def hola():
                         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
                 else:
                     # /hola [circles, circle] [circleId]
-                    message = helpInformationCircle(circleId)
+                    message = strings.help_circle.format(circleId)
                     message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
             else:
                 # /hola [circles, circle]
