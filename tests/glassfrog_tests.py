@@ -3,7 +3,7 @@ import os
 import unittest
 from unittest import mock
 # import tempfile
-from flask import url_for, request, json, jsonify
+from flask import url_for, request, json, jsonify, escape
 
 import glassfrog
 from glassfrog.functions import apiCalls
@@ -82,10 +82,43 @@ class GlassfrogTestCase(unittest.TestCase):
                                               headers=mock_token_header,
                                               data=mock_data)
 
-    def test_configure(self):
-        # Set right glassfrogtoken
-        # Set wrong glassfrogtoken
-        pass
+    @mock.patch('glassfrog.apiCalls.HipchatApiHandler')
+    @mock.patch('glassfrog.getCircles')
+    def test_configure(self, mock_getCircles, mock_HipchatApiHandler):
+        mock_hipchatToken = 'TtqnpP9GREMNHIOSIYaXqM64hZ3YfQjEelxpLDeT'
+        mock_hipchatApiUrl = 'https://api.hipchat.com/v2/'
+        mock_hipchatRoomId = 2589171
+        mock_token = 'banana'
+        mock_hipchatApiSettings = apiCalls.HipchatApiSettings(
+                                    hipchatToken=mock_hipchatToken,
+                                    hipchatApiUrl=mock_hipchatApiUrl,
+                                    hipchatRoomId=mock_hipchatRoomId)
+        glassfrog.app.hipchatApiSettings = mock_hipchatApiSettings
+
+        # Loading of page
+        rv = self.app.get('/configure.html', follow_redirects=True)
+        assert b'Glassfrog Token' in rv.data
+
+        # Wrong token
+        mock_getCircles.return_value = [401, test_values.mock_401_responsebody['message']]
+        rv = self.app.post('/configure.html', follow_redirects=True, data=dict(
+            glassfrogtoken=mock_token
+        ))
+        assert mock_getCircles.called
+        assert escape(test_values.mock_401_flash_message) in rv.data.decode('utf-8')
+
+        # Right token
+        mock_getCircles.return_value = [200, test_values.mock_circles_message]
+        rv = self.app.post('/configure.html', follow_redirects=True, data=dict(
+            glassfrogtoken=mock_token
+        ))
+        assert mock_getCircles.called
+        assert escape(strings.configured_successfully_flash) in rv.data.decode('utf-8')
+        # assert mock_HipchatApiHandler.return_value.sendMessage.called
+        mock_HipchatApiHandler.return_value.sendMessage.assert_called_with(
+            color=strings.succes_color,
+            message=strings.configured_successfully,
+            hipchatApiSettings=mock_hipchatApiSettings)
 
     def test_hola_no_glassfrog_token(self):
         mock_messagedata = json.dumps(test_values.mock_messagedata)

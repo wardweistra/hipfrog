@@ -147,11 +147,11 @@ def configure():
                                     glassfrogToken=request.form['glassfrogtoken'])
         code, message = getCircles()
         if code == 200:
-            flashmessage = 'Valid Glassfrog Token stored'
+            flashmessage = strings.configured_successfully_flash
             hipchatApiHandler = apiCalls.HipchatApiHandler()
             hipchatApiHandler.sendMessage(
                         color=strings.succes_color,
-                        message="Configured successfully. Type /hola to get started!",
+                        message=strings.configured_successfully,
                         hipchatApiSettings=app.hipchatApiSettings)
         else:
             flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'

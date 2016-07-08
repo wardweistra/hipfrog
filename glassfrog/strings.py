@@ -11,5 +11,9 @@ help_circle = '''Please use one of the following commands on your circle to find
 
 set_token_first = "Please set the Glassfrog Token first in the plugin configuration"
 
-installed_successfully = 'Installed successfully. '
-'Please set Glassfrog Token in the Hipchat Integration Configure page.'
+installed_successfully = ('Installed successfully. '
+                          'Please set Glassfrog Token in the Hipchat Integration Configure page.')
+
+configured_successfully_flash = 'Valid Glassfrog Token stored'
+
+configured_successfully = "Configured successfully. Type /hola to get started!"

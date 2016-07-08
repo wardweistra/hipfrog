@@ -123,7 +123,81 @@ mock_messagedata = {
     "webhook_id": 4965523
 }
 
-mock_401_flash_message = 'Encountered Error 401 when testing the Glassfrog Token.'
-' Message given: \'api key not specified or not valid\'.'
-mock_401_code = 401
+mock_401_flash_message = ('Encountered Error 401 when testing the Glassfrog Token.'
+                          ' Message given: \'api key not specified or not valid\'.')
+
 mock_401_responsebody = {'message': 'api key not specified or not valid'}
+
+mock_circles_response = {
+    'circles': [
+        {
+            'id': 8495,
+            'links': {},
+            'short_name': 'The Hyve',
+            'strategy': None,
+            'name': 'The Hyve Company Circle'
+        },
+        {
+            'id': 9032,
+            'links': {},
+            'short_name': 'Delivery',
+            'strategy': None,
+            'name': 'Delivery'
+        },
+        {
+            'id': 15512,
+            'links': {},
+            'short_name': 'Business Development & Sales',
+            'strategy': None,
+            'name': 'Business Development & Sales'
+        }
+    ],
+    'linked': {
+        'roles': [],
+        'domains': [],
+        'policies': [],
+        'supported_roles': []
+    }
+}
+
+mock_circles_message = '''The following circles are in your organization:
+- The Hyve Company Circle (/hola circle 8495)
+- Delivery (/hola circle 9032)
+- Business Development & Sales (/hola circle 15512)'''
+
+mock_circle_members_response = {
+    'people': [
+        {
+            'id': 1234,
+            'email': 'someone@thehyve.nl',
+            'external_id': None,
+            'name': 'Someone van Something',
+            'links': {
+                'circles': [
+                    1,
+                    2
+                ]
+            }
+        },
+        {
+            'id': 22309,
+            'email': 'ward@thehyve.nl',
+            'external_id': None,
+            'name': 'Ward Weistra',
+            'links': {
+                'circles': [
+                    1,
+                    2,
+                    23
+                ]
+            }
+        }
+    ],
+    'linked': {
+        'circles': []
+    }
+}
+
+mock_circle_members_message = '''The following people are in your circle:
+- Someone van Something (1234)
+- Ward Weistra (22309)'''
