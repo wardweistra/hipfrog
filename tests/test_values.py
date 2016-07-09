@@ -86,42 +86,44 @@ mock_tokenData = {
     'token_type': 'bearer'
 }
 
-mock_messagedata = {
-    "event": "room_message",
-    "item": {
-        "message": {
-            "date": "2016-05-26T15:32:43.700609+00:00",
-            "from": {
-                "id": 351107,
-                "links": {
-                    "self": "https://api.hipchat.com/v2/user/351107"
+
+def mock_messagedata(message):
+    return {
+        "event": "room_message",
+        "item": {
+            "message": {
+                "date": "2016-05-26T15:32:43.700609+00:00",
+                "from": {
+                    "id": 351107,
+                    "links": {
+                        "self": "https://api.hipchat.com/v2/user/351107"
+                    },
+                    "mention_name": "WardWeistra",
+                    "name": "Ward Weistra",
+                    "version": "00000000"
                 },
-                "mention_name": "WardWeistra",
-                "name": "Ward Weistra",
-                "version": "00000000"
+                "id": "715f101f-1baa-4a5c-958a-9c6c7efaaa1f",
+                "mentions": [],
+                "message": message,
+                "type": "message"
             },
-            "id": "715f101f-1baa-4a5c-958a-9c6c7efaaa1f",
-            "mentions": [],
-            "message": "/hola",
-            "type": "message"
+            "room": {
+                "id": 2589171,
+                "is_archived": False,
+                "links": {
+                    "members": "https://api.hipchat.com/v2/room/2589171/member",
+                    "participants": "https://api.hipchat.com/v2/room/2589171/participant",
+                    "self": "https://api.hipchat.com/v2/room/2589171",
+                    "webhooks": "https://api.hipchat.com/v2/room/2589171/webhook"
+                },
+                "name": "The Hyve - Holacracy",
+                "privacy": "private",
+                "version": "0XLIKALD"
+            }
         },
-        "room": {
-            "id": 2589171,
-            "is_archived": False,
-            "links": {
-                "members": "https://api.hipchat.com/v2/room/2589171/member",
-                "participants": "https://api.hipchat.com/v2/room/2589171/participant",
-                "self": "https://api.hipchat.com/v2/room/2589171",
-                "webhooks": "https://api.hipchat.com/v2/room/2589171/webhook"
-            },
-            "name": "The Hyve - Holacracy",
-            "privacy": "private",
-            "version": "0XLIKALD"
-        }
-    },
-    "oauth_client_id": "ed8bb9f0-02d8-426b-9226-0d50fdcd47ea",
-    "webhook_id": 4965523
-}
+        "oauth_client_id": "ed8bb9f0-02d8-426b-9226-0d50fdcd47ea",
+        "webhook_id": 4965523
+    }
 
 mock_401_flash_message = ('Encountered Error 401 when testing the Glassfrog Token.'
                           ' Message given: \'api key not specified or not valid\'.')

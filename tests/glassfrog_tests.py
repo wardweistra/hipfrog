@@ -133,7 +133,6 @@ class GlassfrogTestCase(unittest.TestCase):
         ))
         assert mock_getCircles.called
         assert escape(strings.configured_successfully_flash) in rv.data.decode('utf-8')
-        # assert mock_HipchatApiHandler.return_value.sendMessage.called
         mock_HipchatApiHandler.return_value.sendMessage.assert_called_with(
             color=strings.succes_color,
             message=strings.configured_successfully,
@@ -167,33 +166,62 @@ class GlassfrogTestCase(unittest.TestCase):
         # TODO wrong circleID
 
     def test_hola_no_glassfrog_token(self):
-        mock_messagedata = json.dumps(test_values.mock_messagedata)
+        mock_messagedata = json.dumps(test_values.mock_messagedata('/hola'))
         mock_color = strings.error_color
         mock_message = strings.set_token_first
         mock_messageDict = createMessageDict(mock_color, mock_message)
 
         glassfrog.app.glassfrogApiSettings = None
+
         rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
         return_messageDict = json.loads(rv.get_data())
         assert return_messageDict == mock_messageDict
 
     def test_hola(self):
-        mock_messagedata = json.dumps(test_values.mock_messagedata)
+        mock_messagedata = json.dumps(test_values.mock_messagedata('/hola'))
         mock_color = strings.succes_color
         mock_message = strings.help_information
         mock_messageDict = createMessageDict(mock_color, mock_message)
 
         mock_glassfrogToken = 'myglassfrogtoken'
         glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+
         rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
         return_messageDict = json.loads(rv.get_data())
+
         assert return_messageDict == mock_messageDict
 
-    def test_hola_circles(self):
-        # Send '/hola circles' message
-        # Intercept circles call to glassfrog
-        # Assert circles data
-        pass
+    @mock.patch('glassfrog.getCircles')
+    def test_hola_circles(self, mock_getCircles):
+        mock_messagedata = json.dumps(test_values.mock_messagedata('/hola circles'))
+        mock_color = strings.succes_color
+        mock_message = test_values.mock_circles_message
+        mock_messageDict = createMessageDict(mock_color, mock_message)
+        mock_getCircles.return_value = (200, test_values.mock_circles_message)
+
+        mock_glassfrogToken = 'myglassfrogtoken'
+        glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+
+        rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+    @mock.patch('glassfrog.getCircleMembers')
+    def test_hola_circle_members(self, mock_getCircleMembers):
+        mock_messagedata = json.dumps(test_values.mock_messagedata('/hola circle 1000 members'))
+        mock_color = strings.succes_color
+        mock_message = test_values.mock_circle_members_message
+        mock_messageDict = createMessageDict(mock_color, mock_message)
+        mock_getCircleMembers.return_value = (200, test_values.mock_circle_members_message)
+
+        mock_glassfrogToken = 'myglassfrogtoken'
+        glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+
+        rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
 
     def test_uninstalled(self):
         # Send uninstall call
