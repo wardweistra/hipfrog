@@ -16,7 +16,8 @@ app.glassfrogApiSettings = None
 
 @app.route('/')
 def hello_world():
-    return '<a target="_blank" href="https://www.hipchat.com/addons/install?url='+myserver+"/capabilities.json"+'">Install Glassfrog HipChat Integration</a>'
+    return ('<a target="_blank" href="https://www.hipchat.com/addons/install?url=' +
+            myserver+"/capabilities.json"+'">Install Glassfrog HipChat Integration</a>')
 
 
 @app.route('/capabilities.json')
@@ -45,7 +46,8 @@ def installed():
 
         app.hipchatApiSettings = apiCalls.HipchatApiSettings(
                                     hipchatToken=tokendata['access_token'],
-                                    hipchatApiUrl=capabilitiesdata['capabilities']['hipchatApiProvider']['url'],
+                                    hipchatApiUrl=capabilitiesdata['capabilities']
+                                                                  ['hipchatApiProvider']['url'],
                                     hipchatRoomId=installdata['roomId'])
 
         hipchatApiHandler.sendMessage(
@@ -110,22 +112,26 @@ def hola():
                     if callingMessage[3] == 'people' or callingMessage[3] == 'members':
                         # /hola [circles, circle] [circleId] [people, members]
                         code, message = getCircleMembers(circleId)
-                        message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
+                        message_dict = messageFunctions.createMessageDict(strings.succes_color,
+                                                                          message)
                     else:
                         # /hola [circles, circle] [circleId] something
-                        message = "Sorry, the feature \'"+callingMessage[3]+"\' does not exist (yet). Type /hola circle "+circleId+" to get a list of the available commands."
-                        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+                        message = strings.circles_missing_functionality.format(callingMessage[3],
+                                                                               circleId)
+                        message_dict = messageFunctions.createMessageDict(strings.error_color,
+                                                                          message)
                 else:
                     # /hola [circles, circle] [circleId]
                     message = strings.help_circle.format(circleId)
-                    message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
+                    message_dict = messageFunctions.createMessageDict(strings.succes_color,
+                                                                      message)
             else:
                 # /hola [circles, circle]
                 code, message = getCircles()
                 message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
         else:
             # /hola something
-            message = "Sorry, the feature \'"+callingMessage[1]+"\' does not exist (yet). Type /hola to get a list of the available commands."
+            message = strings.missing_functionality.format(callingMessage[1])
             message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     return json.jsonify(message_dict)
 

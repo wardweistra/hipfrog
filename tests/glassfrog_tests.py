@@ -207,6 +207,38 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
+    def test_hola_missing_functionality(self):
+        mock_missing_functionality = 'something'
+        mock_command = message = '/hola {}'.format(mock_missing_functionality)
+        mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
+        mock_color = strings.error_color
+        mock_message = strings.missing_functionality.format(mock_missing_functionality)
+        mock_messageDict = createMessageDict(mock_color, mock_message)
+
+        mock_glassfrogToken = 'myglassfrogtoken'
+        glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+
+        rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+    def test_hola_circle_circleId(self):
+        mock_circleId = 1000
+        mock_command = message = '/hola circle {}'.format(mock_circleId)
+        mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
+        mock_color = strings.succes_color
+        mock_message = strings.help_circle.format(mock_circleId)
+        mock_messageDict = createMessageDict(mock_color, mock_message)
+
+        mock_glassfrogToken = 'myglassfrogtoken'
+        glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+
+        rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
     @mock.patch('glassfrog.getCircleMembers')
     def test_hola_circle_members(self, mock_getCircleMembers):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hola circle 1000 members'))
@@ -223,10 +255,27 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
+    def test_hola_circle_missing_functionality(self):
+        mock_circleId = 1000
+        mock_missing_functionality = 'something'
+        mock_command = message = '/hola circle {} {}'.format(mock_circleId, mock_missing_functionality)
+        mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
+        mock_color = strings.error_color
+        mock_message = strings.circles_missing_functionality.format(mock_missing_functionality, mock_circleId)
+        mock_messageDict = createMessageDict(mock_color, mock_message)
+
+        mock_glassfrogToken = 'myglassfrogtoken'
+        glassfrog.app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+
+        rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
     def test_uninstalled(self):
-        # Send uninstall call
-        # Test removed related data
-        pass
+        mock_oauthId = test_values.mock_installdata['oauthId']
+        rv = self.app.delete('/installed/{}'.format(mock_oauthId), follow_redirects=True)
+        assert rv.status_code == 200
 
 if __name__ == '__main__':
     unittest.main()
