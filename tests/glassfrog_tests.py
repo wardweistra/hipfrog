@@ -82,6 +82,25 @@ class GlassfrogTestCase(unittest.TestCase):
                                               headers=mock_token_header,
                                               data=mock_data)
 
+    @mock.patch('glassfrog.apiCalls.requests.get')
+    def test_glassfrogApiCall(self, mock_requests_get):
+        mock_glassfrogToken = 'myglassfrogtoken'
+        glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+        mock_glassfrogApiSettings = apiCalls.GlassfrogApiSettings(mock_glassfrogToken)
+        mock_apiEndpoint = 'circles'
+
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.text = json.dumps(test_values.mock_circles_response)
+        mock_requests_get.return_value = mock_response
+
+        code, responsebody = glassfrogApiHandler.glassfrogApiCall(mock_apiEndpoint,
+                                                                  mock_glassfrogApiSettings)
+
+        mock_headers = {'X-Auth-Token': mock_glassfrogToken}
+        mock_apiUrl = 'https://glassfrog.holacracy.org/api/v3/'+mock_apiEndpoint
+        mock_requests_get.assert_called_with(mock_apiUrl, headers=mock_headers)
+
     @mock.patch('glassfrog.apiCalls.HipchatApiHandler')
     @mock.patch('glassfrog.getCircles')
     def test_configure(self, mock_getCircles, mock_HipchatApiHandler):

@@ -21,6 +21,7 @@ class GlassfrogApiHandler(object):
         responsebody = json.loads(apiResponse.text)
         return code, responsebody
 
+
 class HipchatApiSettings(object):
     def __init__(self, hipchatToken, hipchatApiUrl, hipchatRoomId):
         self.hipchatToken = hipchatToken
