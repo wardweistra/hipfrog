@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 from flask import Flask, json, request, render_template, flash
+from flask.ext.sqlalchemy import SQLAlchemy
 import requests
 
 from .functions import apiCalls
 from .functions import messageFunctions as messageFunctions
 from .strings import *
+from .models import *
 
 app = Flask(__name__)
 app.secret_key = 'not_so_secret'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/glassfrog_hipchat'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
 
 myserver = "http://5.157.82.115:45277"
 app.hipchatApiSettings = None
@@ -49,6 +54,7 @@ def installed():
                                     hipchatApiUrl=capabilitiesdata['capabilities']
                                                                   ['hipchatApiProvider']['url'],
                                     hipchatRoomId=installdata['roomId'])
+        # TODO create installation. add to database. commit
 
         hipchatApiHandler.sendMessage(
             color=strings.succes_color,
