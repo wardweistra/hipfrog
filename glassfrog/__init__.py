@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from flask import Flask, json, request, render_template, flash
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 import requests
 
 from .functions import apiCalls
