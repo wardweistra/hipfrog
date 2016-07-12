@@ -10,7 +10,6 @@ from .models import *
 from .settings import config
 
 app = Flask(__name__)
-app.secret_key = 'not_so_secret'
 app.config.from_object(config)
 app.config.from_envvar('GLASSFROG_HIPCHAT_SETTINGS', silent=True)
 db.init_app(app)
