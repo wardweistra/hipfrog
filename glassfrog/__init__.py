@@ -36,15 +36,23 @@ def installed():
     if request.method == 'POST':
         installdata = json.loads(request.get_data())
 
-        CLIENT_ID = installdata['oauthId']
-        CLIENT_SECRET = installdata['oauthSecret']
+        installation = Installation(oauthId=installdata['oauthId'],
+                                    capabilitiesUrl=installdata['capabilitiesUrl'],
+                                    roomId=installdata['roomId'],
+                                    groupId=installdata['groupId'],
+                                    oauthSecret=installdata['oauthSecret'])
+        db.session.add(installation)
+        db.session.commit()
+
+        oauthId = installdata['oauthId']
+        oauthSecret = installdata['oauthSecret']
 
         hipchatApiHandler = apiCalls.HipchatApiHandler()
 
         capabilitiesdata = hipchatApiHandler.getCapabilitiesData(installdata['capabilitiesUrl'])
         tokenUrl = capabilitiesdata['capabilities']['oauth2Provider']['tokenUrl']
 
-        client_auth = requests.auth.HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
+        client_auth = requests.auth.HTTPBasicAuth(oauthId, oauthSecret)
         post_data = {"grant_type": "client_credentials",
                      "scope": "send_notification"}
         tokendata = hipchatApiHandler.getTokenData(tokenUrl, client_auth, post_data)
@@ -54,7 +62,6 @@ def installed():
                                     hipchatApiUrl=capabilitiesdata['capabilities']
                                                                   ['hipchatApiProvider']['url'],
                                     hipchatRoomId=installdata['roomId'])
-        # TODO create installation. add to database. commit
 
         hipchatApiHandler.sendMessage(
             color=strings.succes_color,

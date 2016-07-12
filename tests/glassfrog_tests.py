@@ -8,6 +8,7 @@ import glassfrog
 from glassfrog.functions import apiCalls
 from glassfrog.functions.messageFunctions import createMessageDict
 from glassfrog import strings
+from glassfrog.models import *
 from glassfrog import db
 
 import test_values
@@ -57,6 +58,8 @@ class GlassfrogTestCase(unittest.TestCase):
             color=strings.succes_color,
             message=strings.installed_successfully,
             hipchatApiSettings=mock_hipchatApiSettings)
+        # with glassfrog.app.app_context():
+        #     print(Installation.query.all())
 
     @mock.patch('glassfrog.apiCalls.requests')
     def test_sendMessage(self, mock_requests):
