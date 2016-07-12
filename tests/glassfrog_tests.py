@@ -48,7 +48,22 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_HipchatApiHandler.return_value.getTokenData.return_value = test_values.mock_tokenData
         mock_jsoninstalldata = json.dumps(test_values.mock_installdata)
 
+        oauthId = test_values.mock_installdata['oauthId']
+        installation = Installation(oauthId=oauthId,
+                                    capabilitiesUrl=test_values.mock_installdata
+                                    ['capabilitiesUrl'],
+                                    roomId=test_values.mock_installdata['roomId'],
+                                    groupId=test_values.mock_installdata['groupId'],
+                                    oauthSecret=test_values.mock_installdata['oauthSecret'])
+        with glassfrog.app.app_context():
+            db_installation = Installation.query.filter_by(oauthId=oauthId).first()
+        assert db_installation is None
+
         rv = self.app.post('/installed', follow_redirects=True, data=mock_jsoninstalldata)
+
+        with glassfrog.app.app_context():
+            db_installation = Installation.query.filter_by(oauthId=oauthId).first()
+        assert db_installation is not None
 
         mock_hipchatApiSettings = apiCalls.HipchatApiSettings(
                                     hipchatToken=test_values.mock_tokenData['access_token'],
@@ -60,6 +75,27 @@ class GlassfrogTestCase(unittest.TestCase):
             hipchatApiSettings=mock_hipchatApiSettings)
         # with glassfrog.app.app_context():
         #     print(Installation.query.all())
+
+    def test_uninstalled(self):
+        oauthId = test_values.mock_installdata['oauthId']
+        installation = Installation(oauthId=oauthId,
+                                    capabilitiesUrl=test_values.mock_installdata
+                                    ['capabilitiesUrl'],
+                                    roomId=test_values.mock_installdata['roomId'],
+                                    groupId=test_values.mock_installdata['groupId'],
+                                    oauthSecret=test_values.mock_installdata['oauthSecret'])
+        with glassfrog.app.app_context():
+            db.session.add(installation)
+            db.session.commit()
+            db_installation = Installation.query.filter_by(oauthId=oauthId).first()
+        assert db_installation is not None
+
+        rv = self.app.delete('/installed/{}'.format(oauthId), follow_redirects=True)
+
+        with glassfrog.app.app_context():
+            db_installation = Installation.query.filter_by(oauthId=oauthId).first()
+        assert db_installation is None
+        assert rv.status_code == 200
 
     @mock.patch('glassfrog.apiCalls.requests')
     def test_sendMessage(self, mock_requests):
@@ -275,11 +311,6 @@ class GlassfrogTestCase(unittest.TestCase):
         return_messageDict = json.loads(rv.get_data())
 
         assert return_messageDict == mock_messageDict
-
-    def test_uninstalled(self):
-        mock_oauthId = test_values.mock_installdata['oauthId']
-        rv = self.app.delete('/installed/{}'.format(mock_oauthId), follow_redirects=True)
-        assert rv.status_code == 200
 
 if __name__ == '__main__':
     unittest.main()
