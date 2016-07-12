@@ -73,8 +73,6 @@ class GlassfrogTestCase(unittest.TestCase):
             color=strings.succes_color,
             message=strings.installed_successfully,
             hipchatApiSettings=mock_hipchatApiSettings)
-        # with glassfrog.app.app_context():
-        #     print(Installation.query.all())
 
     def test_uninstalled(self):
         oauthId = test_values.mock_installdata['oauthId']
