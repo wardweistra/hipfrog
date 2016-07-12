@@ -70,9 +70,11 @@ def installed():
     return ('', 200)
 
 
-@app.route('/installed/<oauthId>', methods=['GET', 'POST', 'DELETE'])
+@app.route('/installed/<oauthId>', methods=['DELETE'])
 def uninstall(oauthId):
-    # TODO Delete entries related to this installation (oauthID) from database.
+    installation = Installation.query.filter_by(oauthId=oauthId).first()
+    db.session.delete(installation)
+    db.session.commit()
     return ('', 200)
 
 
