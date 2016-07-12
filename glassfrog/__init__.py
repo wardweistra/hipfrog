@@ -7,11 +7,12 @@ from .functions import apiCalls
 from .functions import messageFunctions as messageFunctions
 from .strings import *
 from .models import *
+from .settings import config
 
 app = Flask(__name__)
 app.secret_key = 'not_so_secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/glassfrog_hipchat'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object(config)
+app.config.from_envvar('GLASSFROG_HIPCHAT_SETTINGS', silent=True)
 db.init_app(app)
 
 myserver = "http://5.157.82.115:45277"
