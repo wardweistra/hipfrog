@@ -2,13 +2,13 @@
 import os
 import unittest
 from unittest import mock
-# import tempfile
 from flask import url_for, request, json, jsonify, escape
 
 import glassfrog
 from glassfrog.functions import apiCalls
 from glassfrog.functions.messageFunctions import createMessageDict
 from glassfrog import strings
+from glassfrog import db
 
 import test_values
 
@@ -16,16 +16,17 @@ import test_values
 class GlassfrogTestCase(unittest.TestCase):
 
     def setUp(self):
-        # self.db_fd, glassfrog.app.config['DATABASE'] = tempfile.mkstemp()
         glassfrog.app.config['TESTING'] = True
+        glassfrog.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///glassfrog_hipchat_test'
+
         self.app = glassfrog.app.test_client()
-        # with glassfrog.app.app_context():
-        #     glassfrog.init_db()
+        db.init_app(glassfrog.app)
+        with glassfrog.app.app_context():
+            db.create_all()
 
     def tearDown(self):
-        # os.close(self.db_fd)
-        # os.unlink(glassfrog.app.config['DATABASE'])
-        pass
+        with glassfrog.app.app_context():
+            db.drop_all()
 
     def test_home(self):
         rv = self.app.get('/', follow_redirects=True)
