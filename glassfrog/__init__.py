@@ -87,10 +87,12 @@ def getCircles(glassfrogToken):
                                                               glassfrogToken)
 
     if code == 200:
-        message = 'The following circles are in your organization:'
+        message = 'The following circles are in your organization:<br /><ul>'
         for circle in responsebody['circles']:
-            message = message + '\n- ' + circle['name'] + \
-                      ' (/hola circle ' + str(circle['id']) + ')'
+            message += ('<li><code>/hola circle {}</code>'
+                        ' - <a href="https://app.glassfrog.com/circles/{}">{}</a>'
+                        '</li>').format(str(circle['id']), str(circle['id']), circle['name'])
+        message += '</ul>'
     else:
         message = responsebody['message']
 
