@@ -62,6 +62,9 @@ def installed():
         db.session.add(installation)
         db.session.commit()
 
+        # Pointless query on the installation object to make sure it is still around for testing...
+        installation.id
+
         hipchatApiHandler.sendMessage(
             color=strings.succes_color,
             message=strings.installed_successfully,
