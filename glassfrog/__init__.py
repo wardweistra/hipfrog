@@ -118,6 +118,25 @@ def getCircleMembers(glassfrogToken, circleId):
     return code, message
 
 
+def getCircleRoles(glassfrogToken, circleId):
+    apiEndpoint = 'circles/{}/roles'.format(circleId)
+    glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                              glassfrogToken)
+
+    if code == 200:
+        message = 'The following people are in your circle:<br /><ul>'
+        for role in responsebody['roles']:
+            message += ('<li><code>{}</code>'
+                        ' - <a href="https://app.glassfrog.com/roles/{}">{}</a>'
+                        '</li>').format(str(roles['id']), str(roles['id']), roles['name'])
+        message += '</ul>'
+    else:
+        message = responsebody['message']
+
+    return code, message
+
+
 @app.route('/hola', methods=['GET', 'POST'])
 def hola():
     jwt_token = request.headers['Authorization'].split(' ')[1]
@@ -139,6 +158,11 @@ def hola():
                     if callingMessage[3] == 'people' or callingMessage[3] == 'members':
                         # /hola [circles, circle] [circleId] [people, members]
                         code, message = getCircleMembers(installation.glassfrogToken, circleId)
+                        message_dict = messageFunctions.createMessageDict(strings.succes_color,
+                                                                          message)
+                    elif callingMessage[3] == 'roles':
+                        # /hola [circles, circle] [circleId] roles
+                        code, message = getCircleRoles(installation.glassfrogToken, circleId)
                         message_dict = messageFunctions.createMessageDict(strings.succes_color,
                                                                           message)
                     else:
