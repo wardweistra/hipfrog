@@ -224,6 +224,21 @@ class GlassfrogTestCase(unittest.TestCase):
 
         # TODO wrong circleID
 
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    def test_getCircleRoles(self, mock_glassfrogApiHandler):
+        mock_circleId = 1000
+
+        # Succesfull call
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            200, test_values.mock_circle_roles_response)
+        rv = glassfrog.getCircleRoles(test_values.mock_glassfrogToken, mock_circleId)
+        assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
+        for role in test_values.mock_circle_roles_response['roles']:
+            assert role['name'] in rv[1]
+            assert '{}'.format(role['id']) in rv[1]
+
+        # TODO wrong circleID
+
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
     def test_hola_no_glassfrog_token(self, mock_getInstallationFromJWT):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hola'))
@@ -331,6 +346,27 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
 
         mock_getCircleMembers.return_value = (200, test_values.mock_circle_members_message)
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromJWT.return_value = mock_installation
+
+        rv = self.app.post('/hola', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
+    @mock.patch('glassfrog.getCircleRoles')
+    def test_hola_circle_roles(self, mock_getCircleRoles, mock_getInstallationFromJWT):
+        mock_messagedata = json.dumps(test_values.mock_messagedata('/hola circle 1000 roles'))
+
+        mock_color = strings.succes_color
+        mock_message = test_values.mock_circle_roles_message
+        mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
+
+        mock_getCircleRoles.return_value = (200, test_values.mock_circle_roles_message)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()

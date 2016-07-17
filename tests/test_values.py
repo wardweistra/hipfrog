@@ -93,7 +93,7 @@ mock_glassfrogToken = '172aa12c195cf90cf6bcg856523111c0ceec4eab'
 
 
 def mock_authorization_headers(jwt_token='banana'):
-    return {'Authorization': 'JWT '+jwt_token}
+    return {'Authorization': 'JWT ' + jwt_token}
 
 
 def mock_jwt_data(signed_request):
@@ -241,3 +241,151 @@ mock_circle_members_message = '''The following people are in your circle:<br />
 <li><code>22309</code> -
  <a href="https://app.glassfrog.com/people/22309">Ward Weistra</a></li>
  </ul>'''
+
+mock_circle_roles_response = {
+    'linked': {
+        'domains': [
+            {
+                'description': 'cBioPortal Architecture roadmap',
+                'id': 8467822
+            },
+            {
+                'description': 'cBioPortal Community engagement',
+                'id': 8467823
+            },
+            {
+                'description': 'Role assignments within the Circle',
+                'id': 7884527
+            }
+        ],
+        'circles': [],
+        'people': [],
+        'accountabilities': [
+            {
+                'description': 'Engaging in the product X community meetings',
+                'id': 8914197
+            },
+            {
+                'description': ('Maintaining a vision on product X as a product and its relation '
+                                'to other open source initiatives'),
+                'id': 8914198
+            },
+            {
+                'description': 'Promoting The Hyve as go-to company for product X services',
+                'id': 8914199
+            },
+            {
+                'description': ('Providing everyone at @The_Hyve_Company_Circle with offices and'
+                                ' equipment\nFacilitating company mandated travels for'
+                                ' @The_Hyve_Company_Circle members'),
+                'id': 8912563
+            }
+        ]
+    },
+    'roles': [
+        {
+            'id': 8282582,
+            'links': {
+                'domains': [
+
+                ],
+                'circle':8996,
+                'people':[
+                    28477,
+                    28611
+                ],
+                'supporting_circle':None,
+                'accountabilities':[
+
+                ]
+            },
+            'name':'Finance',
+            'purpose':'Providing The Hyve with finance and accounting functions'
+        },
+        {
+            'id': 8283892,
+            'links': {
+                'domains': [
+                    8467822,
+                    8467823
+                ],
+                'circle':8996,
+                'people':[
+                    28608
+                ],
+                'supporting_circle':13665,
+                'accountabilities':[
+                    8914197,
+                    8914198,
+                    8914199
+                ]
+            },
+            'name':'product X',
+            'purpose':('Create and sustain product X as a great product and a thriving open source'
+                       ' community, by making it the default for function Y')
+        },
+        {
+            'id': 8282557,
+            'links': {
+                'domains': [
+
+                ],
+                'circle':8996,
+                'people':[
+                    32696
+                ],
+                'supporting_circle':None,
+                'accountabilities':[
+                    8912563
+                ]
+            },
+            'name':'Facilities',
+            'purpose':'Facilitating the company with all necessary office support'
+        },
+        {
+            'id': 7763373,
+            'links': {
+                'domains': [
+                    7884527
+                ],
+                'circle':8996,
+                'people':[
+                    28604
+                ],
+                'supporting_circle':None,
+                'accountabilities':[]
+            },
+            'name':'Lead Link',
+            'purpose':('Advance biology and medical science by creating and serving thriving'
+                       ' open source communities')
+        },
+        {
+            'id': 7937421,
+            'links': {
+                'domains': [
+
+                ],
+                'circle':8996,
+                'people':[
+                ],
+                'supporting_circle':10625,
+                'accountabilities':[
+                ]
+            },
+            'name':'Business Development & Sales',
+            'purpose':('Doing the marketing, Business Development & Sales of'
+                       ' @The_Hyve_Company_Circle')
+        }
+    ]
+}
+
+mock_circle_roles_message = '''The following people are in your circle:<br />
+<ul>
+<li><code>8282582</code> - <a href="https://app.glassfrog.com/roles/8282582">Finance</a></li>
+<li><code>8283892</code> - <a href="https://app.glassfrog.com/roles/8283892">product X</a></li>
+<li><code>8282557</code> - <a href="https://app.glassfrog.com/roles/8282557">Facilities</a></li>
+<li><code>7763373</code> - <a href="https://app.glassfrog.com/roles/7763373">Lead Link</a></li>
+<li><code>7937421</code> - <a href="https://app.glassfrog.com/roles/7937421">
+Business Development & Sales</a></li>
+</ul>
+'''

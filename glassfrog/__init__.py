@@ -124,8 +124,6 @@ def getCircleRoles(glassfrogToken, circleId):
     code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
                                                               glassfrogToken)
 
-    print(responsebody)
-
     if code == 200:
         message = 'The following people are in your circle:<br /><ul>'
         for role in responsebody['roles']:
@@ -135,8 +133,6 @@ def getCircleRoles(glassfrogToken, circleId):
         message += '</ul>'
     else:
         message = responsebody['message']
-
-    print(message)
 
     return code, message
 
