@@ -4,38 +4,17 @@ import requests
 from .messageFunctions import createMessageDict
 
 
-class GlassfrogApiSettings(object):
-    def __init__(self, glassfrogToken):
-        self.glassfrogToken = glassfrogToken
-
-
 class GlassfrogApiHandler(object):
     def __init__(self):
         pass
 
-    def glassfrogApiCall(self, apiEndpoint, glassfrogApiSettings: GlassfrogApiSettings):
-        headers = {'X-Auth-Token': glassfrogApiSettings.glassfrogToken}
+    def glassfrogApiCall(self, apiEndpoint, glassfrogToken):
+        headers = {'X-Auth-Token': glassfrogToken}
         apiUrl = 'https://glassfrog.holacracy.org/api/v3/'+apiEndpoint
         apiResponse = requests.get(apiUrl, headers=headers)
         code = apiResponse.status_code
         responsebody = json.loads(apiResponse.text)
         return code, responsebody
-
-
-class HipchatApiSettings(object):
-    def __init__(self, hipchatToken, hipchatApiUrl, hipchatRoomId):
-        self.hipchatToken = hipchatToken
-        self.hipchatApiUrl = hipchatApiUrl
-        self.hipchatRoomId = hipchatRoomId
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
 
 class HipchatApiHandler(object):
@@ -48,9 +27,10 @@ class HipchatApiHandler(object):
     def getTokenData(self, tokenUrl, client_auth, post_data):
         return json.loads(requests.post(tokenUrl, auth=client_auth, data=post_data).text)
 
-    def sendMessage(self, color, message, hipchatApiSettings: HipchatApiSettings):
-        messageUrl = hipchatApiSettings.hipchatApiUrl+'/room/{}/notification'.format(hipchatApiSettings.hipchatRoomId)
-        token_header = {"Authorization": "Bearer "+hipchatApiSettings.hipchatToken}
+    def sendMessage(self, color, message, installation):
+        messageUrl = '{}/room/{}/notification'.format(installation.hipchatApiProvider_url,
+                                                      installation.roomId)
+        token_header = {"Authorization": "Bearer "+installation.access_token}
         data = createMessageDict(color, message)
         messageresponse = requests.post(messageUrl,
                                         headers=token_header,

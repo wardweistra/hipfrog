@@ -15,6 +15,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['requests', 'Flask-Migrate', 'psycopg2', 'Flask-SQLAlchemy', 'Flask'],
+    install_requires=['requests', 'Flask-Migrate', 'psycopg2', 'Flask-SQLAlchemy', 'PyJWT',
+                      'Flask'],
     scripts=[mainscript],
 )

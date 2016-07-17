@@ -14,9 +14,8 @@ app.config.from_object(config)
 app.config.from_envvar('GLASSFROG_HIPCHAT_SETTINGS', silent=True)
 db.init_app(app)
 
+# TODO move myserver to settings. Overwrite this and SECRET_KEY on PROD
 myserver = "http://5.157.82.115:45277"
-app.hipchatApiSettings = None
-app.glassfrogApiSettings = None
 
 
 @app.route('/')
@@ -41,32 +40,32 @@ def installed():
                                     roomId=installdata['roomId'],
                                     groupId=installdata['groupId'],
                                     oauthSecret=installdata['oauthSecret'])
-        db.session.add(installation)
-        db.session.commit()
-
-        oauthId = installdata['oauthId']
-        oauthSecret = installdata['oauthSecret']
 
         hipchatApiHandler = apiCalls.HipchatApiHandler()
 
         capabilitiesdata = hipchatApiHandler.getCapabilitiesData(installdata['capabilitiesUrl'])
         tokenUrl = capabilitiesdata['capabilities']['oauth2Provider']['tokenUrl']
-
-        client_auth = requests.auth.HTTPBasicAuth(oauthId, oauthSecret)
+        client_auth = requests.auth.HTTPBasicAuth(installation.oauthId, installation.oauthSecret)
         post_data = {"grant_type": "client_credentials",
                      "scope": "send_notification"}
         tokendata = hipchatApiHandler.getTokenData(tokenUrl, client_auth, post_data)
 
-        app.hipchatApiSettings = apiCalls.HipchatApiSettings(
-                                    hipchatToken=tokendata['access_token'],
-                                    hipchatApiUrl=capabilitiesdata['capabilities']
-                                                                  ['hipchatApiProvider']['url'],
-                                    hipchatRoomId=installdata['roomId'])
+        installation.access_token = tokendata['access_token']
+        installation.expires_in = tokendata['expires_in']
+        installation.group_id = tokendata['group_id']
+        installation.group_name = tokendata['group_name']
+        installation.scope = tokendata['scope']
+        installation.token_type = tokendata['token_type']
+        installation.hipchatApiProvider_url = \
+            capabilitiesdata['capabilities']['hipchatApiProvider']['url']
+
+        db.session.add(installation)
+        db.session.commit()
 
         hipchatApiHandler.sendMessage(
             color=strings.succes_color,
             message=strings.installed_successfully,
-            hipchatApiSettings=app.hipchatApiSettings)
+            installation=installation)
     return ('', 200)
 
 
@@ -78,25 +77,28 @@ def uninstall(oauthId):
     return ('', 200)
 
 
-def getCircles():
+def getCircles(glassfrogToken):
     apiEndpoint = 'circles'
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
-    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint, app.glassfrogApiSettings)
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                              glassfrogToken)
 
     if code == 200:
         message = 'The following circles are in your organization:'
         for circle in responsebody['circles']:
-            message = message + '\n- ' + circle['name'] + ' (/hola circle ' + str(circle['id']) + ')'
+            message = message + '\n- ' + circle['name'] + \
+                      ' (/hola circle ' + str(circle['id']) + ')'
     else:
         message = responsebody['message']
 
     return code, message
 
 
-def getCircleMembers(circleId):
+def getCircleMembers(glassfrogToken, circleId):
     apiEndpoint = 'circles/{}/people'.format(circleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
-    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint, app.glassfrogApiSettings)
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                              glassfrogToken)
 
     if code == 200:
         message = 'The following people are in your circle:'
@@ -110,10 +112,12 @@ def getCircleMembers(circleId):
 
 @app.route('/hola', methods=['GET', 'POST'])
 def hola():
+    jwt_token = request.headers['Authorization'].split(' ')[1]
+    installation = messageFunctions.getInstallationFromJWT(jwt_token)
     requestdata = json.loads(request.get_data())
 
     callingMessage = requestdata['item']['message']['message'].split()
-    if app.glassfrogApiSettings is None:
+    if installation.glassfrogToken is None:
         message = strings.set_token_first
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     elif len(callingMessage) == 1:
@@ -126,7 +130,7 @@ def hola():
                 if len(callingMessage) > 3:
                     if callingMessage[3] == 'people' or callingMessage[3] == 'members':
                         # /hola [circles, circle] [circleId] [people, members]
-                        code, message = getCircleMembers(circleId)
+                        code, message = getCircleMembers(installation.glassfrogToken, circleId)
                         message_dict = messageFunctions.createMessageDict(strings.succes_color,
                                                                           message)
                     else:
@@ -142,7 +146,7 @@ def hola():
                                                                       message)
             else:
                 # /hola [circles, circle]
-                code, message = getCircles()
+                code, message = getCircles(installation.glassfrogToken)
                 message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
         else:
             # /hola something
@@ -153,25 +157,28 @@ def hola():
 
 @app.route('/configure.html', methods=['GET', 'POST'])
 def configure():
+    installation = messageFunctions.getInstallationFromJWT(request.args['signed_request'])
+
     if request.method == 'POST':
-        app.glassfrogApiSettings = apiCalls.GlassfrogApiSettings(
-                                    glassfrogToken=request.form['glassfrogtoken'])
-        code, message = getCircles()
+        installation.glassfrogToken = request.form['glassfrogtoken']
+        db.session.commit()
+
+        code, message = getCircles(installation.glassfrogToken)
         if code == 200:
             flashmessage = strings.configured_successfully_flash
             hipchatApiHandler = apiCalls.HipchatApiHandler()
             hipchatApiHandler.sendMessage(
                         color=strings.succes_color,
                         message=strings.configured_successfully,
-                        hipchatApiSettings=app.hipchatApiSettings)
+                        installation=installation)
         else:
             flashmessage = 'Encountered Error '+str(code)+' when testing the Glassfrog Token.'
             flashmessage = flashmessage + ' Message given: \''+message+'\'.'
         flash(flashmessage)
 
     glassfrogToken = ''
-    if app.glassfrogApiSettings is not None:
-        glassfrogToken = app.glassfrogApiSettings.glassfrogToken
+    if installation.glassfrogToken is not None:
+        glassfrogToken = installation.glassfrogToken
     return render_template('configure.html', glassfrogtoken=glassfrogToken)
 
 if __name__ == '__main__':

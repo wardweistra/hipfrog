@@ -16,12 +16,14 @@ mock_capabilitiesData = {
                    'name': 'View Room'
                 },
                 'import_data': {
-                    'description': 'Import users, rooms, and chat history. Only available for select add-ons.',
+                    'description': ('Import users, rooms, and chat history.'
+                                    ' Only available for select add-ons.'),
                     'id': 'import_data',
                     'name': 'Import Data'
                 },
                 'view_messages': {
-                    'description': 'View messages from chat rooms and private chats you have access to',
+                    'description': ('View messages from chat rooms and private chats'
+                                    ' you have access to'),
                     'id': 'view_messages',
                     'name': 'View Messages'
                 },
@@ -31,7 +33,8 @@ mock_capabilitiesData = {
                     'name': 'Send Notification'
                 },
                 'admin_group': {
-                    'description': "Perform group administrative tasks. Note that this scope is restricted from updating the group owner's profile.",
+                    'description': ("Perform group administrative tasks. Note that this scope"
+                                    " is restricted from updating the group owner's profile."),
                     'id': 'admin_group',
                     'name': 'Administer Group'
                 },
@@ -85,6 +88,32 @@ mock_tokenData = {
     'scope': 'send_notification',
     'token_type': 'bearer'
 }
+
+mock_glassfrogToken = '172aa12c195cf90cf6bcg856523111c0ceec4eab'
+
+
+def mock_authorization_headers(jwt_token='banana'):
+    return {'Authorization': 'JWT '+jwt_token}
+
+
+def mock_jwt_data(signed_request):
+    return {'xdmhost': 'https://transmart.hipchat.com', 'signed_request': signed_request}
+
+
+def mock_jwt_decoded(time):
+    return {
+        'iat': 1468372150,
+        'iss': 'f3100c47-9936-40e8-a8aa-12314e8da8f0',
+        'exp': time,
+        'prn': '351107',
+        'sub': '351107',
+        'jti': 'YGmIBL8ewp0Ma8NIGEgp',
+        'context': {
+            'room_id': 2589171,
+            'roomId': 2589171,
+            'user_tz': 'Europe/Amsterdam'
+        }
+    }
 
 
 def mock_messagedata(message):
