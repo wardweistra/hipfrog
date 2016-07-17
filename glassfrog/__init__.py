@@ -106,8 +106,9 @@ def getCircleMembers(glassfrogToken, circleId):
                                                               glassfrogToken)
 
     if code == 200:
-        message = 'The following people are in your circle:<br /><ul>'
-        for person in responsebody['people']:
+        message = 'The following people are in this circle:<br /><ul>'
+
+        for person in sorted(responsebody['people'], key=lambda k: k['name']):
             message += ('<li><code>{}</code>'
                         ' - <a href="https://app.glassfrog.com/people/{}">{}</a>'
                         '</li>').format(str(person['id']), str(person['id']), person['name'])
@@ -125,7 +126,7 @@ def getCircleRoles(glassfrogToken, circleId):
                                                               glassfrogToken)
 
     if code == 200:
-        message = 'The following people are in your circle:<br /><ul>'
+        message = 'The following roles are in this circle:<br /><ul>'
         for role in responsebody['roles']:
             supporting_circle_info = ''
             message += ('<li><code>{}</code>'
