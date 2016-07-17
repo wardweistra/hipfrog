@@ -109,8 +109,8 @@ def getCircleCircleId(glassfrogToken, circleId):
         print(responsebody)
 
         message_list = []
-        message_list += [('<strong><a href="https://app.glassfrog.com/circles/{}">Circle:</strong>'
-                          ' {}</a>').format(circleId, responsebody['circles'][0]['name'])]
+        message_list += [('<strong><a href="https://app.glassfrog.com/circles/{}">Circle:'
+                          ' {}</a></strong>').format(circleId, responsebody['circles'][0]['name'])]
         if responsebody['linked']['domains'] != []:
             domains = 'Domains:<ul>'
             for domain in responsebody['linked']['domains']:
@@ -128,7 +128,7 @@ def getCircleCircleId(glassfrogToken, circleId):
                               ' <code>/hipfrog circle {}</code>').format(
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
         message_list += [strings.help_circle.format(circleId)]
-        message = '<br/>'.join(message_list)
+        message = '<br/><br/>'.join(message_list)
 
         print(message)
         # responsebody['circles'][0]['name']
