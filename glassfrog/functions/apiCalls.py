@@ -40,9 +40,9 @@ class HipchatApiHandler(object):
 def getCapabilitiesDict(myserver):
     capabilities_dict = \
         {
-            "name": "Glassfrog Hipchat Bot",
+            "name": "HipFrog",
             "description": "A Hipchat bot for accessing Glassfrog",
-            "key": "glassfrog-hipchat-bot",
+            "key": "hipfrog",
             "links": {
                 "homepage": myserver,
                 "self": myserver+"/capabilities.json"
@@ -53,7 +53,7 @@ def getCapabilitiesDict(myserver):
             },
             "capabilities": {
                 "hipchatApiConsumer": {
-                    "fromName": "Glassfrog Hipchat Bot",
+                    "fromName": "HipFrog",
                     "scopes": [
                         "send_notification",
                         "view_room",
@@ -72,9 +72,9 @@ def getCapabilitiesDict(myserver):
                 "webhook": [
                     {
                         "event": "room_message",
-                        "pattern": "\\A\\/hola\\b",
-                        "url": myserver+"/hola",
-                        "name": "Holacracy webhook",
+                        "pattern": "\\A\\/hipfrog\\b",
+                        "url": myserver+"/hipfrog",
+                        "name": "Hipfrog webhook",
                         "authentication": "jwt"
                     }
                 ],
