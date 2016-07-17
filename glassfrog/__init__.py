@@ -88,7 +88,7 @@ def getCircles(glassfrogToken):
 
     if code == 200:
         message = 'The following circles are in your organization:<br /><ul>'
-        for circle in responsebody['circles']:
+        for circle in sorted(responsebody['circles'], key=lambda k: k['name']):
             message += ('<li><code>/hipfrog circle {}</code>'
                         ' - <a href="https://app.glassfrog.com/circles/{}">{}</a>'
                         '</li>').format(str(circle['id']), str(circle['id']), circle['name'])
@@ -127,7 +127,7 @@ def getCircleRoles(glassfrogToken, circleId):
 
     if code == 200:
         message = 'The following roles are in this circle:<br /><ul>'
-        for role in responsebody['roles']:
+        for role in sorted(responsebody['roles'], key=lambda k: k['name']):
             supporting_circle_info = ''
             message += ('<li><code>{}</code>'
                         ' - <a href="https://app.glassfrog.com/roles/{}">{}</a>'
