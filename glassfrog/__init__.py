@@ -110,8 +110,11 @@ def getCircleCircleId(glassfrogToken, circleId):
 
         description_list = []
         if responsebody['linked']['domains'] != []:
+            domains = 'Domains:<ul>'
             for domain in responsebody['linked']['domains']:
-                description_list += ['Domain: {}'.format(domain['description'])]
+                domains += '<li>{}</li>'.format(domain['description'])
+            domains += '</ul>'
+            description_list += [domains]
         if responsebody['circles'][0]['strategy'] is not None:
             description_list += ['<strong>Strategy:</strong> {}'.format(
                 responsebody['circles'][0]['strategy'])]
@@ -122,7 +125,7 @@ def getCircleCircleId(glassfrogToken, circleId):
             description_list += [('<strong>Parent circle:</strong>'
                                   ' <code>/hipfrog circle {}</code>').format(
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
-        description = '<br />'.join(description_list)
+        description = '<br/>'.join(description_list)
 
         message = 'Circle {}<br />'.format(circleId)
         message += strings.help_circle.format(circleId)
