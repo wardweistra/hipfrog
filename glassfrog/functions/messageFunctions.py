@@ -6,7 +6,7 @@ from flask import escape
 def createMessageDict(color, message):
     message_dict = {
         "color": color,
-        "message": escape(str(message)),
+        "message": str(message),
         "notify": False,
         "message_format": "html"
         }
