@@ -201,6 +201,11 @@ mock_circles_message = '''The following circles are in your organization:<br />
  <a href="https://app.glassfrog.com/circles/15512">Business Development & Sales</a></li>
 </ul>'''
 
+mock_circle_circleId_response = {}
+
+mock_circle_circleId_message = '''
+'''
+
 mock_circle_members_response = {
     'people': [
         {

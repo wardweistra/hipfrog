@@ -99,6 +99,23 @@ def getCircles(glassfrogToken):
     return code, message
 
 
+def getCircleCircleId(glassfrogToken, circleId):
+    apiEndpoint = 'circles/{}'.format(circleId)
+    glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                              glassfrogToken)
+
+    print(responsebody)
+
+    if code == 200:
+        message = 'Circle {}<br />'.format(circleId)
+        message += strings.help_circle.format(circleId)
+    else:
+        message = responsebody['message']
+
+    return code, message
+
+
 def getCircleMembers(glassfrogToken, circleId):
     apiEndpoint = 'circles/{}/people'.format(circleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
@@ -181,8 +198,9 @@ def hipfrog():
                                                                           message)
                 else:
                     # /hipfrog [circles, circle] [circleId]
-                    message = strings.help_circle.format(circleId)
-                    message_dict = messageFunctions.createMessageDict(strings.succes_color,
+                    code, message = getCircleCircleId(installation.glassfrogToken, circleId)
+                    color = strings.succes_color if code == 200 else strings.error_color
+                    message_dict = messageFunctions.createMessageDict(color,
                                                                       message)
             else:
                 # /hipfrog [circles, circle]
