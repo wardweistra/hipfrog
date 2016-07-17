@@ -135,7 +135,7 @@ def getCircleRoles(glassfrogToken, circleId):
                 message += ' (circle <code>{}</code>)'.format(
                     role['links']['supporting_circle'])
             if role['purpose'] is not None and role['purpose'] != '':
-                message += '<br /><i>{}</i>'.format(role['purpose'])
+                message += '<ul><li>{}</li></ul>'.format(role['purpose'])
             message += '</li>'
         message += '</ul>'
     else:
