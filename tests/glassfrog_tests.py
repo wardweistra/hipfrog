@@ -341,7 +341,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_message = strings.help_circle.format(mock_circleId)
         mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
 
-        mock_getCircleCircleId.return_value = (200, test_values.mock_circle_circleId_message)
+        mock_getCircleCircleId.return_value = mock_messageDict
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()

@@ -234,7 +234,9 @@ mock_circle_circleId_response = {
                     ],
                     'supporting_circle':13665
                 },
-                'purpose':'Create and sustain cBioPortal as a great product and a thriving open source community, by making it the default  for translational oncology data visualization portal',
+                'purpose':('Create and sustain cBioPortal as a great product and a thriving'
+                           ' open source community, by making it the default  for translational'
+                           ' oncology data visualization portal'),
                 'name':'cBioPortal',
                 'id':8283892
             }

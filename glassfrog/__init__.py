@@ -121,11 +121,14 @@ def getCircleCircleId(glassfrogToken, circleId):
 
         message = 'Circle {}<br />'.format(circleId)
         message += strings.help_circle.format(circleId)
+
         card = messageFunctions.createMessageCard(
             url='https://app.glassfrog.com/circles/{}'.format(circleId),
             title=responsebody['circles'][0]['name'],
             description=description)
 
+        print(message)
+        print(card)
         # responsebody['circles'][0]['name']
         # responsebody['circles'][0]['strategy']
         # responsebody['linked']['domains']
@@ -133,8 +136,12 @@ def getCircleCircleId(glassfrogToken, circleId):
         # responsebody['linked']['supported_roles'][0]['purpose']
     else:
         message = responsebody['message']
+        card = None
 
-    return code, message
+    color = strings.succes_color if code == 200 else strings.error_color
+    message_dict = messageFunctions.createMessageDict(color, message, card)
+
+    return message_dict
 
 
 def getCircleMembers(glassfrogToken, circleId):
@@ -219,10 +226,8 @@ def hipfrog():
                                                                           message)
                 else:
                     # /hipfrog [circles, circle] [circleId]
-                    code, message = getCircleCircleId(installation.glassfrogToken, circleId)
-                    color = strings.succes_color if code == 200 else strings.error_color
-                    message_dict = messageFunctions.createMessageDict(color,
-                                                                      message)
+                    message_dict = getCircleCircleId(installation.glassfrogToken, circleId)
+                    print(message_dict)
             else:
                 # /hipfrog [circles, circle]
                 code, message = getCircles(installation.glassfrogToken)
