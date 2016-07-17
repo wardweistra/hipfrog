@@ -218,7 +218,9 @@ class GlassfrogTestCase(unittest.TestCase):
             200, test_values.mock_circle_members_response)
         rv = glassfrog.getCircleMembers(test_values.mock_glassfrogToken, mock_circleId)
         assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
-        assert rv == (200, test_values.mock_circle_members_message)
+        for person in test_values.mock_circle_members_response['people']:
+            assert person['name'] in rv[1]
+            assert '{}'.format(person['id']) in rv[1]
 
         # TODO wrong circleID
 

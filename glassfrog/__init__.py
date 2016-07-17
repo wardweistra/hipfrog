@@ -106,9 +106,12 @@ def getCircleMembers(glassfrogToken, circleId):
                                                               glassfrogToken)
 
     if code == 200:
-        message = 'The following people are in your circle:'
+        message = 'The following people are in your circle:<br /><ul>'
         for person in responsebody['people']:
-            message = message + '\n- ' + person['name'] + ' (' + str(person['id']) + ')'
+            message += ('<li><code>{}</code>'
+                        ' - <a href="https://app.glassfrog.com/people/{}">{}</a>'
+                        '</li>').format(str(person['id']), str(person['id']), person['name'])
+        message += '</ul>'
     else:
         message = responsebody['message']
 

@@ -234,6 +234,10 @@ mock_circle_members_response = {
     }
 }
 
-mock_circle_members_message = '''The following people are in your circle:
-- Someone van Something (1234)
-- Ward Weistra (22309)'''
+mock_circle_members_message = '''The following people are in your circle:<br />
+<ul>
+<li><code>1234</code> -
+ <a href="https://app.glassfrog.com/people/1234">Someone van Something</a></li>
+<li><code>22309</code> -
+ <a href="https://app.glassfrog.com/people/22309">Ward Weistra</a></li>
+ </ul>'''
