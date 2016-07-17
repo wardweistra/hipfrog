@@ -129,7 +129,7 @@ def getCircleRoles(glassfrogToken, circleId):
         for role in responsebody['roles']:
             message += ('<li><code>{}</code>'
                         ' - <a href="https://app.glassfrog.com/roles/{}">{}</a>'
-                        '</li>').format(str(roles['id']), str(roles['id']), roles['name'])
+                        '</li>').format(str(role['id']), str(role['id']), role['name'])
         message += '</ul>'
     else:
         message = responsebody['message']
