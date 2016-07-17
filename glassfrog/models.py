@@ -33,8 +33,20 @@ class Installation(db.Model):
             for item in self.__dict__:
                 if isinstance(self.__dict__[item], sqlalchemy.orm.state.InstanceState):
                     break
-                if self.__dict__[item] != other.__dict__[item]:
+                if item in other.__dict__:
+                    if self.__dict__[item] != other.__dict__[item]:
+                        return False
+                else:
                     return False
+
+            for item in other.__dict__:
+                if isinstance(self.__dict__[item], sqlalchemy.orm.state.InstanceState):
+                    break
+                if item in self.__dict__:
+                    pass
+                else:
+                    return False
+
             return True
         else:
             return False
