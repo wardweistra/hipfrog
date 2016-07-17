@@ -383,7 +383,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_circleId = 1000
         mock_missing_functionality = 'something'
         mock_command = message = '/hipfrog circle {} {}'.format(mock_circleId,
-                                                             mock_missing_functionality)
+                                                                mock_missing_functionality)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.error_color
