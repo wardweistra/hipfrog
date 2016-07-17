@@ -43,4 +43,4 @@ class Installation(db.Model):
         return not self.__eq__(other)
 
     def __repr__(self):
-        return '<Installation {}>'.format(self.id)
+        return '<Installation {} with oauthId {}>'.format(self.id, self.oauthId)
