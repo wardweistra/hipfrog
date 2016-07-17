@@ -191,10 +191,15 @@ mock_circles_response = {
     }
 }
 
-mock_circles_message = '''The following circles are in your organization:
-- The Hyve Company Circle (/hola circle 8495)
-- Delivery (/hola circle 9032)
-- Business Development & Sales (/hola circle 15512)'''
+mock_circles_message = '''The following circles are in your organization:<br />
+<ul>
+<li><code>/hola circle 8495</code> -
+ <a href="https://app.glassfrog.com/circles/8495">The Hyve Company Circle</a></li>
+<li><code>/hola circle 9032</code> -
+ <a href="https://app.glassfrog.com/circles/9032">Delivery</a></li>
+<li><code>/hola circle 15512</code> -
+ <a href="https://app.glassfrog.com/circles/15512">Business Development & Sales</a></li>
+</ul>'''
 
 mock_circle_members_response = {
     'people': [

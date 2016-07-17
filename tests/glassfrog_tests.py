@@ -203,7 +203,9 @@ class GlassfrogTestCase(unittest.TestCase):
             200, test_values.mock_circles_response)
         rv = glassfrog.getCircles(test_values.mock_glassfrogToken)
         assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
-        assert rv == (200, test_values.mock_circles_message)
+        for circle in test_values.mock_circles_response['circles']:
+            assert circle['name'] in rv[1]
+            assert '/hola circle {}'.format(circle['id']) in rv[1]
 
         # TODO Failing call
 
