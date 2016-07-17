@@ -1,4 +1,4 @@
-from flask import json
+from flask import json, url_for
 import requests
 
 from .messageFunctions import createMessageDict
@@ -58,7 +58,10 @@ def getCapabilitiesDict(myserver):
                         "send_notification",
                         "view_room",
                         "view_group"
-                    ]
+                    ],
+                    "avatar": {
+                        "url": myserver+'/static/hipfrog.png'
+                    }
                 },
                 "installable": {
                     "allowGlobal": False,
