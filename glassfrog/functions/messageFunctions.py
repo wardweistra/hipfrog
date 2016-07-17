@@ -15,6 +15,42 @@ def createMessageDict(color, message, card=None):
     return message_dict
 
 
+def createMessageCard(url, title, description, icon=None, attributes=None):
+    message_card = {
+      "style": "application",
+      "url": url,
+      "format": "medium",
+      "id": "whatdoesthisiddo",
+      "title": str(title),
+      "description": {
+          "format": "html",
+          "value": str(description)
+        }
+    }
+    #   "icon": {
+    #     "url": "http://bit.ly/1S9Z5dF"
+    #   }
+    #   "attributes": [
+    #     {
+    #       "label": "attribute1",
+    #       "value": {
+    #         "label": "value1"
+    #       }
+    #     },
+    #     {
+    #       "label": "attribute2",
+    #       "value": {
+    #         "icon": {
+    #           "url": "http://bit.ly/1S9Z5dF"
+    #         },
+    #         "label": "value2",
+    #         "style": "lozenge-complete"
+    #       }
+    #     }
+    #   ]
+    return message_card
+
+
 def getInstallationFromJWT(signed_request):
     jwt_unverified = jwt.decode(signed_request,
                                 options={'verify_signature': False, 'verify_exp': False})

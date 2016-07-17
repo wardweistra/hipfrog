@@ -201,7 +201,71 @@ mock_circles_message = '''The following circles are in your organization:<br />
  <a href="https://app.glassfrog.com/circles/15512">Business Development & Sales</a></li>
 </ul>'''
 
-mock_circle_circleId_response = {}
+mock_circle_circleId_response = {
+    'linked': {
+        'policies': [
+
+        ],
+        'domains': [
+            {
+                'description': 'cBioPortal Architecture roadmap',
+                'id': 8467822
+            },
+            {
+                'description': 'cBioPortal Community engagement',
+                'id': 8467823
+            }
+        ],
+        'supported_roles': [
+            {
+                'links': {
+                    'accountabilities': [
+                        8914197,
+                        8914198,
+                        8914199
+                    ],
+                    'circle':8996,
+                    'domains':[
+                        8467822,
+                        8467823
+                    ],
+                    'people':[
+                        28608
+                    ],
+                    'supporting_circle':13665
+                },
+                'purpose':'Create and sustain cBioPortal as a great product and a thriving open source community, by making it the default  for translational oncology data visualization portal',
+                'name':'cBioPortal',
+                'id':8283892
+            }
+        ],
+        'roles': []
+    },
+    'circles': [
+        {
+            'links': {
+                'policies': [
+
+                ],
+                'domain':[
+                    8467822,
+                    8467823
+                ],
+                'supported_role':8283892,
+                'roles':[
+                    8284164,
+                    8284162,
+                    8284166,
+                    8284163
+                ]
+            },
+            'strategy':None,
+            'short_name':'cBioPortal',
+            'name':'cBioPortal',
+            'id':13665
+        }
+    ]
+}
 
 mock_circle_circleId_message = '''
 '''

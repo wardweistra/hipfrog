@@ -105,11 +105,32 @@ def getCircleCircleId(glassfrogToken, circleId):
     code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
                                                               glassfrogToken)
 
-    print(responsebody)
-
     if code == 200:
+        print(responsebody)
+
+        description_list = []
+        if responsebody['linked']['domains'] != []:
+            for domain in responsebody['linked']['domains']:
+                description_list += ['Domain: {}'.format(domain['description'])]
+        description_list += ['Strategy: {}'.format(responsebody['circles'][0]['strategy'])]
+        description_list += ['Purpose: {}'.format(
+            responsebody['linked']['supported_roles'][0]['purpose'])]
+        description_list += ['Parent circle: <code>/hipfrog circle {}</code>'.format(
+            responsebody['linked']['supported_roles'][0]['id'])]
+        description = '<br />'.join(description_list)
+
         message = 'Circle {}<br />'.format(circleId)
         message += strings.help_circle.format(circleId)
+        card = messageFunctions.createMessageCard(
+            url='https://app.glassfrog.com/circles/{}'.format(circleId),
+            title=responsebody['circles'][0]['name'],
+            description=description)
+
+        # responsebody['circles'][0]['name']
+        # responsebody['circles'][0]['strategy']
+        # responsebody['linked']['domains']
+        # responsebody['linked']['supported_roles'][0]['id']
+        # responsebody['linked']['supported_roles'][0]['purpose']
     else:
         message = responsebody['message']
 

@@ -210,6 +210,20 @@ class GlassfrogTestCase(unittest.TestCase):
         # TODO Failing call
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    def test_getCircleCircleId(self, mock_glassfrogApiHandler):
+        mock_circleId = 1000
+
+        # Succesfull call
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            200, test_values.mock_circle_circleId_response)
+        rv = glassfrog.getCircleCircleId(test_values.mock_glassfrogToken, mock_circleId)
+        assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
+        # assert person['name'] in rv[1]
+        # assert '{}'.format(person['id']) in rv[1]
+
+        # TODO wrong circleID
+
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getCircleMembers(self, mock_glassfrogApiHandler):
         mock_circleId = 1000
 
