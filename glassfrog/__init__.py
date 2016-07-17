@@ -162,12 +162,14 @@ def hola():
                     if callingMessage[3] == 'people' or callingMessage[3] == 'members':
                         # /hola [circles, circle] [circleId] [people, members]
                         code, message = getCircleMembers(installation.glassfrogToken, circleId)
-                        message_dict = messageFunctions.createMessageDict(strings.succes_color,
+                        color = strings.succes_color if code == 200 else strings.error_color
+                        message_dict = messageFunctions.createMessageDict(color,
                                                                           message)
                     elif callingMessage[3] == 'roles':
                         # /hola [circles, circle] [circleId] roles
                         code, message = getCircleRoles(installation.glassfrogToken, circleId)
-                        message_dict = messageFunctions.createMessageDict(strings.succes_color,
+                        color = strings.succes_color if code == 200 else strings.error_color
+                        message_dict = messageFunctions.createMessageDict(color,
                                                                           message)
                     else:
                         # /hola [circles, circle] [circleId] something
