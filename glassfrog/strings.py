@@ -19,7 +19,8 @@ configured_successfully_flash = 'Valid Glassfrog Token stored'
 configured_successfully = "Configured successfully. Type <code>/hola</code> to get started!"
 
 missing_functionality = ("Sorry, the feature \'{}\' does not exist (yet)."
-                         " Type /hola to get a list of the available commands.")
+                         " Type <code>/hola</code> to get a list of the available commands.")
 
 circles_missing_functionality = ("Sorry, the feature \'{}\' does not exist (yet)."
-                                 " Type /hola circle {} to get a list of the available commands.")
+                                 " Type <code>/hola circle {}</code> to get a list of"
+                                 " the available commands.")
