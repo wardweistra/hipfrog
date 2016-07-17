@@ -106,13 +106,11 @@ def getCircleCircleId(glassfrogToken, circleId):
                                                               glassfrogToken)
 
     if code == 200:
-        print(responsebody)
-
         message_list = []
-        message_list += [('<strong><a href="https://app.glassfrog.com/circles/{}">Circle:'
+        message_list += [('<strong><a href="https://app.glassfrog.com/circles/{}">Circle -'
                           ' {}</a></strong>').format(circleId, responsebody['circles'][0]['name'])]
         if responsebody['linked']['domains'] != []:
-            domains = 'Domains:<ul>'
+            domains = '<strong>Domains:</strong><ul>'
             for domain in responsebody['linked']['domains']:
                 domains += '<li>{}</li>'.format(domain['description'])
             domains += '</ul>'
@@ -129,20 +127,10 @@ def getCircleCircleId(glassfrogToken, circleId):
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
         message_list += [strings.help_circle.format(circleId)]
         message = '<br/><br/>'.join(message_list)
-
-        print(message)
-        # responsebody['circles'][0]['name']
-        # responsebody['circles'][0]['strategy']
-        # responsebody['linked']['domains']
-        # responsebody['linked']['supported_roles'][0]['id']
-        # responsebody['linked']['supported_roles'][0]['purpose']
     else:
         message = responsebody['message']
 
-    color = strings.succes_color if code == 200 else strings.error_color
-    message_dict = messageFunctions.createMessageDict(color, message)
-
-    return message_dict
+    return code, message
 
 
 def getCircleMembers(glassfrogToken, circleId):
@@ -227,7 +215,9 @@ def hipfrog():
                                                                           message)
                 else:
                     # /hipfrog [circles, circle] [circleId]
-                    message_dict = getCircleCircleId(installation.glassfrogToken, circleId)
+                    code, message = getCircleCircleId(installation.glassfrogToken, circleId)
+                    color = strings.succes_color if code == 200 else strings.error_color
+                    message_dict = messageFunctions.createMessageDict(color, message)
             else:
                 # /hipfrog [circles, circle]
                 code, message = getCircles(installation.glassfrogToken)
