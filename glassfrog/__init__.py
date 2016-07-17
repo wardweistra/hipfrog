@@ -132,7 +132,7 @@ def getCircleRoles(glassfrogToken, circleId):
                         ' - <a href="https://app.glassfrog.com/roles/{}">{}</a>'
                         ).format(str(role['id']), str(role['id']), role['name'])
             if role['links']['supporting_circle'] is not None:
-                message += ' (aka <code>/hola circle {}</code>)'.format(
+                message += ' - <code>/hipfrog circle {}</code>'.format(
                     role['links']['supporting_circle'])
             message += '</li>'
         message += '</ul>'
