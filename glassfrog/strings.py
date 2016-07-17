@@ -6,8 +6,10 @@ help_information = '''Use one of the following commands to learn more:
 <ul><li><code>/hipfrog circles</code> - List the circles in your organization</li></ul>'''
 
 help_circle = '''Use one of the following commands on your circle to learn more:
-<ul><li><code>/hipfrog circle {0} members</code> - List the members of this circle</li></ul>
-<ul><li><code>/hipfrog circle {0} roles</code> - List the roles in this circle</li></ul>'''
+<ul>
+<li><code>/hipfrog circle {0} members</code> - List the members of this circle</li>
+<li><code>/hipfrog circle {0} roles</code> - List the roles in this circle</li>
+</ul>'''
 
 set_token_first = "Please set the Glassfrog Token first in the plugin configuration"
 
