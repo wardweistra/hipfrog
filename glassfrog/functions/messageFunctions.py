@@ -3,13 +3,15 @@ from glassfrog.models import Installation
 from flask import escape
 
 
-def createMessageDict(color, message):
+def createMessageDict(color, message, card=None):
     message_dict = {
         "color": color,
         "message": str(message),
         "notify": False,
         "message_format": "html"
         }
+    if card is not None:
+        message_dict['card'] = card
     return message_dict
 
 
