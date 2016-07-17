@@ -60,7 +60,8 @@ def getCapabilitiesDict(myserver):
                         "view_group"
                     ],
                     "avatar": {
-                        "url": myserver+'/static/hipfrog.png'
+                        "url": myserver+'/static/hipfrog.png',
+                        "url@2x": myserver+'/static/hipfrog.png'
                     }
                 },
                 "installable": {
