@@ -108,34 +108,29 @@ def getCircleCircleId(glassfrogToken, circleId):
     if code == 200:
         print(responsebody)
 
-        description_list = []
+        message_list = []
+        message_list += [('<strong><a href="https://app.glassfrog.com/circles/{}">Circle:</strong>'
+                          ' {}</a>').format(circleId, responsebody['circles'][0]['name'])]
         if responsebody['linked']['domains'] != []:
-            domains = 'Domains:\n'
+            domains = 'Domains:<ul>'
             for domain in responsebody['linked']['domains']:
-                domains += '- {}\n'.format(domain['description'])
-            description_list += [domains]
+                domains += '<li>{}</li>'.format(domain['description'])
+            domains += '</ul>'
+            message_list += [domains]
         if responsebody['circles'][0]['strategy'] is not None:
-            description_list += ['<strong>Strategy:</strong> {}'.format(
+            message_list += ['<strong>Strategy:</strong> {}'.format(
                 responsebody['circles'][0]['strategy'])]
         if responsebody['linked']['supported_roles'][0]['purpose'] is not None:
-            description_list += ['<strong>Purpose:</strong> {}'.format(
+            message_list += ['<strong>Purpose:</strong> {}'.format(
                 responsebody['linked']['supported_roles'][0]['purpose'])]
         if responsebody['linked']['supported_roles'][0]['links']['circle'] is not None:
-            description_list += [('<strong>Parent circle:</strong>'
-                                  ' <code>/hipfrog circle {}</code>').format(
+            message_list += [('<strong>Parent circle:</strong>'
+                              ' <code>/hipfrog circle {}</code>').format(
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
-        description = '\n'.join(description_list)
-
-        message = 'Circle {}<br />'.format(circleId)
-        message += strings.help_circle.format(circleId)
-
-        card = messageFunctions.createMessageCard(
-            url='https://app.glassfrog.com/circles/{}'.format(circleId),
-            title=responsebody['circles'][0]['name'],
-            description=description)
+        message_list += [strings.help_circle.format(circleId)]
+        message = '<br/>'.join(message_list)
 
         print(message)
-        print(card)
         # responsebody['circles'][0]['name']
         # responsebody['circles'][0]['strategy']
         # responsebody['linked']['domains']
@@ -143,10 +138,9 @@ def getCircleCircleId(glassfrogToken, circleId):
         # responsebody['linked']['supported_roles'][0]['purpose']
     else:
         message = responsebody['message']
-        card = None
 
     color = strings.succes_color if code == 200 else strings.error_color
-    message_dict = messageFunctions.createMessageDict(color, message, card)
+    message_dict = messageFunctions.createMessageDict(color, message)
 
     return message_dict
 
@@ -234,7 +228,6 @@ def hipfrog():
                 else:
                     # /hipfrog [circles, circle] [circleId]
                     message_dict = getCircleCircleId(installation.glassfrogToken, circleId)
-                    print(message_dict)
             else:
                 # /hipfrog [circles, circle]
                 code, message = getCircles(installation.glassfrogToken)
