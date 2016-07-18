@@ -120,7 +120,7 @@ def getCircleCircleId(glassfrogToken, circleId):
             domains = '<strong>Domains:</strong>'
             domain_list = []
             for domain in responsebody['linked']['domains']:
-                domains += '{}'.format(domain['description'])
+                domain_list += ['{}'.format(domain['description'])]
             domains += ' ' + ', '.join(domain_list)
             message_list += [domains]
         if responsebody['linked']['supported_roles'][0]['links']['circle'] is not None:
