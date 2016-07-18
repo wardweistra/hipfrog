@@ -110,20 +110,20 @@ def getCircleCircleId(glassfrogToken, circleId):
         message_list += [('<strong><a href="https://app.glassfrog.com/circles/{}">Circle -'
                           ' {}</a></strong><br/>').format(circleId, responsebody['circles'][0]['name'])]
         if responsebody['linked']['domains'] != []:
-            domains = '<u>Domains:</u><ul>'
+            domains = '<strong>Domains:</strong><ul>'
             for domain in responsebody['linked']['domains']:
                 domains += '<li>{}</li>'.format(domain['description'])
             domains += '</ul>'
             message_list += [domains]
         if responsebody['circles'][0]['strategy'] is not None:
-            message_list += ['<u>Strategy:</u> {}'.format(
+            message_list += ['<strong>Strategy:</strong><ul><li>{}</li></ul>'.format(
                 responsebody['circles'][0]['strategy'])]
         if responsebody['linked']['supported_roles'][0]['purpose'] is not None:
-            message_list += ['<u>Purpose:</u> {}'.format(
+            message_list += ['<strong>Purpose:</strong> <ul><li>{}</li></ul>'.format(
                 responsebody['linked']['supported_roles'][0]['purpose'])]
         if responsebody['linked']['supported_roles'][0]['links']['circle'] is not None:
-            message_list += [('<u>Parent circle:</u>'
-                              ' <code>/hipfrog circle {}</code>').format(
+            message_list += [('<strong>Parent circle:</strong>'
+                              '<ul><li><code>/hipfrog circle {}</code></li></ul>').format(
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
         message_list += [strings.help_circle.format(circleId)]
         message = '<br/>'.join(message_list)
