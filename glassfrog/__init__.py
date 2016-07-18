@@ -121,10 +121,11 @@ def getCircleCircleId(glassfrogToken, circleId):
             message_list += ['<strong>Strategy:</strong> {}'.format(
                 responsebody['circles'][0]['strategy'])]
         if responsebody['linked']['domains'] != []:
-            domains = '<strong>Domains:</strong><ul>'
+            domains = '<strong>Domains:</strong>'
+            domain_list = []
             for domain in responsebody['linked']['domains']:
-                domains += '<li>{}</li>'.format(domain['description'])
-            domains += '</ul>'
+                domains += '{}'.format(domain['description'])
+            domains += ' ' + ', '.join(domain_list)
             message_list += [domains]
         message_list += [strings.help_circle.format(circleId)]
         message = '<br/>'.join(message_list)
