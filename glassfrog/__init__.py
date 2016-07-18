@@ -107,15 +107,19 @@ def getCircleCircleId(glassfrogToken, circleId):
 
     if code == 200:
         message_list = []
+        # Title with circle name
         message_list += [('<strong><a href="https://app.glassfrog.com/circles/{}">Circle -'
                           ' {}</a></strong><br/>').format(
                           circleId, responsebody['circles'][0]['name'])]
+        # Purpose
         if responsebody['linked']['supported_roles'][0]['purpose'] is not None:
             message_list += ['<strong>Purpose:</strong> {}'.format(
                 responsebody['linked']['supported_roles'][0]['purpose'])]
+        # Strategy
         if responsebody['circles'][0]['strategy'] is not None:
             message_list += ['<strong>Strategy:</strong> {}'.format(
                 responsebody['circles'][0]['strategy'])]
+        # Domains
         if responsebody['linked']['domains'] != []:
             domains = '<strong>Domains:</strong>'
             domain_list = []
@@ -123,11 +127,14 @@ def getCircleCircleId(glassfrogToken, circleId):
                 domain_list += ['{}'.format(domain['description'])]
             domains += ' ' + ', '.join(domain_list)
             message_list += [domains]
+        # Parent circle
         if responsebody['linked']['supported_roles'][0]['links']['circle'] is not None:
             message_list += [('<strong>Parent circle:</strong>'
                               ' <code>/hipfrog circle {}</code>').format(
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
+        # Follow up links
         message_list += [strings.help_circle.format(circleId)]
+        # Joining with new lines
         message = '<br/>'.join(message_list)
     else:
         message = responsebody['message']

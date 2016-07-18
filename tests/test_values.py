@@ -270,7 +270,17 @@ mock_circle_circleId_response = {
 }
 
 mock_circle_circleId_message = '''
-'''
+<strong><a href="https://app.glassfrog.com/circles/1000">Circle - cBioPortal</a></strong><br/>
+<br/>
+<strong>Purpose:</strong>
+ Create and sustain cBioPortal as a great product and a thriving open source community, by making
+ it the default for translational oncology data visualization portal<br/>
+<strong>Domains:</strong> cBioPortal Architecture roadmap, cBioPortal Community engagement<br/>
+<strong>Parent circle:</strong> <code>/hipfrog circle 8996</code><br/>
+<strong>More:</strong>
+<ul><li><code>/hipfrog circle {0} members</code> - List the members of this circle</li>
+<li><code>/hipfrog circle {0} roles</code> - List the roles in this circle</li>
+</ul>'''
 
 mock_circle_members_response = {
     'people': [

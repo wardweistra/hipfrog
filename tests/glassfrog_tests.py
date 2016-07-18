@@ -211,15 +211,17 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getCircleCircleId(self, mock_glassfrogApiHandler):
-        mock_circleId = 1000
+        mock_circleId = test_values.mock_circle_circleId_response['circles'][0]['id']
 
         # Succesfull call
         mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
             200, test_values.mock_circle_circleId_response)
         rv = glassfrog.getCircleCircleId(test_values.mock_glassfrogToken, mock_circleId)
         assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
-        # assert person['name'] in rv[1]
-        # assert '{}'.format(person['id']) in rv[1]
+
+        for circle in test_values.mock_circle_circleId_response['circles']:
+            assert circle['name'] in rv[1]
+            assert strings.help_circle.format(circle['id']) in rv[1]
 
         # TODO wrong circleID
 
@@ -338,10 +340,11 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.succes_color
-        mock_message = strings.help_circle.format(mock_circleId)
+        mock_message = test_values.mock_circle_circleId_message.format(mock_circleId)
         mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
 
-        mock_getCircleCircleId.return_value = (200, test_values.mock_circle_circleId_message)
+        mock_getCircleCircleId.return_value = (
+            200, test_values.mock_circle_circleId_message.format(mock_circleId))
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
@@ -351,8 +354,7 @@ class GlassfrogTestCase(unittest.TestCase):
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
-        # TODO fix test
-        # assert return_messageDict == mock_messageDict
+        assert return_messageDict == mock_messageDict
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
     @mock.patch('glassfrog.getCircleMembers')
