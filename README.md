@@ -1,7 +1,7 @@
 # HipFrog
 <img width=100px align=right src="/glassfrog/static/hipfrog.png">
-[![Build Status](https://travis-ci.org/wardweistra/hipfrog.svg?branch=master)](https://travis-ci.org/wardweistra/glassfrog-hipchat-bot)
-[![codecov](https://codecov.io/gh/wardweistra/glassfrog-hipchat-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/wardweistra/glassfrog-hipchat-bot)
+[![Build Status](https://travis-ci.org/wardweistra/hipfrog.svg?branch=master)](https://travis-ci.org/wardweistra/hipfrog)
+[![codecov](https://codecov.io/gh/wardweistra/hipfrog/branch/master/graph/badge.svg)](https://codecov.io/gh/wardweistra/hipfrog)
 
 A Hipchat bot for accessing Glassfrog
 
