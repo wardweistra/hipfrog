@@ -188,11 +188,11 @@ def getCircleRoles(glassfrogToken, circleId):
 
 @app.route('/hipfrog', methods=['GET', 'POST'])
 def hipfrog():
-    jwt_token = request.headers['Authorization'].split(' ')[1]
-    installation = messageFunctions.getInstallationFromJWT(jwt_token)
     requestdata = json.loads(request.get_data())
-
     callingMessage = requestdata['item']['message']['message'].split()
+    oauthId = requestdata['oauth_client_id']
+    installation = messageFunctions.getInstallationFromOauthId(oauthId)
+
     if installation.glassfrogToken is None:
         message = strings.set_token_first
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)

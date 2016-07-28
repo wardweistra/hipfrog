@@ -255,8 +255,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
         # TODO wrong circleID
 
-    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
-    def test_hipfrog_no_glassfrog_token(self, mock_getInstallationFromJWT):
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    def test_hipfrog_no_glassfrog_token(self, mock_getInstallationFromOauthId):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog'))
 
         mock_color = strings.error_color
@@ -266,15 +266,15 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
         mock_installation.glassfrogToken = None
-        mock_getInstallationFromJWT.return_value = mock_installation
+        mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
         assert return_messageDict == mock_messageDict
 
-    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
-    def test_hipfrog(self, mock_getInstallationFromJWT):
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    def test_hipfrog(self, mock_getInstallationFromOauthId):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog'))
 
         mock_color = strings.succes_color
@@ -283,7 +283,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
-        mock_getInstallationFromJWT.return_value = mock_installation
+        mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
@@ -291,9 +291,9 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircles')
-    def test_hipfrog_circles(self, mock_getCircles, mock_getInstallationFromJWT):
+    def test_hipfrog_circles(self, mock_getCircles, mock_getInstallationFromOauthId):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog circles'))
 
         mock_color = strings.succes_color
@@ -304,7 +304,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
-        mock_getInstallationFromJWT.return_value = mock_installation
+        mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
@@ -312,8 +312,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
-    def test_hipfrog_missing_functionality(self, mock_getInstallationFromJWT):
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    def test_hipfrog_missing_functionality(self, mock_getInstallationFromOauthId):
         mock_missing_functionality = 'something'
         mock_command = message = '/hipfrog {}'.format(mock_missing_functionality)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
@@ -324,7 +324,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
-        mock_getInstallationFromJWT.return_value = mock_installation
+        mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
@@ -332,9 +332,9 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircleCircleId')
-    def test_hipfrog_circle_circleId(self, mock_getCircleCircleId, mock_getInstallationFromJWT):
+    def test_hipfrog_circle_circleId(self, mock_getCircleCircleId, mock_getInstallationFromOauthId):
         mock_circleId = 1000
         mock_command = message = '/hipfrog circle {}'.format(mock_circleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
@@ -348,7 +348,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
-        mock_getInstallationFromJWT.return_value = mock_installation
+        mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
@@ -356,9 +356,9 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircleMembers')
-    def test_hipfrog_circle_members(self, mock_getCircleMembers, mock_getInstallationFromJWT):
+    def test_hipfrog_circle_members(self, mock_getCircleMembers, mock_getInstallationFromOauthId):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog circle 1000 members'))
 
         mock_color = strings.succes_color
@@ -369,7 +369,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
-        mock_getInstallationFromJWT.return_value = mock_installation
+        mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
@@ -377,9 +377,9 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircleRoles')
-    def test_hipfrog_circle_roles(self, mock_getCircleRoles, mock_getInstallationFromJWT):
+    def test_hipfrog_circle_roles(self, mock_getCircleRoles, mock_getInstallationFromOauthId):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog circle 1000 roles'))
 
         mock_color = strings.succes_color
@@ -390,7 +390,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
-        mock_getInstallationFromJWT.return_value = mock_installation
+        mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
@@ -398,8 +398,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromJWT')
-    def test_hipfrog_circle_missing_functionality(self, mock_getInstallationFromJWT):
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    def test_hipfrog_circle_missing_functionality(self, mock_getInstallationFromOauthId):
         mock_circleId = 1000
         mock_missing_functionality = 'something'
         mock_command = message = '/hipfrog circle {} {}'.format(mock_circleId,
@@ -413,7 +413,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
-        mock_getInstallationFromJWT.return_value = mock_installation
+        mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
