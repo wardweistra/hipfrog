@@ -2,6 +2,8 @@ succes_color = 'green'
 
 error_color = 'red'
 
+install_message = 'Install HipFrog in your Hipchat room'
+
 help_information = '''Use one of the following commands to learn more:
 <ul><li><code>/hipfrog circles</code> - List the circles in your organization</li></ul>'''
 

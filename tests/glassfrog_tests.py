@@ -63,7 +63,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
     def test_home(self):
         rv = self.app.get('/', follow_redirects=True)
-        assert b'Install Glassfrog HipChat Integration' in rv.data
+        assert strings.install_message in rv.data.decode('utf-8')
 
     def test_capabilities(self):
         mock_capabilitiesDict = apiCalls.getCapabilitiesDict(glassfrog.app.config['PUBLIC_URL'])

@@ -19,7 +19,7 @@ db.init_app(app)
 def hello_world():
     return ('<a target="_blank" href="https://www.hipchat.com/addons/install?url=' +
             app.config['PUBLIC_URL'] + '/capabilities.json">' +
-            'Install HipFrog in your Hipchat room</a>')
+            strings.install_message + '</a>')
 
 
 @app.route('/capabilities.json')
