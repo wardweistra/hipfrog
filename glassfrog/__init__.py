@@ -11,22 +11,20 @@ from .settings import config
 
 app = Flask(__name__)
 app.config.from_object(config)
-app.config.from_envvar('GLASSFROG_HIPCHAT_SETTINGS', silent=True)
+app.config.from_envvar('HIPFROG_SETTINGS', silent=True)
 db.init_app(app)
-
-# TODO move myserver to settings. Overwrite this and SECRET_KEY on PROD
-myserver = "http://5.157.82.115:45277"
 
 
 @app.route('/')
 def hello_world():
     return ('<a target="_blank" href="https://www.hipchat.com/addons/install?url=' +
-            myserver+"/capabilities.json"+'">Install Glassfrog HipChat Integration</a>')
+            app.config['PUBLIC_URL'] + '/capabilities.json">' +
+            'Install HipFrog in your Hipchat room</a>')
 
 
 @app.route('/capabilities.json')
 def capabilities():
-    capabilities_dict = apiCalls.getCapabilitiesDict(myserver)
+    capabilities_dict = apiCalls.getCapabilitiesDict(app.config['PUBLIC_URL'])
     return json.jsonify(capabilities_dict)
 
 

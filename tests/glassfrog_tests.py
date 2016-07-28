@@ -66,10 +66,7 @@ class GlassfrogTestCase(unittest.TestCase):
         assert b'Install Glassfrog HipChat Integration' in rv.data
 
     def test_capabilities(self):
-        mock_myserver = 'http://localhost:45277'
-        mock_capabilitiesDict = apiCalls.getCapabilitiesDict(mock_myserver)
-
-        glassfrog.myserver = mock_myserver
+        mock_capabilitiesDict = apiCalls.getCapabilitiesDict(glassfrog.app.config['PUBLIC_URL'])
         rv = self.app.get('/capabilities.json', follow_redirects=True)
         return_capabilitiesDict = json.loads(rv.get_data())
         assert return_capabilitiesDict == mock_capabilitiesDict
@@ -334,7 +331,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircleCircleId')
-    def test_hipfrog_circle_circleId(self, mock_getCircleCircleId, mock_getInstallationFromOauthId):
+    def test_hipfrog_circle_circleId(self, mock_getCircleCircleId,
+                                     mock_getInstallationFromOauthId):
         mock_circleId = 1000
         mock_command = message = '/hipfrog circle {}'.format(mock_circleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))

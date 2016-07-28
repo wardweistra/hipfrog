@@ -37,15 +37,15 @@ class HipchatApiHandler(object):
                                         data=data)
 
 
-def getCapabilitiesDict(myserver):
+def getCapabilitiesDict(publicUrl):
     capabilities_dict = \
         {
             "name": "HipFrog",
             "description": "A Hipchat bot for accessing Glassfrog",
             "key": "hipfrog",
             "links": {
-                "homepage": myserver,
-                "self": myserver+"/capabilities.json"
+                "homepage": publicUrl,
+                "self": publicUrl+"/capabilities.json"
             },
             "vendor": {
                 "name": "The Hyve",
@@ -60,26 +60,26 @@ def getCapabilitiesDict(myserver):
                         "view_group"
                     ],
                     "avatar": {
-                        "url": myserver+'/static/hipfrog.png',
-                        "url@2x": myserver+'/static/hipfrog.png'
+                        "url": publicUrl+'/static/hipfrog.png',
+                        "url@2x": publicUrl+'/static/hipfrog.png'
                     }
                 },
                 "installable": {
                     "allowGlobal": False,
                     "allowRoom": True,
-                    "callbackUrl": myserver+"/installed"
+                    "callbackUrl": publicUrl+"/installed"
                 },
                 "webhook": [
                     {
                         "event": "room_message",
                         "pattern": "\\A\\/hipfrog\\b",
-                        "url": myserver+"/hipfrog",
+                        "url": publicUrl+"/hipfrog",
                         "name": "Hipfrog webhook",
                         "authentication": "jwt"
                     }
                 ],
                 "configurable": {
-                    "url": myserver+"/configure.html"
+                    "url": publicUrl+"/configure.html"
                 }
             }
         }
