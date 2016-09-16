@@ -252,6 +252,21 @@ class GlassfrogTestCase(unittest.TestCase):
 
         # TODO wrong circleID
 
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    def test_getRoleRoleId(self, mock_glassfrogApiHandler):
+        mock_roleId = test_values.mock_role_roleid_response['roles'][0]['id']
+
+        # Succesfull call
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            200, test_values.mock_role_roleid_response)
+        rv = glassfrog.getRoleRoleId(test_values.mock_glassfrogToken, mock_roleId)
+        assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
+
+        for role in test_values.mock_role_roleid_response['roles']:
+            assert role['name'] in rv[1]
+
+        # TODO wrong circleID
+
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     def test_hipfrog_no_glassfrog_token(self, mock_getInstallationFromOauthId):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog'))
@@ -408,6 +423,31 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_message = strings.circles_missing_functionality.format(mock_missing_functionality,
                                                                     mock_circleId)
         mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    @mock.patch('glassfrog.getRoleRoleId')
+    def test_hipfrog_role_roleId(self, mock_getRoleRoleId,
+                                 mock_getInstallationFromOauthId):
+        mock_roleId = 1000
+        mock_command = message = '/hipfrog role {}'.format(mock_roleId)
+        mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
+
+        mock_color = strings.succes_color
+        mock_message = test_values.mock_role_roleId_message.format(mock_roleId)
+        mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
+
+        mock_getRoleRoleId.return_value = (
+            200, test_values.mock_role_roleId_message.format(mock_roleId))
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()

@@ -184,6 +184,27 @@ def getCircleRoles(glassfrogToken, circleId):
     return code, message
 
 
+def getRoleRoleId(glassfrogToken, roleId):
+    apiEndpoint = 'roles/{}'.format(roleId)
+    glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                              glassfrogToken)
+
+    if code == 200:
+        print(responsebody)
+
+        message_list = []
+        # Title with role name
+        message_list += [('<strong><a href="https://app.glassfrog.com/roles/{}">Role -'
+                          ' {}</a></strong><br/>').format(
+                          roleId, responsebody['roles'][0]['name'])]
+        message = '<br/>'.join(message_list)
+    else:
+        message = responsebody['message']
+
+    return code, message
+
+
 @app.route('/hipfrog', methods=['GET', 'POST'])
 def hipfrog():
     requestdata = json.loads(request.get_data())
@@ -229,6 +250,18 @@ def hipfrog():
                 # /hipfrog [circles, circle]
                 code, message = getCircles(installation.glassfrogToken)
                 message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
+        elif callingMessage[1] == 'roles' or callingMessage[1] == 'role':
+            if len(callingMessage) > 2:
+                roleId = callingMessage[2]
+                # /hipfrog [roles, role] [roleId]
+                code, message = getRoleRoleId(installation.glassfrogToken, roleId)
+                color = strings.succes_color if code == 200 else strings.error_color
+                message_dict = messageFunctions.createMessageDict(color, message)
+            else:
+                # /hipfrog [roles, role]
+                # code, message = getRoles(installation.glassfrogToken)
+                # message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
+                pass
         else:
             # /hipfrog something
             message = strings.missing_functionality.format(callingMessage[1])

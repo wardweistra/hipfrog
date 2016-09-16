@@ -270,7 +270,7 @@ mock_circle_circleId_response = {
 }
 
 mock_circle_circleId_message = '''
-<strong><a href="https://app.glassfrog.com/circles/1000">Circle - cBioPortal</a></strong><br/>
+<strong><a href="https://app.glassfrog.com/circles/{0}">Circle - cBioPortal</a></strong><br/>
 <br/>
 <strong>Purpose:</strong>
  Create and sustain cBioPortal as a great product and a thriving open source community, by making
@@ -470,3 +470,45 @@ mock_circle_roles_message = '''The following people are in your circle:<br />
 Business Development & Sales</a></li>
 </ul>
 '''
+
+mock_role_roleid_response = {
+  "linked": {
+    "circles": [
+      {
+        "id": 582240928,
+        "name": "Operations",
+        "short_name": "Ops",
+        "strategy": ("Emphasize \"Documenting & Aligning to Standards\", "
+                     "even over \"Developing & Co-Creating Novelty\""),
+        "links": {
+        }
+      }
+    ],
+    "people": [
+      {
+        "id": 811765527,
+        "name": "Carlos Aldrich",
+        "email": "carlos@example.com",
+        "external_id": None
+      }
+    ]
+  },
+  "roles": [
+    {
+      "id": 83866836,
+      "name": "Fulfillment Role",
+      "purpose": None,
+      "links": {
+        "domains": [],
+        "accountabilities": [],
+        "circle": 582240928,
+        "people": [
+          811765527
+        ]
+      }
+    }
+  ]
+}
+
+mock_role_roleId_message = '''
+<strong><a href="https://app.glassfrog.com/roles/{0}">Role - Fulfillment Role</a></strong>'''
