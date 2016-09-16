@@ -87,9 +87,9 @@ def getCircles(glassfrogToken):
     if code == 200:
         message = 'The following circles are in your organization:<br /><ul>'
         for circle in sorted(responsebody['circles'], key=lambda k: k['name']):
-            message += ('<li><code>/hipfrog circle {}</code>'
-                        ' - <a href="https://app.glassfrog.com/circles/{}">{}</a>'
-                        '</li>').format(str(circle['id']), str(circle['id']), circle['name'])
+            message += ('<li><code>/hipfrog circle {0}</code>'
+                        ' - <a href="https://app.glassfrog.com/circles/{0}">{1}</a>'
+                        '</li>').format(str(circle['id']), circle['name'])
         message += '</ul>'
     else:
         message = responsebody['message']
@@ -170,9 +170,9 @@ def getCircleRoles(glassfrogToken, circleId):
         message = 'The following roles are in this circle:<br /><ul>'
         for role in sorted(responsebody['roles'], key=lambda k: k['name']):
             supporting_circle_info = ''
-            message += ('<li><code>{}</code>'
-                        ' - <a href="https://app.glassfrog.com/roles/{}">{}</a>'
-                        ).format(str(role['id']), str(role['id']), role['name'])
+            message += ('<li><code>/hipfrog role {0}</code>'
+                        ' - <a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
+                        ).format(str(role['id']), role['name'])
             if role['links']['supporting_circle'] is not None:
                 message += ' - <code>/hipfrog circle {}</code>'.format(
                     role['links']['supporting_circle'])
