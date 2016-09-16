@@ -200,9 +200,10 @@ def getRoleRoleId(glassfrogToken, roleId):
                           roleId, responsebody['roles'][0]['name'])]
         # Circle
         if responsebody['linked']['circles'] != []:
-            message_list += [('<strong>Circle:</strong>'
-                              ' <code>/hipfrog circle {}</code>').format(
-                responsebody['linked']['circles'][0]['id'])]
+            message_list += [('<strong>Circle:</strong> <code>/hipfrog circle {0}</code>'
+                              ' - <a href="https://app.glassfrog.com/circles/{0}">{1}</a>').format(
+                responsebody['linked']['circles'][0]['id'],
+                responsebody['linked']['circles'][0]['name'])]
         # Accountabilities
         if responsebody['linked']['accountabilities'] != []:
             accountabilities = '<strong>Accountabilities:</strong><ul>'
