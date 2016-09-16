@@ -198,10 +198,36 @@ def getRoleRoleId(glassfrogToken, roleId):
         message_list += [('<strong><a href="https://app.glassfrog.com/roles/{}">Role -'
                           ' {}</a></strong><br/>').format(
                           roleId, responsebody['roles'][0]['name'])]
+        # Circle
+        if responsebody['linked']['circles'] != []:
+            message_list += [('<strong>Circle:</strong>'
+                              ' <code>/hipfrog circle {}</code>').format(
+                responsebody['linked']['circles'][0]['id'])]
+        # Accountabilities
+        if responsebody['linked']['accountabilities'] != []:
+            accountabilities = '<strong>Accountabilities:</strong><ul>'
+            for accountability in responsebody['linked']['accountabilities']:
+                accountabilities += '<li>{}</li>'.format(accountability['description'])
+            accountabilities += '</ul>'
+            message_list += [accountabilities]
+        # Purpose
+        if responsebody['roles'][0]['purpose'] is not None:
+            message_list += ['<strong>Purpose:</strong> {}'.format(
+                responsebody['roles'][0]['purpose'])]
+        # Domains
+        if responsebody['linked']['domains'] != []:
+            domains = '<strong>Domains:</strong>'
+            domain_list = []
+            for domain in responsebody['linked']['domains']:
+                domain_list += ['{}'.format(domain['description'])]
+            domains += ' ' + ', '.join(domain_list)
+            message_list += [domains]
+        # Joining with new lines
         message = '<br/>'.join(message_list)
     else:
         message = responsebody['message']
 
+    print(message)
     return code, message
 
 

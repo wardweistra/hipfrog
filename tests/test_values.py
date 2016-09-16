@@ -472,42 +472,66 @@ Business Development & Sales</a></li>
 '''
 
 mock_role_roleid_response = {
-  "linked": {
-    "circles": [
-      {
-        "id": 582240928,
-        "name": "Operations",
-        "short_name": "Ops",
-        "strategy": ("Emphasize \"Documenting & Aligning to Standards\", "
-                     "even over \"Developing & Co-Creating Novelty\""),
-        "links": {
-        }
-      }
-    ],
-    "people": [
-      {
-        "id": 811765527,
-        "name": "Carlos Aldrich",
-        "email": "carlos@example.com",
-        "external_id": None
-      }
-    ]
-  },
-  "roles": [
-    {
-      "id": 83866836,
-      "name": "Fulfillment Role",
-      "purpose": None,
-      "links": {
-        "domains": [],
-        "accountabilities": [],
-        "circle": 582240928,
+    "linked": {
+        "circles": [
+            {
+                "id": 582240928,
+                "name": "Operations",
+                "short_name": "Ops",
+                "strategy": ("Emphasize \"Documenting & Aligning to Standards\", "
+                             "even over \"Developing & Co-Creating Novelty\""),
+                "links": {
+                }
+            }
+        ],
+        'accountabilities': [
+            {
+                'description': ('Assigning Partners to the Circle\xe2\x80\x99s Roles; monitoring '
+                                'the fit; offering feedback to enhance fit; and re-assigning '
+                                'Roles to other Partners when useful for enhancing fit'),
+                'id': 8234494
+            },
+            {
+                'description': ('Allocating the Circle\xe2\x80\x99s resources across its '
+                                'various Projects and/or Roles'),
+                'id': 8234495
+            }
+        ],
         "people": [
-          811765527
+            {
+                "id": 811765527,
+                "name": "Carlos Aldrich",
+                "email": "carlos@example.com",
+                "external_id": None
+            }
+        ],
+        'domains': [
+            {
+                'description': 'Role assignments within the Circle',
+                'id': 8424325
+            }
         ]
-      }
-    }
-  ]
+    },
+    "roles": [
+        {
+            "id": 83866836,
+            "name": "Fulfillment Role",
+            "purpose": 'Exist',
+            "links": {
+                "circle": 582240928,
+                "people": [
+                    811765527
+                ],
+                'accountabilities': [
+                    8234494,
+                    8234495
+                ],
+                'domains':[
+                    8424325
+                ]
+            }
+        }
+    ]
 }
 
 mock_role_roleId_message = '''
