@@ -196,8 +196,6 @@ def getRoleRoleId(glassfrogToken, roleId):
                                                               glassfrogToken)
 
     if code == 200:
-        print(responsebody)
-
         message_list = []
         # Title with role name
         message_list += [('<strong><a href="https://app.glassfrog.com/roles/{}">Role -'
