@@ -225,6 +225,15 @@ def getRoleRoleId(glassfrogToken, roleId):
                 domain_list += ['{}'.format(domain['description'])]
             domains += ' ' + ', '.join(domain_list)
             message_list += [domains]
+        # People
+        if responsebody['linked']['people'] != []:
+            people = '<strong>People:</strong><ul>'
+            for person in responsebody['linked']['people']:
+                people += ('<li><code>{0}</code>'
+                           ' - <a href="https://app.glassfrog.com/people/{0}">{1}</a>'
+                           '</li>').format(str(person['id']), person['name'])
+            people += '</ul>'
+            message_list += [people]
         # Joining with new lines
         message = '<br/>'.join(message_list)
     else:
