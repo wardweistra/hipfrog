@@ -259,7 +259,6 @@ def getRoleRoleId(glassfrogToken, roleId):
     else:
         message = responsebody['message']
 
-    print(message)
     return code, message
 
 
