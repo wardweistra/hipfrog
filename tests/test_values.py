@@ -535,4 +535,17 @@ mock_role_roleid_response = {
 }
 
 mock_role_roleId_message = '''
-<strong><a href="https://app.glassfrog.com/roles/{0}">Role - Fulfillment Role</a></strong>'''
+<strong><a href="https://app.glassfrog.com/roles/83866836">Role - Fulfillment Role</a></strong>
+<br/><br/>
+<strong>Purpose:</strong> Exist<br/>
+<strong>Domain:</strong> Role assignments within the Circle<br/>
+<strong>Circle:</strong> <code>/hipfrog circle 582240928</code> -
+ <a href="https://app.glassfrog.com/circles/582240928">Operations</a><br/>
+<strong>Accountabilities:</strong><ul>
+<li>Assigning Partners to the Circleâs Roles; monitoring the fit; offering feedback to enhance
+ fit; and re-assigning Roles to other Partners when useful for enhancing fit</li>
+<li>Allocating the Circleâs resources across its various Projects and/or Roles</li>
+</ul>
+<br/>
+<strong>Person: </strong><code>811765527</code> -
+ <a href="https://app.glassfrog.com/people/811765527">Carlos Aldrich</a>'''

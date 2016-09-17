@@ -219,6 +219,11 @@ class GlassfrogTestCase(unittest.TestCase):
         for circle in test_values.mock_circle_circleId_response['circles']:
             assert circle['name'] in rv[1]
             assert strings.help_circle.format(circle['id']) in rv[1]
+        for supported_role in \
+                test_values.mock_circle_circleId_response['linked']['supported_roles']:
+            assert supported_role['purpose'] in rv[1]
+        for domain in test_values.mock_circle_circleId_response['linked']['domains']:
+            assert domain['description'] in rv[1]
 
         # TODO wrong circleID
 
@@ -264,6 +269,15 @@ class GlassfrogTestCase(unittest.TestCase):
 
         for role in test_values.mock_role_roleid_response['roles']:
             assert role['name'] in rv[1]
+            assert role['purpose'] in rv[1]
+        for circle in test_values.mock_role_roleid_response['linked']['circles']:
+            assert circle['name'] in rv[1]
+        for accountability in test_values.mock_role_roleid_response['linked']['accountabilities']:
+            assert accountability['description'] in rv[1]
+        for person in test_values.mock_role_roleid_response['linked']['people']:
+            assert person['name'] in rv[1]
+        for domain in test_values.mock_role_roleid_response['linked']['domains']:
+            assert domain['description'] in rv[1]
 
         # TODO wrong circleID
 
