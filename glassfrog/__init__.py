@@ -247,12 +247,12 @@ def getRoleRoleId(glassfrogToken, roleId):
                 people = '<strong>Person: </strong>'
             for person in responsebody['linked']['people']:
                 if len(responsebody['linked']['people']) > 1:
-                    people = '<li>'
+                    people += '<li>'
                 people += ('<code>{0}</code>'
                            ' - <a href="https://app.glassfrog.com/people/{0}">{1}</a>'
                            ).format(str(person['id']), person['name'])
                 if len(responsebody['linked']['people']) > 1:
-                    people = '</li>'
+                    people += '</li>'
             if len(responsebody['linked']['people']) > 1:
                 people += '</ul>'
             message_list += [people]
