@@ -119,7 +119,10 @@ def getCircleCircleId(glassfrogToken, circleId):
                 responsebody['circles'][0]['strategy'])]
         # Domains
         if responsebody['linked']['domains'] != []:
-            domains = '<strong>Domains:</strong>'
+            if len(responsebody['linked']['domains']) > 1:
+                domains = '<strong>Domains:</strong>'
+            else:
+                domains = '<strong>Domain:</strong>'
             domain_list = []
             for domain in responsebody['linked']['domains']:
                 domain_list += ['{}'.format(domain['description'])]
@@ -212,14 +215,25 @@ def getRoleRoleId(glassfrogToken, roleId):
                 responsebody['linked']['circles'][0]['name'])]
         # Accountabilities
         if responsebody['linked']['accountabilities'] != []:
-            accountabilities = '<strong>Accountabilities:</strong><ul>'
+            if len(responsebody['linked']['accountabilities']) > 1:
+                accountabilities = '<strong>Accountabilities:</strong><ul>'
+            else:
+                accountabilities = '<strong>Accountability:</strong> '
             for accountability in responsebody['linked']['accountabilities']:
-                accountabilities += '<li>{}</li>'.format(accountability['description'])
-            accountabilities += '</ul>'
+                if len(responsebody['linked']['accountabilities']) > 1:
+                    accountabilities += '<li>'
+                accountabilities += '{}'.format(accountability['description'])
+                if len(responsebody['linked']['accountabilities']) > 1:
+                    accountabilities += '</li>'
+            if len(responsebody['linked']['accountabilities']) > 1:
+                accountabilities += '</ul>'
             message_list += [accountabilities]
         # Domains
         if responsebody['linked']['domains'] != []:
-            domains = '<strong>Domains:</strong>'
+            if len(responsebody['linked']['domains']) > 1:
+                domains = '<strong>Domains:</strong>'
+            else:
+                domains = '<strong>Domain:</strong>'
             domain_list = []
             for domain in responsebody['linked']['domains']:
                 domain_list += ['{}'.format(domain['description'])]
@@ -227,12 +241,20 @@ def getRoleRoleId(glassfrogToken, roleId):
             message_list += [domains]
         # People
         if responsebody['linked']['people'] != []:
-            people = '<strong>People:</strong><ul>'
+            if len(responsebody['linked']['people']) > 1:
+                people = '<strong>People:</strong><ul>'
+            else:
+                people = '<strong>Person: </strong>'
             for person in responsebody['linked']['people']:
-                people += ('<li><code>{0}</code>'
+                if len(responsebody['linked']['people']) > 1:
+                    people = '<li>'
+                people += ('<code>{0}</code>'
                            ' - <a href="https://app.glassfrog.com/people/{0}">{1}</a>'
-                           '</li>').format(str(person['id']), person['name'])
-            people += '</ul>'
+                           ).format(str(person['id']), person['name'])
+                if len(responsebody['linked']['people']) > 1:
+                    people = '</li>'
+            if len(responsebody['linked']['people']) > 1:
+                people += '</ul>'
             message_list += [people]
         # Joining with new lines
         message = '<br/>'.join(message_list)
