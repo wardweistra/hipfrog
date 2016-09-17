@@ -170,7 +170,7 @@ def getCircleRoles(glassfrogToken, circleId):
         message = 'The following roles are in this circle:<br /><ul>'
         for role in sorted(responsebody['roles'], key=lambda k: k['name']):
             supporting_circle_info = ''
-            message += '<ul>'
+            message += '<li>'
             if role['links']['supporting_circle'] is not None:
                 message += '<code>/hipfrog circle {}</code>'.format(
                     role['links']['supporting_circle'])
