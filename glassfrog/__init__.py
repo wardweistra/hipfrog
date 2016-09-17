@@ -150,9 +150,9 @@ def getCircleMembers(glassfrogToken, circleId):
         message = 'The following people are in this circle:<br /><ul>'
 
         for person in sorted(responsebody['people'], key=lambda k: k['name']):
-            message += ('<li><code>{}</code>'
-                        ' - <a href="https://app.glassfrog.com/people/{}">{}</a>'
-                        '</li>').format(str(person['id']), str(person['id']), person['name'])
+            message += ('<li><code>{0}</code>'
+                        ' - <a href="https://app.glassfrog.com/people/{0}">{1}</a>'
+                        '</li>').format(str(person['id']), person['name'])
         message += '</ul>'
     else:
         message = responsebody['message']
