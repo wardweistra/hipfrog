@@ -207,6 +207,17 @@ def getRoleRoleId(glassfrogToken, roleId):
         if responsebody['roles'][0]['purpose'] is not None:
             message_list += ['<strong>Purpose:</strong> {}'.format(
                 responsebody['roles'][0]['purpose'])]
+        # Domains
+        if responsebody['linked']['domains'] != []:
+            if len(responsebody['linked']['domains']) > 1:
+                domains = '<strong>Domains:</strong>'
+            else:
+                domains = '<strong>Domain:</strong>'
+            domain_list = []
+            for domain in responsebody['linked']['domains']:
+                domain_list += ['{}'.format(domain['description'])]
+            domains += ' ' + ', '.join(domain_list)
+            message_list += [domains]
         # Circle
         if responsebody['linked']['circles'] != []:
             message_list += [('<strong>Circle:</strong> <code>/hipfrog circle {0}</code>'
@@ -228,17 +239,6 @@ def getRoleRoleId(glassfrogToken, roleId):
             if len(responsebody['linked']['accountabilities']) > 1:
                 accountabilities += '</ul>'
             message_list += [accountabilities]
-        # Domains
-        if responsebody['linked']['domains'] != []:
-            if len(responsebody['linked']['domains']) > 1:
-                domains = '<strong>Domains:</strong>'
-            else:
-                domains = '<strong>Domain:</strong>'
-            domain_list = []
-            for domain in responsebody['linked']['domains']:
-                domain_list += ['{}'.format(domain['description'])]
-            domains += ' ' + ', '.join(domain_list)
-            message_list += [domains]
         # People
         if responsebody['linked']['people'] != []:
             if len(responsebody['linked']['people']) > 1:
