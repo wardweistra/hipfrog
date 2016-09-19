@@ -13,6 +13,11 @@ help_circle = '''<strong>More:</strong>
 <li><code>/hipfrog circle {0} roles</code> - List the roles in this circle</li>
 </ul>'''
 
+help_hipfrog = '''<strong>More:</strong>
+<ul>
+<li><code>/hipfrog circle [Circle ID] members</code> - Get the details for this circle</li>
+</ul>'''
+
 set_token_first = "Please set the Glassfrog Token first in the plugin configuration"
 
 installed_successfully = ('Installed successfully.'

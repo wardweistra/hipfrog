@@ -202,7 +202,7 @@ class GlassfrogTestCase(unittest.TestCase):
         assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
         for circle in test_values.mock_circles_response['circles']:
             assert circle['name'] in rv[1]
-            assert '/hipfrog circle {}'.format(circle['id']) in rv[1]
+            assert '{}'.format(circle['id']) in rv[1]
 
         # TODO Failing call
 

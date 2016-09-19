@@ -112,7 +112,7 @@ def getCircles(glassfrogToken):
             for circleId in circle_hierarchy:
                 circle = getCircleWithId(circleId)
                 message += ('<li><a href="https://app.glassfrog.com/circles/{0}">{1}</a>'
-                            ' - <code>/hipfrog circle {0}</code>'
+                            ' - <code>{0}</code>'
                             ).format(str(circle['id']), circle['name'])
                 if circle_hierarchy[circleId] != {}:
                     message += '<ul>'
@@ -122,7 +122,7 @@ def getCircles(glassfrogToken):
             return message
 
         message += getCircleMessage(circle_hierarchy)
-        message += '</ul>'
+        message += strings.help_circle
     else:
         message = responsebody['message']
 
