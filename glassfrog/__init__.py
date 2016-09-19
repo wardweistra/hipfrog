@@ -121,8 +121,10 @@ def getCircles(glassfrogToken):
                 message += '</li>'
             return message
 
+        message += '</ul>'
+
         message += getCircleMessage(circle_hierarchy)
-        message += strings.help_circle
+        message += strings.help_hipfrog
     else:
         message = responsebody['message']
 
