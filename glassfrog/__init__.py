@@ -86,11 +86,71 @@ def getCircles(glassfrogToken):
 
     if code == 200:
         message = 'The following circles are in your organization:<br /><ul>'
-        for circle in sorted(responsebody['circles'], key=lambda k: k['name']):
-            message += ('<li><code>/hipfrog circle {0}</code>'
-                        ' - <a href="https://app.glassfrog.com/circles/{0}">{1}</a>'
-                        '</li>').format(str(circle['id']), circle['name'])
+
+        def getSubCircles(circleId):
+            print("Getting in circle "+str(circleId))
+
+            sub_circle_hierarchy = {}
+
+            for supported_role in responsebody['linked']['supported_roles']:
+                if supported_role['links']['circle'] == circleId:
+                    sub_circleId = supported_role['links']['supporting_circle']
+                    print("Getting in subcircle of "+str(circleId)+": "+str(sub_circleId))
+                    sub_circle_hierarchy[sub_circleId] = getSubCircles(sub_circleId)
+
+            print("Returning to parent circle of "+str(circleId))
+            return sub_circle_hierarchy
+
+        circle_hierarchy = {}
+
+        for supported_role in responsebody['linked']['supported_roles']:
+            if supported_role['links']['circle'] is None:
+                sub_circleId = supported_role['links']['supporting_circle']
+                # print("Getting in subcircle of None: "+str(sub_circleId))
+                circle_hierarchy[sub_circleId] = getSubCircles(sub_circleId)
+
+        print(circle_hierarchy)
+
+        # TODO finish this, something with recursive creation of the message
+
+        def getCircleWithId(circleId):
+            for circle in responsebody['circles']:
+                if circle['id'] == circleId:
+                    return circle
+
+        def getCircleMessage(circle_hierarchy):
+            message = ''
+            for circleId in circle_hierarchy:
+                circle = getCircleWithId(circleId)
+                message += ('<li><code>/hipfrog circle {0}</code>'
+                            ' - <a href="https://app.glassfrog.com/circles/{0}">{1}</a>'
+                            '</li>').format(str(circle['id']), circle['name'])
+                if circle_hierarchy[circleId] != {}:
+                    message += '<ul>'
+                    message += getCircleMessage(circle_hierarchy[circleId])
+                    message += '</ul>'
+            return message
+
+        message += getCircleMessage(circle_hierarchy)
         message += '</ul>'
+
+        print(message)
+
+        # for circleId in circle_hierarchy:
+        #     message += ('<li><code>/hipfrog circle {0}</code>'
+        #                 ' - <a href="https://app.glassfrog.com/circles/{0}">{1}</a>'
+        #                 '</li>').format(str(circle['id']), circle['name'])
+        #     if circle_hierarchy[circleId] != {}:
+        #         message += '<ul>'
+        #         for subCircleId in circle_hierarchy[circleId]:
+        #             message += getCircleMessage(circle_hierarchy[circleId][subCircleId])
+        #         message += '</ul>'
+        #
+        # for circle in sorted(responsebody['circles'], key=lambda k: k['name']):
+        #     message += ('<li><code>/hipfrog circle {0}</code>'
+        #                 ' - <a href="https://app.glassfrog.com/circles/{0}">{1}</a>'
+        #                 '</li>').format(str(circle['id']), circle['name'])
+        # message += '</ul>'
     else:
         message = responsebody['message']
 

@@ -187,7 +187,45 @@ mock_circles_response = {
         'roles': [],
         'domains': [],
         'policies': [],
-        'supported_roles': []
+        'supported_roles': [
+            {
+                'links': {
+                    'supporting_circle': 8495,
+                    'people': [],
+                    'accountabilities':[],
+                    'domains':[],
+                    'circle':None
+                },
+                'purpose':'Party',
+                'name':'The Hyve Company Circle',
+                'id':7763372
+            },
+            {
+                'links': {
+                    'supporting_circle': 9032,
+                    'people': [],
+                    'accountabilities':[],
+                    'domains':[],
+                    'circle': 8495
+                },
+                'purpose':'Deliver stuff',
+                'name':'Service Delivery',
+                'id': 7745623
+            },
+            {
+                'links': {
+                    'supporting_circle': 15512,
+                    'people': [],
+                    'accountabilities':[],
+                    'domains':[],
+                    'circle': 8495
+                },
+                'purpose':'Sell stuff',
+                'name':'Business Development & Sales',
+                'id': 7298371
+            }
+        ]
+
     }
 }
 
