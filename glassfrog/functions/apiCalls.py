@@ -76,6 +76,20 @@ def getCapabilitiesDict(publicUrl):
                         "url": publicUrl+"/hipfrog",
                         "name": "Hipfrog webhook",
                         "authentication": "jwt"
+                    },
+                    {
+                        "event": "room_message",
+                        "pattern": "@role\\b \\w+",
+                        "url": publicUrl+"/atRole",
+                        "name": "At Role webhook",
+                        "authentication": "jwt"
+                    },
+                    {
+                        "event": "room_message",
+                        "pattern": "@circle\\b \\w+",
+                        "url": publicUrl+"/atCircle",
+                        "name": "At Circle webhook",
+                        "authentication": "jwt"
                     }
                 ],
                 "configurable": {

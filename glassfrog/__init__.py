@@ -360,6 +360,40 @@ def hipfrog():
     return json.jsonify(message_dict)
 
 
+@app.route('/atrole', methods=['GET', 'POST'])
+def atRole():
+    requestdata = json.loads(request.get_data())
+    callingMessage = requestdata['item']['message']['message'].split()
+    oauthId = requestdata['oauth_client_id']
+    installation = messageFunctions.getInstallationFromOauthId(oauthId)
+
+    if installation.glassfrogToken is None:
+        message = strings.set_token_first
+        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+    else:
+        code, message = 200, "atRole"
+        color = strings.succes_color if code == 200 else strings.error_color
+        message_dict = messageFunctions.createMessageDict(color, message)
+    return json.jsonify(message_dict)
+
+
+@app.route('/atcircle', methods=['GET', 'POST'])
+def atCircle():
+    requestdata = json.loads(request.get_data())
+    callingMessage = requestdata['item']['message']['message'].split()
+    oauthId = requestdata['oauth_client_id']
+    installation = messageFunctions.getInstallationFromOauthId(oauthId)
+
+    if installation.glassfrogToken is None:
+        message = strings.set_token_first
+        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+    else:
+        code, message = 200, "atCircle"
+        color = strings.succes_color if code == 200 else strings.error_color
+        message_dict = messageFunctions.createMessageDict(color, message)
+    return json.jsonify(message_dict)
+
+
 @app.route('/configure.html', methods=['GET', 'POST'])
 def configure():
     installation = messageFunctions.getInstallationFromJWT(request.args['signed_request'])
