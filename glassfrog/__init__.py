@@ -124,7 +124,7 @@ def getCircles(glassfrogToken):
         message += '</ul>'
 
         message += getCircleMessage(circle_hierarchy)
-        message += strings.help_hipfrog
+        message += strings.help_hipfrog_circle
     else:
         message = responsebody['message']
 
@@ -168,7 +168,7 @@ def getCircleCircleId(glassfrogToken, circleId):
                               ' <code>/hipfrog circle {}</code>').format(
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
         # Follow up links
-        message_list += [strings.help_circle.format(circleId)]
+        message_list += [strings.help_hipfrog_circle_circleid.format(circleId)]
         # Joining with new lines
         message = '<br/>'.join(message_list)
     else:
@@ -307,7 +307,7 @@ def hipfrog():
         message = strings.set_token_first
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     elif len(callingMessage) == 1:
-        message = strings.help_information
+        message = strings.help_hipfrog
         message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
     elif len(callingMessage) > 1:
         if callingMessage[1] == 'circles' or callingMessage[1] == 'circle':
