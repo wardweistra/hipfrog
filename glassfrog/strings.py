@@ -15,7 +15,7 @@ help_circle = '''<strong>More:</strong>
 
 help_hipfrog = '''More:
 <ul>
-<li><code>/hipfrog circle [Circle ID] members</code> - Get the details for this circle</li>
+<li><code>/hipfrog circle [Circle ID]</code> - Get the details for this circle</li>
 </ul>'''
 
 set_token_first = "Please set the Glassfrog Token first in the plugin configuration"
