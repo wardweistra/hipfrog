@@ -9,13 +9,13 @@ An open source [Hipchat](http://hipchat.com/) bot for accessing the [Holacracy](
 Follow [this link](https://www.hipchat.com/addons/install?url=https://host.wardweistra.nl/hipfrog/capabilities.json) to install the plugin in your Hipchat room.
 
 ## Development
+Hipfrog is using [Glassfrog API V3 beta](https://github.com/holacracyone/glassfrog-api/tree/API_v3). Tested on Python 3.5.2.
+
 * Download: `git clone https://github.com/wardweistra/hipfrog.git`  
 * Install: `python3 setup.py install`  
 * Create and upgrade the database with [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/). Tested on Postgres.  
 * Test: `python3 tests/glassfrog_tests.py`  
 * Run: `python3 runserver.py --debug`  
-
-Hipfrog is using [Glassfrog API V3 beta](https://github.com/holacracyone/glassfrog-api/tree/API_v3).
 
 ## Deployment
 Hipfrog can be deployed to run your own managed version of it with Apache2.
