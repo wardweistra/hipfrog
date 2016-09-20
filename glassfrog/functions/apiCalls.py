@@ -2,6 +2,7 @@ from flask import json, url_for
 import requests
 
 from .messageFunctions import createMessageDict
+import glassfrog.strings as strings
 
 
 class GlassfrogApiHandler(object):
@@ -72,21 +73,21 @@ def getCapabilitiesDict(publicUrl):
                 "webhook": [
                     {
                         "event": "room_message",
-                        "pattern": "\\A\\/hipfrog\\b",
+                        "pattern": strings.regex_hipfrog,
                         "url": publicUrl+"/hipfrog",
                         "name": "Hipfrog webhook",
                         "authentication": "jwt"
                     },
                     {
                         "event": "room_message",
-                        "pattern": "@role\\b \\w+",
+                        "pattern": strings.regex_at_role,
                         "url": publicUrl+"/atrole",
                         "name": "At Role webhook",
                         "authentication": "jwt"
                     },
                     {
                         "event": "room_message",
-                        "pattern": "@circle\\b \\w+",
+                        "pattern": strings.regex_at_circle,
                         "url": publicUrl+"/atcircle",
                         "name": "At Circle webhook",
                         "authentication": "jwt"

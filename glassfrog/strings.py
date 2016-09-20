@@ -33,3 +33,9 @@ missing_functionality = ("Sorry, the feature \'{}\' does not exist (yet)."
 circles_missing_functionality = ("Sorry, the feature \'{}\' does not exist (yet)."
                                  " Type <code>/hipfrog circle {}</code> to get a list of"
                                  " the available commands.")
+
+regex_hipfrog = "\\A\\/hipfrog\\b"
+regex_at_role = "@role\\b"
+regex_at_role_roleId = regex_at_role+" \\w+"
+regex_at_circle = "@circle\\b"
+regex_at_circle_circleId = regex_at_circle+" \\w+"

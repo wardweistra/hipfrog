@@ -360,6 +360,29 @@ def hipfrog():
     return json.jsonify(message_dict)
 
 
+def getMentionsForEmail(emaillist):
+    # Create mention list
+    # For email in emaillist:
+        # Get mention from email
+        # Add to mention list
+    # return mention list
+    pass
+
+
+def getMentionsForRole(roleId):
+    # emaillist = get emails for roleId
+    # code, mentions = getMentionsForEmail(emaillist)
+    code = 200
+    mentions = "@role "+roleId
+    return code, mentions
+
+
+def getMentionsForCircle(circleId):
+    # emaillist = get emails for circleId
+    # code, mentions = getMentionsForEmail(emaillist)
+    pass
+
+
 @app.route('/atrole', methods=['GET', 'POST'])
 def atRole():
     requestdata = json.loads(request.get_data())
@@ -371,7 +394,15 @@ def atRole():
         message = strings.set_token_first
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     else:
-        code, message = 200, "atRole"
+        try:
+            found = re.search(strings.regex_at_role_roleId, text).group(1)
+            roleId = found.split(" ")[1]
+            code, message = getMentionsForRole(roleId)
+        except AttributeError:
+            code = 404
+            message = ("Please specify a Circle ID after @role. "
+                       "Type <code>/hipfrog</code> to find it.")
+
         color = strings.succes_color if code == 200 else strings.error_color
         message_dict = messageFunctions.createMessageDict(color, message)
     return json.jsonify(message_dict)
