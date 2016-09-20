@@ -80,14 +80,14 @@ def getCapabilitiesDict(publicUrl):
                     {
                         "event": "room_message",
                         "pattern": "@role\\b \\w+",
-                        "url": publicUrl+"/atRole",
+                        "url": publicUrl+"/atrole",
                         "name": "At Role webhook",
                         "authentication": "jwt"
                     },
                     {
                         "event": "room_message",
                         "pattern": "@circle\\b \\w+",
-                        "url": publicUrl+"/atCircle",
+                        "url": publicUrl+"/atcircle",
                         "name": "At Circle webhook",
                         "authentication": "jwt"
                     }
