@@ -304,7 +304,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog'))
 
         mock_color = strings.succes_color
-        mock_message = strings.help_information
+        mock_message = strings.help_hipfrog
         mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
 
         mock_headers = test_values.mock_authorization_headers()
