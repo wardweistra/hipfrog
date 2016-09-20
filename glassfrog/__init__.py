@@ -2,6 +2,7 @@
 from flask import Flask, json, request, render_template, flash
 from flask_sqlalchemy import SQLAlchemy
 import requests
+import re
 
 from .functions import apiCalls
 from .functions import messageFunctions as messageFunctions
