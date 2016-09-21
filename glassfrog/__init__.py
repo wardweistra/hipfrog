@@ -387,7 +387,7 @@ def getMentionsForCircle(circleId):
 @app.route('/atrole', methods=['GET', 'POST'])
 def atRole():
     requestdata = json.loads(request.get_data())
-    callingMessage = requestdata['item']['message']['message'].split()
+    callingMessage = requestdata['item']['message']['message']
     oauthId = requestdata['oauth_client_id']
     installation = messageFunctions.getInstallationFromOauthId(oauthId)
 
