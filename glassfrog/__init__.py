@@ -396,8 +396,7 @@ def atRole():
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     else:
         try:
-            found = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
-            roleId = found.split(" ")[1]
+            roleId = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
             code, message = getMentionsForRole(roleId)
         except AttributeError:
             code = 404
