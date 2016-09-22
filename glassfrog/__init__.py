@@ -402,9 +402,12 @@ def getMentionsForCircle(circleId):
 @app.route('/atrole', methods=['GET', 'POST'])
 def atRole():
     requestdata = json.loads(request.get_data())
+    print(requestdata)
     callingMessage = requestdata['item']['message']['message']
     oauthId = requestdata['oauth_client_id']
     installation = messageFunctions.getInstallationFromOauthId(oauthId)
+
+    print(callingMessage)
 
     if installation.glassfrogToken is None:
         message = strings.set_token_first
