@@ -361,21 +361,36 @@ def hipfrog():
     return json.jsonify(message_dict)
 
 
-def getMentionsForEmail(emaillist):
+def getMentionsForEmail(email_list):
     # Create mention list
     # For email in emaillist:
         # Get mention from email
         # Add to mention list
     # return mention list
-    pass
+    return 200, email_list.join(" ")
 
 
-def getMentionsForRole(roleId):
-    # emaillist = get emails for roleId
-    # code, mentions = getMentionsForEmail(emaillist)
-    code = 200
-    mentions = "@role "+roleId
-    return code, mentions
+def getMentionsForRole(glassfrogToken, roleId):
+    apiEndpoint = 'roles/{}'.format(roleId)
+    glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                              glassfrogToken)
+
+    if code == 200:
+        email_list = []
+
+        # People
+        if responsebody['linked']['people'] != []:
+            for person in responsebody['linked']['people']:
+                email_list += [person['email']]
+            code, message = getMentionsForEmail(email_list)
+        else:
+            # TODO Role not fullfilled
+            message = "(not fullfilled)"
+    else:
+        message = responsebody['message']
+
+    return code, message
 
 
 def getMentionsForCircle(circleId):
@@ -397,10 +412,10 @@ def atRole():
     else:
         try:
             roleId = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
-            code, message = getMentionsForRole(roleId)
+            code, message = getMentionsForRole(installation.glassfrogToken, roleId)
         except AttributeError:
             code = 404
-            message = ("Please specify a Circle ID after @role. "
+            message = ("Please specify a Role ID after @role. "
                        "Type <code>/hipfrog</code> to find it.")
 
         color = strings.succes_color if code == 200 else strings.error_color
