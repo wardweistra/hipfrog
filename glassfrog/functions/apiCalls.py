@@ -38,8 +38,8 @@ class HipchatApiHandler(object):
                                         data=data)
 
     def getMentionForEmail(self, email, installation):
-        messageUrl = '{}/v2/user/{}'.format(installation.hipchatApiProvider_url,
-                                            email)
+        messageUrl = '{}/user/{}'.format(installation.hipchatApiProvider_url,
+                                         email)
         token_header = {"Authorization": "Bearer "+installation.access_token}
         messageresponse = requests.post(messageUrl, headers=token_header).text
         print(messageresponse)
