@@ -48,7 +48,6 @@ def installed():
         post_data = {"grant_type": "client_credentials",
                      "scope": "send_notification view_room"}
         tokendata = hipchatApiHandler.getTokenData(tokenUrl, client_auth, post_data)
-        print(tokendata)
 
         installation.access_token = tokendata['access_token']
         installation.expires_in = tokendata['expires_in']
@@ -75,9 +74,9 @@ def installed():
 @app.route('/installed/<oauthId>', methods=['DELETE'])
 def uninstall(oauthId):
     installation = Installation.query.filter_by(oauthId=oauthId).first()
-    print(installation)
     db.session.delete(installation)
     db.session.commit()
+    # TODO why are they not uninstalled?
     return ('', 200)
 
 
@@ -410,12 +409,9 @@ def getMentionsForCircle(circleId):
 @app.route('/atrole', methods=['GET', 'POST'])
 def atRole():
     requestdata = json.loads(request.get_data())
-    print(requestdata)
     callingMessage = requestdata['item']['message']['message']
     oauthId = requestdata['oauth_client_id']
     installation = messageFunctions.getInstallationFromOauthId(oauthId)
-
-    print(callingMessage)
 
     if installation.glassfrogToken is None:
         message = strings.set_token_first
@@ -423,7 +419,6 @@ def atRole():
     else:
         try:
             roleId = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
-            print(roleId)
             code, mentions = getMentionsForRole(installation, roleId)
             from_mention = requestdata['item']['message']['from']['mention_name']
             message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
@@ -433,7 +428,7 @@ def atRole():
                        "Type <code>/hipfrog</code> to find it.")
 
         color = strings.succes_color if code == 200 else strings.error_color
-        message_dict = messageFunctions.createMessageDict(color, message)
+        message_dict = messageFunctions.createMessageDict(color, message, message_format="text")
     return json.jsonify(message_dict)
 
 

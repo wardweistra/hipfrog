@@ -42,7 +42,7 @@ class HipchatApiHandler(object):
                                                 installation.roomId)
         token_header = {"Authorization": "Bearer "+installation.access_token}
         messageresponse = requests.get(messageUrl, headers=token_header)
-        return messageresponse.status_code, messageresponse.text
+        return messageresponse.status_code, json.loads(messageresponse.text)
 
 
 def getCapabilitiesDict(publicUrl):

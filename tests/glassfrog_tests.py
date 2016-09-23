@@ -501,7 +501,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_color = strings.succes_color
         mock_message = test_values.mock_atrole_message.format(mock_roleId)
-        mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
+        mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message,
+                                                              message_format="text")
 
         mock_getMentionsForRole.return_value = (200, test_values.mock_atrole_mentions)
 
