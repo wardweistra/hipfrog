@@ -587,3 +587,7 @@ mock_role_roleId_message = '''
 <br/>
 <strong>Person: </strong><code>811765527</code> -
  <a href="https://app.glassfrog.com/people/811765527">Carlos Aldrich</a>'''
+
+mock_atrole_message = '''
+@role {}
+'''

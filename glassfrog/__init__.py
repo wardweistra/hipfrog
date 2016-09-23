@@ -361,20 +361,23 @@ def hipfrog():
     return json.jsonify(message_dict)
 
 
-def getMentionsForEmail(email_list):
-    # Create mention list
-    # For email in emaillist:
-        # Get mention from email
-        # Add to mention list
-    # return mention list
-    return 200, email_list.join(" ")
+def getMentionsForEmail(installation, email_list):
+    hipchatApiHandler = apiCalls.HipchatApiHandler()
+
+    mention_list = []
+    for email in email_list:
+        mention = hipchatApiHandler.getMentionForEmail(
+                    email=email,
+                    installation=installation)
+        mention_list += [mention]
+    return 200, " ".join(mention_list)
 
 
-def getMentionsForRole(glassfrogToken, roleId):
+def getMentionsForRole(installation, roleId):
     apiEndpoint = 'roles/{}'.format(roleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
     code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
-                                                              glassfrogToken)
+                                                              installation.glassfrogToken)
 
     if code == 200:
         email_list = []
@@ -383,7 +386,7 @@ def getMentionsForRole(glassfrogToken, roleId):
         if responsebody['linked']['people'] != []:
             for person in responsebody['linked']['people']:
                 email_list += [person['email']]
-            code, message = getMentionsForEmail(email_list)
+            code, message = getMentionsForEmail(installation, email_list)
         else:
             # TODO Role not fullfilled
             message = "(not fullfilled)"
@@ -415,7 +418,8 @@ def atRole():
     else:
         try:
             roleId = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
-            code, message = getMentionsForRole(installation.glassfrogToken, roleId)
+            print(roleId)
+            code, message = getMentionsForRole(installation, roleId)
         except AttributeError:
             code = 404
             message = ("Please specify a Role ID after @role. "

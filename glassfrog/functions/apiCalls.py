@@ -37,6 +37,16 @@ class HipchatApiHandler(object):
                                         headers=token_header,
                                         data=data)
 
+    def getMentionForEmail(self, email, installation):
+        messageUrl = '{}/v2/user/{}'.format(installation.hipchatApiProvider_url,
+                                            email)
+        token_header = {"Authorization": "Bearer "+installation.access_token}
+        messageresponse = requests.post(messageUrl, headers=token_header).text
+        print(messageresponse)
+        print(json.loads(messageresponse))
+        print(json.loads(messageresponse)['mention_name'])
+        return email
+
 
 def getCapabilitiesDict(publicUrl):
     capabilities_dict = \
