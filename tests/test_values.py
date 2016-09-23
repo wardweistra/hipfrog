@@ -538,8 +538,8 @@ mock_role_roleid_response = {
         "people": [
             {
                 "id": 811765527,
-                "name": "Carlos Aldrich",
-                "email": "carlos@example.com",
+                "name": "Henk de Vries",
+                "email": "henk@devries.com",
                 "external_id": None
             }
         ],
@@ -588,6 +588,34 @@ mock_role_roleId_message = '''
 <strong>Person: </strong><code>811765527</code> -
  <a href="https://app.glassfrog.com/people/811765527">Carlos Aldrich</a>'''
 
-mock_atrole_message = '''
-@role {}
-'''
+mock_room_members_response = {
+    "items": [
+        {
+            "id": 1325375,
+            "mention_name": "HenkdeVries",
+            "name": "Henk de Vries",
+            "room_roles": [
+                "room_member"
+            ],
+            "version":"QMWTDSXQ"
+        },
+        {
+            "id": 32797,
+            "mention_name": "WardWeistra",
+            "name": "Ward Weistra",
+            "room_roles": [
+                "room_member",
+                "room_admin"
+            ],
+            "version":"00000000"
+        }
+    ],
+    "links": {
+        "self": "https://api.hipchat.com/v2/room/1000/member"
+    },
+    "maxResults": 100,
+    "startIndex": 0
+}
+
+mock_atrole_mentions = '''@HenkdeVries'''
+mock_atrole_message = '''@WardWeistra said: Beste @role {}: Hoi! /cc @HenkdeVries'''

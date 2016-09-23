@@ -37,17 +37,12 @@ class HipchatApiHandler(object):
                                         headers=token_header,
                                         data=data)
 
-    def getMentionForEmail(self, email, installation):
-        # messageUrl = '{}/user/{}'.format(installation.hipchatApiProvider_url,
-                                        #  email)
+    def getRoomMembers(self, installation):
         messageUrl = '{}/room/{}/member'.format(installation.hipchatApiProvider_url,
                                                 installation.roomId)
         token_header = {"Authorization": "Bearer "+installation.access_token}
-        messageresponse = requests.get(messageUrl, headers=token_header).text
-        print(messageresponse)
-        print(json.loads(messageresponse))
-        print(json.loads(messageresponse)['mention_name'])
-        return email
+        messageresponse = requests.get(messageUrl, headers=token_header)
+        return messageresponse.status_code, messageresponse.text
 
 
 def getCapabilitiesDict(publicUrl):
@@ -69,8 +64,7 @@ def getCapabilitiesDict(publicUrl):
                     "fromName": "HipFrog",
                     "scopes": [
                         "send_notification",
-                        "view_room",
-                        "view_group"
+                        "view_room"
                     ],
                     "avatar": {
                         "url": publicUrl+'/static/hipfrog.png',

@@ -46,7 +46,7 @@ def installed():
         tokenUrl = capabilitiesdata['capabilities']['oauth2Provider']['tokenUrl']
         client_auth = requests.auth.HTTPBasicAuth(installation.oauthId, installation.oauthSecret)
         post_data = {"grant_type": "client_credentials",
-                     "scope": "send_notification, view_room, view_group"}
+                     "scope": "send_notification view_room"}
         tokendata = hipchatApiHandler.getTokenData(tokenUrl, client_auth, post_data)
         print(tokendata)
 
@@ -363,18 +363,6 @@ def hipfrog():
     return json.jsonify(message_dict)
 
 
-def getMentionsForEmail(installation, email_list):
-    hipchatApiHandler = apiCalls.HipchatApiHandler()
-
-    mention_list = []
-    for email in email_list:
-        mention = hipchatApiHandler.getMentionForEmail(
-                    email=email,
-                    installation=installation)
-        mention_list += [mention]
-    return 200, " ".join(mention_list)
-
-
 def getMentionsForRole(installation, roleId):
     apiEndpoint = 'roles/{}'.format(roleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
@@ -382,15 +370,30 @@ def getMentionsForRole(installation, roleId):
                                                               installation.glassfrogToken)
 
     if code == 200:
-        email_list = []
+        role_names = []
 
-        # People
         if responsebody['linked']['people'] != []:
+            # Get names of people in role
             for person in responsebody['linked']['people']:
-                email_list += [person['email']]
-            code, message = getMentionsForEmail(installation, email_list)
+                role_names += [person['name']]
+            # Get names of people in room
+            hipchatApiHandler = apiCalls.HipchatApiHandler()
+            room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
+
+            mention_list = []
+
+            for role_name in role_names:
+                inroom = False
+                for room_member in room_members['items']:
+                    if room_member['name'] == role_name:
+                        mention_list += ['@'+room_member['mention_name']]
+                        inroom = True
+                        break
+                if not inroom:
+                    mention_list += [role_name]
+
+            message = " ".join(mention_list)
         else:
-            # TODO Role not fullfilled
             message = "(not fullfilled)"
     else:
         message = responsebody['message']
@@ -421,7 +424,9 @@ def atRole():
         try:
             roleId = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
             print(roleId)
-            code, message = getMentionsForRole(installation, roleId)
+            code, mentions = getMentionsForRole(installation, roleId)
+            from_mention = requestdata['item']['message']['from']['mention_name']
+            message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
         except AttributeError:
             code = 404
             message = ("Please specify a Role ID after @role. "

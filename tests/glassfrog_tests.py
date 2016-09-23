@@ -478,8 +478,8 @@ class GlassfrogTestCase(unittest.TestCase):
     def test_getMentionsForRole(self, mock_HipchatApiHandler, mock_glassfrogApiHandler):
         mock_roleId = test_values.mock_role_roleid_response['roles'][0]['id']
         mock_installation = self.defaultInstallation()
-        mock_HipchatApiHandler.return_value.getMentionForEmail.return_value = \
-            test_values.mock_role_roleid_response['linked']['people'][0]['email']
+        mock_HipchatApiHandler.return_value.getRoomMembers.return_value = \
+            200, test_values.mock_room_members_response
 
         # Succesfull call
         mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
@@ -487,24 +487,23 @@ class GlassfrogTestCase(unittest.TestCase):
         rv = glassfrog.getMentionsForRole(mock_installation, mock_roleId)
         assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
 
-        print(rv[1])
-
         for person in test_values.mock_role_roleid_response['linked']['people']:
-            assert person['email'] in rv[1]
+            for room_member in test_values.mock_room_members_response['items']:
+                if person['name'] == room_member['name']:
+                    assert room_member['mention_name'] in rv[1]
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getMentionsForRole')
     def test_atRole(self, mock_getMentionsForRole, mock_getInstallationFromOauthId):
         mock_roleId = 1000
-        mock_command = message = 'Beste @role {}: Hoi!'.format(mock_roleId)
+        mock_command = 'Beste @role {}: Hoi!'.format(mock_roleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.succes_color
         mock_message = test_values.mock_atrole_message.format(mock_roleId)
         mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message)
 
-        mock_getMentionsForRole.return_value = (
-            200, test_values.mock_atrole_message.format(mock_roleId))
+        mock_getMentionsForRole.return_value = (200, test_values.mock_atrole_mentions)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
