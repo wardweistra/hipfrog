@@ -46,8 +46,9 @@ def installed():
         tokenUrl = capabilitiesdata['capabilities']['oauth2Provider']['tokenUrl']
         client_auth = requests.auth.HTTPBasicAuth(installation.oauthId, installation.oauthSecret)
         post_data = {"grant_type": "client_credentials",
-                     "scope": "send_notification"}
+                     "scope": "send_notification, view_room, view_group"}
         tokendata = hipchatApiHandler.getTokenData(tokenUrl, client_auth, post_data)
+        print(tokendata)
 
         installation.access_token = tokendata['access_token']
         installation.expires_in = tokendata['expires_in']
@@ -74,6 +75,7 @@ def installed():
 @app.route('/installed/<oauthId>', methods=['DELETE'])
 def uninstall(oauthId):
     installation = Installation.query.filter_by(oauthId=oauthId).first()
+    print(installation)
     db.session.delete(installation)
     db.session.commit()
     return ('', 200)
