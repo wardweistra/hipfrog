@@ -34,8 +34,8 @@ circles_missing_functionality = ("Sorry, the feature \'{}\' does not exist (yet)
                                  " Type <code>/hipfrog circle {}</code> to get a list of"
                                  " the available commands.")
 
-regex_hipfrog = "\\A\\/hipfrog\\b"
-regex_at_role = "@role"
-regex_at_role_roleId = "@role (\w+)"
-regex_at_circle = "@circle"
-regex_at_circle_circleId = "@circle (\w+)"
+regex_hipfrog = "\\A\\/[hH][iI][pP][fF][rR][oO][gG]\\b"
+regex_at_role = "@[rR][oO][lL][eE]"
+regex_at_role_roleId = "@[rR][oO][lL][eE] (\w+)"
+regex_at_circle = "@[cC][iI][rR][cC][lL][eE]"
+regex_at_circle_circleId = "@[cC][iI][rR][cC][lL][eE] (\w+)"

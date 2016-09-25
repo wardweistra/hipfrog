@@ -515,7 +515,7 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.getMentionsForRole')
     def test_atRole(self, mock_getMentionsForRole, mock_getInstallationFromOauthId):
         mock_roleId = test_values.mock_role_roleid_response['roles'][0]['id']
-        mock_command = 'Beste @role {}: Hoi!'.format(mock_roleId)
+        mock_command = 'Beste @Role {}: Hoi!'.format(mock_roleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.succes_color
@@ -540,7 +540,7 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.getMentionsForCircle')
     def test_atCircle(self, mock_getMentionsForCircle, mock_getInstallationFromOauthId):
         mock_circleId = 1000
-        mock_command = 'Beste @circle {}: Hoi!'.format(mock_circleId)
+        mock_command = 'Beste @Circle {}: Hoi!'.format(mock_circleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.succes_color

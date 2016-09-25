@@ -615,9 +615,9 @@ mock_room_members_response = {
 }
 
 mock_atrole_mentions = '''Fulfillment Role (/hipfrog role {0}) - @HenkdeVries'''
-mock_atrole_message = ('@WardWeistra said: Beste @role {0}: Hoi! /cc '
+mock_atrole_message = ('@WardWeistra said: Beste @Role {0}: Hoi! /cc '
                        'Fulfillment Role (/hipfrog role {0}) - @HenkdeVries')
 mock_atcircle_mentions = ('Circle {0} (/hipfrog circle {0}) - Someone van Something,'
                           ' @WardWeistra')
-mock_atcircle_message = ('@WardWeistra said: Beste @circle {0}: Hoi! /cc '
+mock_atcircle_message = ('@WardWeistra said: Beste @Circle {0}: Hoi! /cc '
                          'Circle {0} (/hipfrog circle {0}) - Someone van Something, @WardWeistra')
