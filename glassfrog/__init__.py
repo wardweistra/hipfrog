@@ -371,6 +371,8 @@ def getMentionsForRole(installation, roleId):
     if code == 200:
         role_names = []
 
+        message = responsebody['roles'][0]['name'] + " (/hipfrog role {}) - ".format(roleId)
+
         if responsebody['linked']['people'] != []:
             # Get names of people in role
             for person in responsebody['linked']['people']:
@@ -391,19 +393,54 @@ def getMentionsForRole(installation, roleId):
                 if not inroom:
                     mention_list += [role_name]
 
-            message = " ".join(mention_list)
+            message += ", ".join(mention_list)
         else:
-            message = "(not fullfilled)"
+            message += "(not fullfilled)"
     else:
         message = responsebody['message']
 
     return code, message
 
 
-def getMentionsForCircle(circleId):
-    # emaillist = get emails for circleId
-    # code, mentions = getMentionsForEmail(emaillist)
-    pass
+def getMentionsForCircle(installation, circleId):
+    apiEndpoint = 'circles/{}/people'.format(circleId)
+    glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                              installation.glassfrogToken)
+
+    if code == 200:
+        circle_names = []
+
+        message = responsebody['linked']['circles'][0]['name'] + \
+            " (/hipfrog circle {}) - ".format(circleId)
+
+        if responsebody['people'] != []:
+            # Get names of people in circle
+            for person in responsebody['people']:
+                circle_names += [person['name']]
+            # Get names of people in room
+            hipchatApiHandler = apiCalls.HipchatApiHandler()
+            room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
+
+            mention_list = []
+
+            for circle_name in circle_names:
+                inroom = False
+                for room_member in room_members['items']:
+                    if room_member['name'] == circle_name:
+                        mention_list += ['@'+room_member['mention_name']]
+                        inroom = True
+                        break
+                if not inroom:
+                    mention_list += [circle_name]
+
+            message += ", ".join(mention_list)
+        else:
+            message += "(not fullfilled)"
+    else:
+        message = responsebody['message']
+
+    return code, message
 
 
 @app.route('/atrole', methods=['GET', 'POST'])
@@ -435,7 +472,7 @@ def atRole():
 @app.route('/atcircle', methods=['GET', 'POST'])
 def atCircle():
     requestdata = json.loads(request.get_data())
-    callingMessage = requestdata['item']['message']['message'].split()
+    callingMessage = requestdata['item']['message']['message']
     oauthId = requestdata['oauth_client_id']
     installation = messageFunctions.getInstallationFromOauthId(oauthId)
 
@@ -443,9 +480,18 @@ def atCircle():
         message = strings.set_token_first
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     else:
-        code, message = 200, "atCircle"
+        try:
+            circleId = re.search(strings.regex_at_circle_circleId, callingMessage).group(1)
+            code, mentions = getMentionsForCircle(installation, circleId)
+            from_mention = requestdata['item']['message']['from']['mention_name']
+            message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
+        except AttributeError:
+            code = 404
+            message = ("Please specify a Circle ID after @circle. "
+                       "Type <code>/hipfrog</code> to find it.")
+
         color = strings.succes_color if code == 200 else strings.error_color
-        message_dict = messageFunctions.createMessageDict(color, message)
+        message_dict = messageFunctions.createMessageDict(color, message, message_format="text")
     return json.jsonify(message_dict)
 
 

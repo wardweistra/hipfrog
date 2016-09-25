@@ -492,10 +492,29 @@ class GlassfrogTestCase(unittest.TestCase):
                 if person['name'] == room_member['name']:
                     assert room_member['mention_name'] in rv[1]
 
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    @mock.patch('glassfrog.apiCalls.HipchatApiHandler')
+    def test_getMentionsForCircle(self, mock_HipchatApiHandler, mock_glassfrogApiHandler):
+        mock_circleId = test_values.mock_circle_members_response['linked']['circles'][0]['id']
+        mock_installation = self.defaultInstallation()
+        mock_HipchatApiHandler.return_value.getRoomMembers.return_value = \
+            200, test_values.mock_room_members_response
+
+        # Succesfull call
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            200, test_values.mock_circle_members_response)
+        rv = glassfrog.getMentionsForCircle(mock_installation, mock_circleId)
+        assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
+
+        for person in test_values.mock_circle_members_response['people']:
+            for room_member in test_values.mock_room_members_response['items']:
+                if person['name'] == room_member['name']:
+                    assert room_member['mention_name'] in rv[1]
+
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getMentionsForRole')
     def test_atRole(self, mock_getMentionsForRole, mock_getInstallationFromOauthId):
-        mock_roleId = 1000
+        mock_roleId = test_values.mock_role_roleid_response['roles'][0]['id']
         mock_command = 'Beste @role {}: Hoi!'.format(mock_roleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
@@ -504,13 +523,39 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message,
                                                               message_format="text")
 
-        mock_getMentionsForRole.return_value = (200, test_values.mock_atrole_mentions)
+        mock_getMentionsForRole.return_value = (
+            200, test_values.mock_atrole_mentions.format(mock_roleId))
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
         mock_getInstallationFromOauthId.return_value = mock_installation
 
         rv = self.app.post('/atrole', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    @mock.patch('glassfrog.getMentionsForCircle')
+    def test_atCircle(self, mock_getMentionsForCircle, mock_getInstallationFromOauthId):
+        mock_circleId = test_values.mock_circle_members_response['linked']['circles'][0]['id']
+        mock_command = 'Beste @circle {}: Hoi!'.format(mock_circleId)
+        mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
+
+        mock_color = strings.succes_color
+        mock_message = test_values.mock_atcircle_message.format(mock_circleId)
+        mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message,
+                                                              message_format="text")
+
+        mock_getMentionsForCircle.return_value = (
+            200, test_values.mock_atcircle_mentions.format(mock_circleId))
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/atcircle', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
