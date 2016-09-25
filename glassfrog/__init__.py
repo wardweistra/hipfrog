@@ -411,6 +411,7 @@ def getMentionsForCircle(installation, circleId):
     if code == 200:
         circle_names = []
 
+        # TODO add circle name
         message = "Circle " + str(circleId) + \
             " (/hipfrog circle {}) - ".format(circleId)
 
