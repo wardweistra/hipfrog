@@ -495,7 +495,7 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     @mock.patch('glassfrog.apiCalls.HipchatApiHandler')
     def test_getMentionsForCircle(self, mock_HipchatApiHandler, mock_glassfrogApiHandler):
-        mock_circleId = test_values.mock_circle_members_response['linked']['circles'][0]['id']
+        mock_circleId = 1000
         mock_installation = self.defaultInstallation()
         mock_HipchatApiHandler.return_value.getRoomMembers.return_value = \
             200, test_values.mock_room_members_response
@@ -539,7 +539,7 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getMentionsForCircle')
     def test_atCircle(self, mock_getMentionsForCircle, mock_getInstallationFromOauthId):
-        mock_circleId = test_values.mock_circle_members_response['linked']['circles'][0]['id']
+        mock_circleId = 1000
         mock_command = 'Beste @circle {}: Hoi!'.format(mock_circleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 

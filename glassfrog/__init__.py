@@ -411,7 +411,7 @@ def getMentionsForCircle(installation, circleId):
     if code == 200:
         circle_names = []
 
-        message = responsebody['linked']['circles'][0]['name'] + \
+        message = "Circle " + str(circleId) + \
             " (/hipfrog circle {}) - ".format(circleId)
 
         if responsebody['people'] != []:

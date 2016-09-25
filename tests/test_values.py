@@ -347,33 +347,7 @@ mock_circle_members_response = {
                 ]
             }
         }
-    ],
-    'linked': {
-        'circles': [
-            {
-                'links': {
-                    'policies': [
-
-                    ],
-                    'domain':[
-                        8467822,
-                        8467823
-                    ],
-                    'supported_role':8283892,
-                    'roles':[
-                        8284164,
-                        8284162,
-                        8284166,
-                        8284163
-                    ]
-                },
-                'strategy':None,
-                'short_name':'cBioPortal',
-                'name':'cBioPortal',
-                'id':13665
-            }
-        ]
-    }
+    ]
 }
 
 mock_circle_members_message = '''The following people are in your circle:<br />
@@ -643,7 +617,7 @@ mock_room_members_response = {
 mock_atrole_mentions = '''Fulfillment Role (/hipfrog role {0}) - @HenkdeVries'''
 mock_atrole_message = ('@WardWeistra said: Beste @role {0}: Hoi! /cc '
                        'Fulfillment Role (/hipfrog role {0}) - @HenkdeVries')
-mock_atcircle_mentions = ('cBioPortal (/hipfrog circle {0}) - Someone van Something,'
+mock_atcircle_mentions = ('Circle {0} (/hipfrog circle {0}) - Someone van Something,'
                           ' @WardWeistra')
 mock_atcircle_message = ('@WardWeistra said: Beste @circle {0}: Hoi! /cc '
-                         'cBioPortal (/hipfrog circle {0}) - Someone van Something, @WardWeistra')
+                         'Circle {0} (/hipfrog circle {0}) - Someone van Something, @WardWeistra')
