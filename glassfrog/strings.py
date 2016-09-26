@@ -29,7 +29,7 @@ help_hipfrog_circle_circleid = '''<strong>More:</strong>
 <li><code>/hipfrog circle {0} members</code>
  - List the members of the specified circle</li>
 <li><code>/hipfrog circle {0} roles</code>
- - List the roles in the specified circle</li>
+ - List the roles and subcircles in the specified circle</li>
 <li><code>@circle {0}</code>
   - Mention the people in the current room in the specified circle</li>
 </ul>'''

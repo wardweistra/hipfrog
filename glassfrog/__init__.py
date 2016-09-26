@@ -206,7 +206,7 @@ def getCircleRoles(glassfrogToken, circleId):
                                                               glassfrogToken)
 
     if code == 200:
-        message = 'The following roles are in this circle:<br /><ul>'
+        message = 'The following roles and subcircles are in this circle:<br /><ul>'
         for role in sorted(responsebody['roles'], key=lambda k: k['name']):
             supporting_circle_info = ''
             message += '<li>'
