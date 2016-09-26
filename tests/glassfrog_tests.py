@@ -107,6 +107,28 @@ class GlassfrogTestCase(unittest.TestCase):
         assert db_installation is None
         assert rv.status_code == 200
 
+    @mock.patch('glassfrog.apiCalls.requests.get')
+    def test_getRoomMembers(self, mock_requests_get):
+        mock_installation = self.defaultInstallation()
+        mock_color = strings.succes_color
+
+        hipchatApiHandler = apiCalls.HipchatApiHandler()
+
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.text = json.dumps(test_values.mock_room_members_response)
+        mock_requests_get.return_value = mock_response
+
+        rv = hipchatApiHandler.getRoomMembers(installation=mock_installation)
+        mock_requestUrl = '{}/room/{}/member'.format(mock_installation.hipchatApiProvider_url,
+                                                     mock_installation.roomId)
+        mock_token_header = {"Authorization": "Bearer "+mock_installation.access_token}
+
+        mock_requests_get.assert_called_with(mock_requestUrl,
+                                             headers=mock_token_header)
+
+        assert rv == (mock_response.status_code, test_values.mock_room_members_response)
+
     @mock.patch('glassfrog.apiCalls.requests')
     def test_sendMessage(self, mock_requests):
         mock_installation = self.defaultInstallation()
