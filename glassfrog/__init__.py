@@ -489,13 +489,15 @@ def atCircle():
             code, mentions = getMentionsForCircle(installation, circleId)
             from_mention = requestdata['item']['message']['from']['mention_name']
             message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
+            message_format = "text"
         except AttributeError:
             code = 404
             message = ("Please specify a Circle ID after @circle. "
                        "Type <code>/hipfrog</code> to find it.")
+            message_format = "html"
 
         color = strings.succes_color if code == 200 else strings.error_color
-        message_dict = messageFunctions.createMessageDict(color, message, message_format="text")
+        message_dict = messageFunctions.createMessageDict(color, message, message_format)
     return json.jsonify(message_dict)
 
 
