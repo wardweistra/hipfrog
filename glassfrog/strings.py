@@ -16,7 +16,7 @@ help_hipfrog = '''Use one of the following commands to learn more:
  - Mention the people in the current room in the specified circle</li>
 </ul>'''
 
-help_hipfrog_circle = '''More:
+help_hipfrog_circle = '''<strong>More</strong>:
 <ul>
 <li><code>/hipfrog circle [Circle ID] (members/roles)</code>
  - Get the details for the specified circle</li>
