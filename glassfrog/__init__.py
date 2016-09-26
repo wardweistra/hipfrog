@@ -301,7 +301,7 @@ def getRoleRoleId(glassfrogToken, roleId):
 @app.route('/hipfrog', methods=['GET', 'POST'])
 def hipfrog():
     requestdata = json.loads(request.get_data())
-    callingMessage = requestdata['item']['message']['message'].split()
+    callingMessage = requestdata['item']['message']['message'].lower().split()
     oauthId = requestdata['oauth_client_id']
     installation = messageFunctions.getInstallationFromOauthId(oauthId)
 
