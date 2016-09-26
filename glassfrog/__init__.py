@@ -219,6 +219,7 @@ def getCircleRoles(glassfrogToken, circleId):
                         ).format(str(role['id']), role['name'])
             message += '</li>'
         message += '</ul>'
+        message += help_hipfrog_circle_circleid_roles
     else:
         message = responsebody['message']
 
