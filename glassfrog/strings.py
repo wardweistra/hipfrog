@@ -42,6 +42,11 @@ help_hipfrog_circle_circleid_roles = '''<strong>More:</strong>
  - Mention the people in the current room in the specified circle</li>
 </ul>'''
 
+help_hipfrog_role_roleid = '''<strong>More:</strong>
+<ul>
+<li><code>@role {0}</code>
+  - Mention the people in the current room fullfilling the specified role</li>
+</ul>'''
 
 set_token_first = "Please set the Glassfrog Token first in the plugin configuration"
 

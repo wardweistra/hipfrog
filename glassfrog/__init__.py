@@ -291,6 +291,7 @@ def getRoleRoleId(glassfrogToken, roleId):
             if len(responsebody['linked']['people']) > 1:
                 people += '</ul>'
             message_list += [people]
+        message_list += [help_hipfrog_role_roleid.format(roleId)]
         # Joining with new lines
         message = '<br/>'.join(message_list)
     else:
