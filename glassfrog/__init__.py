@@ -31,8 +31,10 @@ def capabilities():
 
 @app.route('/installed', methods=['GET', 'POST'])
 def installed():
+    print("installed")
     if request.method == 'POST':
         installdata = json.loads(request.get_data())
+        print(installdata)
 
         installation = Installation(oauthId=installdata['oauthId'],
                                     capabilitiesUrl=installdata['capabilitiesUrl'],
@@ -73,10 +75,29 @@ def installed():
 
 @app.route('/installed/<oauthId>', methods=['DELETE'])
 def uninstall(oauthId):
+    print("uninstalled"+oauthId)
     installation = Installation.query.filter_by(oauthId=oauthId).first()
     db.session.delete(installation)
     db.session.commit()
     # TODO why are they not uninstalled?
+    return ('', 200)
+
+
+@app.route('/installedUrl', methods=['GET', 'POST'])
+def installedUrl():
+    print("installedUrl")
+    if request.method == 'POST':
+        installdata = json.loads(request.get_data())
+        print(installdata)
+    return ('', 200)
+
+
+@app.route('/uninstalledUrl', methods=['GET', 'POST'])
+def uninstalledUrl():
+    print("uninstalledUrl")
+    if request.method == 'POST':
+        installdata = json.loads(request.get_data())
+        print(installdata)
     return ('', 200)
 
 

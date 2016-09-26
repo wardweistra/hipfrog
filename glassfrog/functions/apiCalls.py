@@ -74,7 +74,9 @@ def getCapabilitiesDict(publicUrl):
                 "installable": {
                     "allowGlobal": False,
                     "allowRoom": True,
-                    "callbackUrl": publicUrl+"/installed"
+                    "callbackUrl": publicUrl+"/installed",
+                    "installedUrl": publicUrl+"/installedUrl",
+                    "uninstalledUrl": publicUrl+"/uninstalledUrl"
                 },
                 "webhook": [
                     {
