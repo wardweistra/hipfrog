@@ -228,6 +228,29 @@ class GlassfrogTestCase(unittest.TestCase):
 
         # TODO Failing call
 
+    @mock.patch('glassfrog.getCircleCircleId')
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    def test_getIdForCircleIdentifier(self, mock_glassfrogApiHandler, mock_getCircleCircleId):
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            200, test_values.mock_circles_response)
+
+        # Test succesful match
+        mock_circleIdentifier = "sales"
+        mock_circleId = test_values.mock_circles_response['circles'][2]['id']
+        mock_getCircleCircleId.return_value = (
+            200, test_values.mock_circle_circleId_message.format(mock_circleId))
+        rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
+        assert rv == (200, mock_circleId)
+
+        # Test bad match
+        mock_circleIdentifier = "banana"
+        mock_circleId = test_values.mock_circles_response['circles'][2]['id']
+        mock_getCircleCircleId.return_value = (
+            200, test_values.mock_circle_circleId_message.format(mock_circleId))
+        rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
+        assert rv == (200, strings.no_circle_matched.format(mock_circleIdentifier))
+
+
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getCircleCircleId(self, mock_glassfrogApiHandler):
         mock_circleId = test_values.mock_circle_circleId_response['circles'][0]['id']
@@ -449,7 +472,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     def test_hipfrog_circle_missing_functionality(self, mock_getInstallationFromOauthId):
-        mock_circleId = 1000
+        mock_circleId = test_values.mock_circle_circleId_response['circles'][0]['id']
         mock_missing_functionality = 'something'
         mock_command = message = '/hipfrog circle {} {}'.format(mock_circleId,
                                                                 mock_missing_functionality)

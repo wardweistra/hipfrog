@@ -31,10 +31,8 @@ def capabilities():
 
 @app.route('/installed', methods=['GET', 'POST'])
 def installed():
-    print("installed")
     if request.method == 'POST':
         installdata = json.loads(request.get_data())
-        print(installdata)
 
         installation = Installation(oauthId=installdata['oauthId'],
                                     capabilitiesUrl=installdata['capabilitiesUrl'],
@@ -75,7 +73,6 @@ def installed():
 
 @app.route('/installed/<oauthId>', methods=['DELETE'])
 def uninstall(oauthId):
-    print("uninstalled"+oauthId)
     installation = Installation.query.filter_by(oauthId=oauthId).first()
     db.session.delete(installation)
     db.session.commit()
@@ -85,19 +82,15 @@ def uninstall(oauthId):
 
 @app.route('/installedUrl', methods=['GET', 'POST'])
 def installedUrl():
-    print("installedUrl")
     if request.method == 'POST':
         installdata = json.loads(request.get_data())
-        print(installdata)
     return ('', 200)
 
 
 @app.route('/uninstalledUrl', methods=['GET', 'POST'])
 def uninstalledUrl():
-    print("uninstalledUrl")
     if request.method == 'POST':
         installdata = json.loads(request.get_data())
-        print(installdata)
     return ('', 200)
 
 
@@ -152,6 +145,31 @@ def getCircles(glassfrogToken):
         message = responsebody['message']
 
     return code, message
+
+
+def getIdForCircleIdentifier(glassfrogToken, circleIdentifier):
+    def getCircleIdFromName(glassfrogToken, circleIdentifier):
+        apiEndpoint = 'circles'
+        glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+        code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                                  glassfrogToken)
+
+        if code == 200:
+            circleId = messageFunctions.getMatchingCircle(responsebody['circles'], circleIdentifier)
+            return code, circleId
+        else:
+            return code, -999
+
+    try:
+        int(circleIdentifier)
+        circleId = circleIdentifier
+        code = 200
+    except ValueError:
+        code, circleId = getCircleIdFromName(glassfrogToken, circleIdentifier)
+        if code != 200 or circleId == -999:
+            message = strings.no_circle_matched.format(circleIdentifier)
+            return code, message
+    return code, circleId
 
 
 def getCircleCircleId(glassfrogToken, circleId):
@@ -337,7 +355,9 @@ def hipfrog():
     elif len(callingMessage) > 1:
         if callingMessage[1] == 'circles' or callingMessage[1] == 'circle':
             if len(callingMessage) > 2:
-                circleId = callingMessage[2]
+                circleIdentifier = callingMessage[2]
+                code, circleId = getIdForCircleIdentifier(installation.glassfrogToken, circleIdentifier)
+                # TODO check for -999
                 if len(callingMessage) > 3:
                     if callingMessage[3] == 'people' or callingMessage[3] == 'members':
                         # /hipfrog [circles, circle] [circleId] [people, members]
@@ -369,11 +389,13 @@ def hipfrog():
         elif callingMessage[1] == 'roles' or callingMessage[1] == 'role':
             if len(callingMessage) > 2:
                 roleId = callingMessage[2]
+                # TODO getIdForRoleIdentifier
                 # /hipfrog [roles, role] [roleId]
                 code, message = getRoleRoleId(installation.glassfrogToken, roleId)
                 color = strings.succes_color if code == 200 else strings.error_color
                 message_dict = messageFunctions.createMessageDict(color, message)
             else:
+                # TODO give error message
                 # /hipfrog [roles, role]
                 # code, message = getRoles(installation.glassfrogToken)
                 # message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
@@ -382,6 +404,7 @@ def hipfrog():
             # /hipfrog something
             message = strings.missing_functionality.format(callingMessage[1])
             message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+    # TODO Generate message_dict and color here
     return json.jsonify(message_dict)
 
 
@@ -480,6 +503,7 @@ def atRole():
     else:
         try:
             roleId = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
+            # TODO getIdForRoleIdentifier
             code, mentions = getMentionsForRole(installation, roleId)
             from_mention = requestdata['item']['message']['from']['mention_name']
             message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
@@ -508,6 +532,7 @@ def atCircle():
     else:
         try:
             circleId = re.search(strings.regex_at_circle_circleId, callingMessage).group(1)
+            # TODO use getIdForCircleIdentifier
             code, mentions = getMentionsForCircle(installation, circleId)
             from_mention = requestdata['item']['message']['from']['mention_name']
             message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
