@@ -166,9 +166,7 @@ def getIdForCircleIdentifier(glassfrogToken, circleIdentifier):
         code = 200
     except ValueError:
         code, circleId = getCircleIdFromName(glassfrogToken, circleIdentifier)
-        if code != 200 or circleId == -999:
-            message = strings.no_circle_matched.format(circleIdentifier)
-            return code, message
+
     return code, circleId
 
 
@@ -356,32 +354,40 @@ def hipfrog():
         if callingMessage[1] == 'circles' or callingMessage[1] == 'circle':
             if len(callingMessage) > 2:
                 circleIdentifier = callingMessage[2]
+                # Convert circleIdentifier to circleId if needed
                 code, circleId = getIdForCircleIdentifier(installation.glassfrogToken, circleIdentifier)
-                # TODO check for -999
-                if len(callingMessage) > 3:
-                    if callingMessage[3] == 'people' or callingMessage[3] == 'members':
-                        # /hipfrog [circles, circle] [circleId] [people, members]
-                        code, message = getCircleMembers(installation.glassfrogToken, circleId)
-                        color = strings.succes_color if code == 200 else strings.error_color
-                        message_dict = messageFunctions.createMessageDict(color,
-                                                                          message)
-                    elif callingMessage[3] == 'roles':
-                        # /hipfrog [circles, circle] [circleId] roles
-                        code, message = getCircleRoles(installation.glassfrogToken, circleId)
-                        color = strings.succes_color if code == 200 else strings.error_color
-                        message_dict = messageFunctions.createMessageDict(color,
-                                                                          message)
+                if circleId == -999:
+                    if code == 200:
+                        message = strings.no_circle_matched.format(circleIdentifier)
+                        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
                     else:
-                        # /hipfrog [circles, circle] [circleId] something
-                        message = strings.circles_missing_functionality.format(callingMessage[3],
-                                                                               circleId)
-                        message_dict = messageFunctions.createMessageDict(strings.error_color,
-                                                                          message)
+                        message = strings.no_circle_matched_error.format(code)
+                        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
                 else:
-                    # /hipfrog [circles, circle] [circleId]
-                    code, message = getCircleCircleId(installation.glassfrogToken, circleId)
-                    color = strings.succes_color if code == 200 else strings.error_color
-                    message_dict = messageFunctions.createMessageDict(color, message)
+                    if len(callingMessage) > 3:
+                        if callingMessage[3] == 'people' or callingMessage[3] == 'members':
+                            # /hipfrog [circles, circle] [circleId] [people, members]
+                            code, message = getCircleMembers(installation.glassfrogToken, circleId)
+                            color = strings.succes_color if code == 200 else strings.error_color
+                            message_dict = messageFunctions.createMessageDict(color,
+                                                                              message)
+                        elif callingMessage[3] == 'roles':
+                            # /hipfrog [circles, circle] [circleId] roles
+                            code, message = getCircleRoles(installation.glassfrogToken, circleId)
+                            color = strings.succes_color if code == 200 else strings.error_color
+                            message_dict = messageFunctions.createMessageDict(color,
+                                                                              message)
+                        else:
+                            # /hipfrog [circles, circle] [circleId] something
+                            message = strings.circles_missing_functionality.format(callingMessage[3],
+                                                                                   circleId)
+                            message_dict = messageFunctions.createMessageDict(strings.error_color,
+                                                                              message)
+                    else:
+                        # /hipfrog [circles, circle] [circleId]
+                        code, message = getCircleCircleId(installation.glassfrogToken, circleId)
+                        color = strings.succes_color if code == 200 else strings.error_color
+                        message_dict = messageFunctions.createMessageDict(color, message)
             else:
                 # /hipfrog [circles, circle]
                 code, message = getCircles(installation.glassfrogToken)
@@ -526,22 +532,31 @@ def atCircle():
     oauthId = requestdata['oauth_client_id']
     installation = messageFunctions.getInstallationFromOauthId(oauthId)
 
+    message_format = 'html'
+
     if installation.glassfrogToken is None:
         message = strings.set_token_first
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     else:
         try:
-            circleId = re.search(strings.regex_at_circle_circleId, callingMessage).group(1)
-            # TODO use getIdForCircleIdentifier
-            code, mentions = getMentionsForCircle(installation, circleId)
-            from_mention = requestdata['item']['message']['from']['mention_name']
-            message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
-            message_format = "text"
+            circleIdentifier = re.search(strings.regex_at_circle_circleId, callingMessage).group(1)
+            # Convert circleIdentifier to circleId if needed
+            code, circleId = getIdForCircleIdentifier(installation.glassfrogToken, circleIdentifier)
+            if circleId == -999:
+                if code == 200:
+                    code = 404
+                    message = strings.no_circle_matched.format(circleIdentifier)
+                else:
+                    message = strings.no_circle_matched_error.format(code)
+            else:
+                code, mentions = getMentionsForCircle(installation, circleId)
+                from_mention = requestdata['item']['message']['from']['mention_name']
+                message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
+                message_format = "text"
         except AttributeError:
             code = 404
             message = ("Please specify a Circle ID after @circle. "
                        "Type <code>/hipfrog</code> to find it.")
-            message_format = "html"
 
         color = strings.succes_color if code == 200 else strings.error_color
         message_dict = messageFunctions.createMessageDict(color, message, message_format)

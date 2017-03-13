@@ -71,3 +71,4 @@ regex_at_circle = "@[cC][iI][rR][cC][lL][eE]"
 regex_at_circle_circleId = "@[cC][iI][rR][cC][lL][eE] (\w+)"
 
 no_circle_matched = 'No circle name matched {}'
+no_circle_matched_error = 'Error code {} during matching circles'

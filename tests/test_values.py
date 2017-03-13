@@ -620,4 +620,4 @@ mock_atrole_message = ('@WardWeistra said: Beste @Role {0}: Hoi! /cc '
 mock_atcircle_mentions = ('Circle {0} (/hipfrog circle {0}) - Someone van Something,'
                           ' @WardWeistra')
 mock_atcircle_message = ('@WardWeistra said: Beste @Circle {0}: Hoi! /cc '
-                         'Circle {0} (/hipfrog circle {0}) - Someone van Something, @WardWeistra')
+                         'Circle {1} (/hipfrog circle {1}) - Someone van Something, @WardWeistra')

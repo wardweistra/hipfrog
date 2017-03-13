@@ -248,8 +248,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_getCircleCircleId.return_value = (
             200, test_values.mock_circle_circleId_message.format(mock_circleId))
         rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
-        assert rv == (200, strings.no_circle_matched.format(mock_circleIdentifier))
-
+        assert rv == (200, -999)
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getCircleCircleId(self, mock_glassfrogApiHandler):
@@ -408,7 +407,7 @@ class GlassfrogTestCase(unittest.TestCase):
     def test_hipfrog_circle_circleId(self, mock_getCircleCircleId,
                                      mock_getInstallationFromOauthId):
         mock_circleId = 1000
-        mock_command = message = '/hipfrog circle {}'.format(mock_circleId)
+        mock_command = '/hipfrog circle {}'.format(mock_circleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.succes_color
@@ -417,6 +416,75 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_getCircleCircleId.return_value = (
             200, test_values.mock_circle_circleId_message.format(mock_circleId))
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    @mock.patch('glassfrog.getCircleCircleId')
+    @mock.patch('glassfrog.getIdForCircleIdentifier')
+    def test_hipfrog_circle_circleId_string(self, mock_getIdForCircleIdentifier,
+                                            mock_getCircleCircleId,
+                                            mock_getInstallationFromOauthId):
+        mock_circleId = 1000
+        mock_circleIdentier = 'sales'
+        mock_command = '/hipfrog circle {}'.format(mock_circleIdentier)
+        mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
+
+        # Succesful match
+        mock_message = test_values.mock_circle_circleId_message.format(mock_circleId)
+        mock_messageDict = messageFunctions.createMessageDict(
+            strings.succes_color, mock_message)
+
+        mock_getCircleCircleId.return_value = (
+            200, test_values.mock_circle_circleId_message.format(mock_circleId))
+        mock_getIdForCircleIdentifier.return_value = (200, mock_circleId)
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+        # Unsuccesful match
+        mock_message = strings.no_circle_matched.format(mock_circleIdentier)
+        mock_messageDict = messageFunctions.createMessageDict(
+            strings.error_color, mock_message)
+
+        mock_getCircleCircleId.return_value = (
+            200, test_values.mock_circle_circleId_message.format(mock_circleId))
+        mock_getIdForCircleIdentifier.return_value = (200, -999)
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+        # Error code in retrieving circleId
+        mock_code = 401
+        mock_message = strings.no_circle_matched_error.format(mock_code)
+        mock_messageDict = messageFunctions.createMessageDict(
+            strings.error_color, mock_message)
+
+        mock_getCircleCircleId.return_value = (
+            200, test_values.mock_circle_circleId_message.format(mock_circleId))
+        mock_getIdForCircleIdentifier.return_value = (mock_code, -999)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
@@ -588,13 +656,84 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_command = 'Beste @Circle {}: Hoi!'.format(mock_circleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
-        mock_color = strings.succes_color
-        mock_message = test_values.mock_atcircle_message.format(mock_circleId)
-        mock_messageDict = messageFunctions.createMessageDict(mock_color, mock_message,
-                                                              message_format="text")
+        mock_message = test_values.mock_atcircle_message.format(
+            mock_circleId, mock_circleId)
+        mock_messageDict = messageFunctions.createMessageDict(
+            strings.succes_color, mock_message, message_format="text")
 
         mock_getMentionsForCircle.return_value = (
             200, test_values.mock_atcircle_mentions.format(mock_circleId))
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/atcircle', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    @mock.patch('glassfrog.getMentionsForCircle')
+    @mock.patch('glassfrog.getIdForCircleIdentifier')
+    def test_hipfrog_circle_circleId_string(self, mock_getIdForCircleIdentifier,
+                                            mock_getMentionsForCircle,
+                                            mock_getInstallationFromOauthId):
+
+        mock_circleId = 1000
+        mock_circleIdentier = 'sales'
+        mock_command = 'Beste @Circle {}: Hoi!'.format(mock_circleIdentier)
+        mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
+
+        # Succesful match
+        mock_message = test_values.mock_atcircle_message.format(
+            mock_circleIdentier, mock_circleId)
+        mock_messageDict = messageFunctions.createMessageDict(
+            strings.succes_color, mock_message, message_format="text")
+
+        mock_getMentionsForCircle.return_value = (
+            200, test_values.mock_atcircle_mentions.format(mock_circleId))
+        mock_getIdForCircleIdentifier.return_value = (200, mock_circleId)
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/atcircle', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+        # Unsuccesful match
+        mock_message = strings.no_circle_matched.format(mock_circleIdentier)
+        mock_messageDict = messageFunctions.createMessageDict(
+            strings.error_color, mock_message)
+
+        mock_getMentionsForCircle.return_value = (
+            200, test_values.mock_atcircle_mentions.format(mock_circleId))
+        mock_getIdForCircleIdentifier.return_value = (200, -999)
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/atcircle', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+        # Error code in retrieving circleId
+        mock_code = 401
+        mock_message = strings.no_circle_matched_error.format(mock_code)
+        mock_messageDict = messageFunctions.createMessageDict(
+            strings.error_color, mock_message)
+
+        mock_getMentionsForCircle.return_value = (
+            200, test_values.mock_atcircle_mentions.format(mock_circleId))
+        mock_getIdForCircleIdentifier.return_value = (mock_code, -999)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
