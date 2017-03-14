@@ -67,8 +67,8 @@ def getCapabilitiesDict(publicUrl):
                         "view_room"
                     ],
                     "avatar": {
-                        "url": publicUrl+'/static/hipfrog.png',
-                        "url@2x": publicUrl+'/static/hipfrog.png'
+                        "url": publicUrl+'/static/hipfrog.png'
+                        # , "url@2x": publicUrl+'/static/hipfrog.png'
                     }
                 },
                 "installable": {
@@ -98,6 +98,20 @@ def getCapabilitiesDict(publicUrl):
                         "pattern": strings.regex_at_circle,
                         "url": publicUrl+"/atcircle",
                         "name": "At Circle webhook",
+                        "authentication": "jwt"
+                    },
+                    {
+                        "event": "room_message",
+                        "pattern": strings.regex_slash_role,
+                        "url": publicUrl+"/slashrole",
+                        "name": "Slash Role webhook",
+                        "authentication": "jwt"
+                    },
+                    {
+                        "event": "room_message",
+                        "pattern": strings.regex_slash_circle,
+                        "url": publicUrl+"/slashcircle",
+                        "name": "Slash Circle webhook",
                         "authentication": "jwt"
                     }
                 ],

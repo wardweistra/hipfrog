@@ -17,7 +17,7 @@ db.init_app(app)
 
 
 @app.route('/')
-def hello_world():
+def home():
     return ('<a target="_blank" href="https://www.hipchat.com/addons/install?url=' +
             app.config['PUBLIC_URL'] + '/capabilities.json">' +
             strings.install_message + '</a>')
@@ -153,21 +153,63 @@ def getIdForCircleIdentifier(glassfrogToken, circleIdentifier):
         glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
         code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
                                                                   glassfrogToken)
+        message = ''
+        success = True
 
         if code == 200:
             circleId = messageFunctions.getMatchingCircle(responsebody['circles'], circleIdentifier)
-            return code, circleId
+            if circleId == -999:  # no match
+                message = no_circle_matched.format(circleIdentifier)
+                success = False
         else:
-            return code, -999
+            message = responsebody['message']
+            circleId = -999
+            success = False
+        return success, circleId, message
+
+    message = ''
+    success = True
 
     try:
         int(circleIdentifier)
         circleId = circleIdentifier
-        code = 200
     except ValueError:
-        code, circleId = getCircleIdFromName(glassfrogToken, circleIdentifier)
+        success, circleId, message = getCircleIdFromName(glassfrogToken, circleIdentifier)
 
-    return code, circleId
+    return success, circleId, message
+
+
+def getIdForRoleIdentifier(glassfrogToken, roleIdentifier):
+    def getRoleIdFromName(glassfrogToken, roleIdentifier):
+        # TODO option to specify circle for role
+        apiEndpoint = 'roles'
+        glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+        code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                                  glassfrogToken)
+        message = ''
+        success = True
+
+        if code == 200:
+            roleId = messageFunctions.getMatchingRole(responsebody['roles'], roleIdentifier)
+            if roleId == -999:  # no match
+                message = no_role_matched.format(roleIdentifier)
+                success = False
+        else:
+            message = responsebody['message']
+            roleId = -999
+            success = False
+        return success, roleId, message
+
+    message = ''
+    success = True
+
+    try:
+        int(roleIdentifier)
+        roleId = roleIdentifier
+    except ValueError:
+        success, roleId, message = getRoleIdFromName(glassfrogToken, roleIdentifier)
+
+    return success, roleId, message
 
 
 def getCircleCircleId(glassfrogToken, circleId):
@@ -355,14 +397,9 @@ def hipfrog():
             if len(callingMessage) > 2:
                 circleIdentifier = callingMessage[2]
                 # Convert circleIdentifier to circleId if needed
-                code, circleId = getIdForCircleIdentifier(installation.glassfrogToken, circleIdentifier)
-                if circleId == -999:
-                    if code == 200:
-                        message = strings.no_circle_matched.format(circleIdentifier)
-                        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
-                    else:
-                        message = strings.no_circle_matched_error.format(code)
-                        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+                success, circleId, message = getIdForCircleIdentifier(installation.glassfrogToken, circleIdentifier)
+                if not success:
+                    message_dict = messageFunctions.createMessageDict(strings.error_color, message)
                 else:
                     if len(callingMessage) > 3:
                         if callingMessage[3] == 'people' or callingMessage[3] == 'members':
@@ -394,14 +431,18 @@ def hipfrog():
                 message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
         elif callingMessage[1] == 'roles' or callingMessage[1] == 'role':
             if len(callingMessage) > 2:
-                roleId = callingMessage[2]
-                # TODO getIdForRoleIdentifier
-                # /hipfrog [roles, role] [roleId]
-                code, message = getRoleRoleId(installation.glassfrogToken, roleId)
-                color = strings.succes_color if code == 200 else strings.error_color
-                message_dict = messageFunctions.createMessageDict(color, message)
+                roleIdentifier = callingMessage[2]
+                # Convert circleIdentifier to circleId if needed
+                success, roleId, message = getIdForRoleIdentifier(installation.glassfrogToken, roleIdentifier)
+                if not success:
+                    message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+                else:
+                    # /hipfrog [roles, role] [roleId]
+                    code, message = getRoleRoleId(installation.glassfrogToken, roleId)
+                    color = strings.succes_color if code == 200 else strings.error_color
+                    message_dict = messageFunctions.createMessageDict(color, message)
             else:
-                # TODO give error message
+                # TODO give help message for /hipfrog role
                 # /hipfrog [roles, role]
                 # code, message = getRoles(installation.glassfrogToken)
                 # message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
@@ -509,7 +550,7 @@ def atRole():
     else:
         try:
             roleId = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
-            # TODO getIdForRoleIdentifier
+            # TODO use getIdForRoleIdentifier
             code, mentions = getMentionsForRole(installation, roleId)
             from_mention = requestdata['item']['message']['from']['mention_name']
             message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
@@ -541,13 +582,9 @@ def atCircle():
         try:
             circleIdentifier = re.search(strings.regex_at_circle_circleId, callingMessage).group(1)
             # Convert circleIdentifier to circleId if needed
-            code, circleId = getIdForCircleIdentifier(installation.glassfrogToken, circleIdentifier)
-            if circleId == -999:
-                if code == 200:
-                    code = 404
-                    message = strings.no_circle_matched.format(circleIdentifier)
-                else:
-                    message = strings.no_circle_matched_error.format(code)
+            success, circleId, message = getIdForCircleIdentifier(installation.glassfrogToken, circleIdentifier)
+            if not success:
+                code = 404
             else:
                 code, mentions = getMentionsForCircle(installation, circleId)
                 from_mention = requestdata['item']['message']['from']['mention_name']
@@ -561,6 +598,18 @@ def atCircle():
         color = strings.succes_color if code == 200 else strings.error_color
         message_dict = messageFunctions.createMessageDict(color, message, message_format)
     return json.jsonify(message_dict)
+
+
+@app.route('/slashcircle', methods=['GET', 'POST'])
+def slashCircle():
+    # TODO make slashCircle
+    pass
+
+
+@app.route('/slashrole', methods=['GET', 'POST'])
+def slashRole():
+    # TODO make slashRole
+    pass
 
 
 @app.route('/configure.html', methods=['GET', 'POST'])

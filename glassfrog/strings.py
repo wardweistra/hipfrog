@@ -69,6 +69,11 @@ regex_at_role = "@[rR][oO][lL][eE]"
 regex_at_role_roleId = "@[rR][oO][lL][eE] (\w+)"
 regex_at_circle = "@[cC][iI][rR][cC][lL][eE]"
 regex_at_circle_circleId = "@[cC][iI][rR][cC][lL][eE] (\w+)"
+regex_slash_role = "/[rR][oO][lL][eE]"
+regex_slash_role_roleId = "/[rR][oO][lL][eE] (\w+)"
+regex_slash_circle = "/[cC][iI][rR][cC][lL][eE]"
+regex_slash_circle_circleId = "/[cC][iI][rR][cC][lL][eE] (\w+)"
 
 no_circle_matched = 'No circle name matched {}'
-no_circle_matched_error = 'Error code {} during matching circles'
+no_role_matched = 'No role name matched {}'
+no_role_in_circle_matched = 'No role name in circle {0} matched {1}'

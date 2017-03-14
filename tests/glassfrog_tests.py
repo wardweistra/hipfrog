@@ -228,27 +228,35 @@ class GlassfrogTestCase(unittest.TestCase):
 
         # TODO Failing call
 
-    @mock.patch('glassfrog.getCircleCircleId')
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
-    def test_getIdForCircleIdentifier(self, mock_glassfrogApiHandler, mock_getCircleCircleId):
+    def test_getIdForCircleIdentifier(self, mock_glassfrogApiHandler):
         mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
             200, test_values.mock_circles_response)
 
         # Test succesful match
-        mock_circleIdentifier = "sales"
+        mock_circleIdentifier = "business-development"
         mock_circleId = test_values.mock_circles_response['circles'][2]['id']
-        mock_getCircleCircleId.return_value = (
-            200, test_values.mock_circle_circleId_message.format(mock_circleId))
         rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
-        assert rv == (200, mock_circleId)
+        assert rv == (True, mock_circleId, '')
 
         # Test bad match
         mock_circleIdentifier = "banana"
         mock_circleId = test_values.mock_circles_response['circles'][2]['id']
-        mock_getCircleCircleId.return_value = (
-            200, test_values.mock_circle_circleId_message.format(mock_circleId))
         rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
-        assert rv == (200, -999)
+        assert rv == (False, -999, strings.no_circle_matched.format(mock_circleIdentifier))
+
+        # Test error
+
+        mock_code = 401
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            mock_code, test_values.mock_401_responsebody)
+
+        mock_circleIdentifier = "banana"
+        mock_circleId = test_values.mock_circles_response['circles'][2]['id']
+        rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
+        assert rv == (False, -999, test_values.mock_401_responsebody['message'])
+
+# TODO test_getIdForRoleIdentifier
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getCircleCircleId(self, mock_glassfrogApiHandler):
@@ -694,7 +702,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_getMentionsForCircle.return_value = (
             200, test_values.mock_atcircle_mentions.format(mock_circleId))
-        mock_getIdForCircleIdentifier.return_value = (200, mock_circleId)
+        mock_getIdForCircleIdentifier.return_value = (True, mock_circleId, '')
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
@@ -713,7 +721,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_getMentionsForCircle.return_value = (
             200, test_values.mock_atcircle_mentions.format(mock_circleId))
-        mock_getIdForCircleIdentifier.return_value = (200, -999)
+        mock_getIdForCircleIdentifier.return_value = (False, -999, mock_message)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
@@ -727,13 +735,13 @@ class GlassfrogTestCase(unittest.TestCase):
 
         # Error code in retrieving circleId
         mock_code = 401
-        mock_message = strings.no_circle_matched_error.format(mock_code)
+        mock_message = test_values.mock_401_responsebody['message']
         mock_messageDict = messageFunctions.createMessageDict(
             strings.error_color, mock_message)
 
         mock_getMentionsForCircle.return_value = (
-            200, test_values.mock_atcircle_mentions.format(mock_circleId))
-        mock_getIdForCircleIdentifier.return_value = (mock_code, -999)
+            401, test_values.mock_401_responsebody)
+        mock_getIdForCircleIdentifier.return_value = (False, -999, mock_message)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
@@ -745,6 +753,9 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
+# TODO test_hipfrog_role_roleId_string
+# TODO test_atCircle_string
+# TODO test_atRole_string
 
 if __name__ == '__main__':
     unittest.main()

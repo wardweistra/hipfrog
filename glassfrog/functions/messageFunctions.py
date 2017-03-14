@@ -32,18 +32,29 @@ def getInstallationFromJWT(signed_request):
 def getLevenshteinDistance(item, keyword):
     item = item.lower().replace(' ', '').replace('-', '').replace('_', '')
     keyword = keyword.lower().replace(' ', '').replace('-', '').replace('_', '')
-    return Levenshtein.ratio(item.lower(), keyword.lower())
+    return Levenshtein.ratio(item, keyword)
 
 
 def getMatchingCircle(circles, keyword):
     closestDistance = 0
-    closestMatch = -999
+    closestMatch = -999  # no match
     for circle in circles:
         for name in ['name', 'short_name']:
             distance = getLevenshteinDistance(circle[name], keyword)
-            if distance > 0.3 and distance > closestDistance:
+            if distance > 0.5 and distance > closestDistance:
                 closestDistance = distance
                 closestMatch = circle['id']
     return closestMatch
 
-# TODO getMatchingRole
+
+def getMatchingRole(roles, keyword):
+    closestDistance = 0
+    closestMatch = -999  # no match
+    for role in roles:
+        for name in ['name']:
+            distance = getLevenshteinDistance(circle[name], keyword)
+            if distance > 0.5 and distance > closestDistance:
+                closestDistance = distance
+                closestMatch = role['id']
+                matchfound = True
+    return closestMatch
