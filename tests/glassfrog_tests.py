@@ -707,45 +707,6 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_command = 'Beste @Circle {}: Hoi!'.format(mock_circleIdentier)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
-        # Succesful match
-        mock_message = test_values.mock_atcircle_message.format(
-            mock_circleIdentier, mock_circleId)
-        mock_messageDict = messageFunctions.createMessageDict(
-            strings.succes_color, mock_message, message_format="text")
-
-        mock_getMentionsForCircle.return_value = (
-            200, test_values.mock_atcircle_mentions.format(mock_circleId))
-        mock_getIdForCircleIdentifier.return_value = (True, mock_circleId, '')
-
-        mock_headers = test_values.mock_authorization_headers()
-        mock_installation = self.defaultInstallation()
-        mock_getInstallationFromOauthId.return_value = mock_installation
-
-        rv = self.app.post('/atcircle', follow_redirects=True, data=mock_messagedata,
-                           headers=mock_headers)
-        return_messageDict = json.loads(rv.get_data())
-
-        assert return_messageDict == mock_messageDict
-
-        # Unsuccesful match
-        mock_message = strings.no_circle_matched.format(mock_circleIdentier)
-        mock_messageDict = messageFunctions.createMessageDict(
-            strings.error_color, mock_message)
-
-        mock_getMentionsForCircle.return_value = (
-            200, test_values.mock_atcircle_mentions.format(mock_circleId))
-        mock_getIdForCircleIdentifier.return_value = (False, -999, mock_message)
-
-        mock_headers = test_values.mock_authorization_headers()
-        mock_installation = self.defaultInstallation()
-        mock_getInstallationFromOauthId.return_value = mock_installation
-
-        rv = self.app.post('/atcircle', follow_redirects=True, data=mock_messagedata,
-                           headers=mock_headers)
-        return_messageDict = json.loads(rv.get_data())
-
-        assert return_messageDict == mock_messageDict
-
         # Error code in retrieving circleId
         mock_code = 401
         mock_message = test_values.mock_401_responsebody['message']
@@ -766,7 +727,6 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-# TODO test_atCircle_string
 # TODO test_atRole_string
 
 if __name__ == '__main__':
