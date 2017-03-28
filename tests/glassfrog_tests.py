@@ -766,7 +766,6 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-# TODO test_hipfrog_role_roleId_string
 # TODO test_atCircle_string
 # TODO test_atRole_string
 

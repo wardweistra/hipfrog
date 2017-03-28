@@ -549,12 +549,16 @@ def atRole():
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     else:
         try:
-            roleId = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
-            # TODO use getIdForRoleIdentifier
-            code, mentions = getMentionsForRole(installation, roleId)
-            from_mention = requestdata['item']['message']['from']['mention_name']
-            message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
-            message_format = "text"
+            roleIdentifier = re.search(strings.regex_at_role_roleId, callingMessage).group(1)
+            # Convert roleIdentifier to roleId if needed
+            success, roleId, message = getIdForRoleIdentifier(installation.glassfrogToken, roleIdentifier)
+            if not success:
+                code = 404
+            else:
+                code, mentions = getMentionsForRole(installation, roleId)
+                from_mention = requestdata['item']['message']['from']['mention_name']
+                message = '@'+from_mention+' said: '+callingMessage+' /cc '+mentions
+                message_format = "text"
         except AttributeError:
             code = 404
             message = ("Please specify a Role ID after @role. "
