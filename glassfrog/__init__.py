@@ -544,6 +544,8 @@ def atRole():
     oauthId = requestdata['oauth_client_id']
     installation = messageFunctions.getInstallationFromOauthId(oauthId)
 
+    message_format = 'html'
+
     if installation.glassfrogToken is None:
         message = strings.set_token_first
         message_dict = messageFunctions.createMessageDict(strings.error_color, message)
@@ -563,7 +565,6 @@ def atRole():
             code = 404
             message = ("Please specify a Role ID after @role. "
                        "Type <code>/hipfrog</code> to find it.")
-            message_format = "html"
 
         color = strings.succes_color if code == 200 else strings.error_color
         message_dict = messageFunctions.createMessageDict(color, message, message_format)
