@@ -473,7 +473,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_getCircleCircleId.return_value = (
             200, test_values.mock_circle_circleId_message.format(mock_circleId))
-        mock_getIdForCircleIdentifier.return_value = (200, mock_circleId)
+        mock_getIdForCircleIdentifier.return_value = (True, mock_circleId, mock_message)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
@@ -492,7 +492,7 @@ class GlassfrogTestCase(unittest.TestCase):
 
         mock_getCircleCircleId.return_value = (
             200, test_values.mock_circle_circleId_message.format(mock_circleId))
-        mock_getIdForCircleIdentifier.return_value = (200, -999)
+        mock_getIdForCircleIdentifier.return_value = (False, -999, mock_message)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
@@ -506,13 +506,13 @@ class GlassfrogTestCase(unittest.TestCase):
 
         # Error code in retrieving circleId
         mock_code = 401
-        mock_message = strings.no_circle_matched_error.format(mock_code)
+        mock_message = test_values.mock_401_responsebody['message']
         mock_messageDict = messageFunctions.createMessageDict(
             strings.error_color, mock_message)
 
         mock_getCircleCircleId.return_value = (
             200, test_values.mock_circle_circleId_message.format(mock_circleId))
-        mock_getIdForCircleIdentifier.return_value = (mock_code, -999)
+        mock_getIdForCircleIdentifier.return_value = (False, -999, mock_message)
 
         mock_headers = test_values.mock_authorization_headers()
         mock_installation = self.defaultInstallation()
@@ -705,9 +705,9 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getMentionsForCircle')
     @mock.patch('glassfrog.getIdForCircleIdentifier')
-    def test_hipfrog_circle_circleId_string(self, mock_getIdForCircleIdentifier,
-                                            mock_getMentionsForCircle,
-                                            mock_getInstallationFromOauthId):
+    def test_atCircle_string(self, mock_getIdForCircleIdentifier,
+                             mock_getMentionsForCircle,
+                             mock_getInstallationFromOauthId):
 
         mock_circleId = 1000
         mock_circleIdentier = 'sales'
