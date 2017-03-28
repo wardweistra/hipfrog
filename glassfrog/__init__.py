@@ -432,7 +432,7 @@ def hipfrog():
         elif callingMessage[1] == 'roles' or callingMessage[1] == 'role':
             if len(callingMessage) > 2:
                 roleIdentifier = callingMessage[2]
-                # Convert circleIdentifier to circleId if needed
+                # Convert roleIdentifier to roleId if needed
                 success, roleId, message = getIdForRoleIdentifier(installation.glassfrogToken, roleIdentifier)
                 if not success:
                     message_dict = messageFunctions.createMessageDict(strings.error_color, message)
