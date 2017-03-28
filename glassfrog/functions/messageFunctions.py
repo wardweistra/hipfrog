@@ -52,7 +52,7 @@ def getMatchingRole(roles, keyword):
     closestMatch = -999  # no match
     for role in roles:
         for name in ['name']:
-            distance = getLevenshteinDistance(circle[name], keyword)
+            distance = getLevenshteinDistance(role[name], keyword)
             if distance > 0.5 and distance > closestDistance:
                 closestDistance = distance
                 closestMatch = role['id']

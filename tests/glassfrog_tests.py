@@ -241,22 +241,17 @@ class GlassfrogTestCase(unittest.TestCase):
 
         # Test bad match
         mock_circleIdentifier = "banana"
-        mock_circleId = test_values.mock_circles_response['circles'][2]['id']
         rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
         assert rv == (False, -999, strings.no_circle_matched.format(mock_circleIdentifier))
 
         # Test error
-
         mock_code = 401
         mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
             mock_code, test_values.mock_401_responsebody)
 
         mock_circleIdentifier = "banana"
-        mock_circleId = test_values.mock_circles_response['circles'][2]['id']
         rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
         assert rv == (False, -999, test_values.mock_401_responsebody['message'])
-
-# TODO test_getIdForRoleIdentifier
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getCircleCircleId(self, mock_glassfrogApiHandler):
@@ -308,6 +303,31 @@ class GlassfrogTestCase(unittest.TestCase):
             assert '{}'.format(role['id']) in rv[1]
 
         # TODO wrong circleID
+
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    def test_getIdForRoleIdentifier(self, mock_glassfrogApiHandler):
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            200, test_values.mock_roles_response)
+
+        # Test succesful match
+        mock_roleIdentifier = "fullfil"
+        mock_roleId = test_values.mock_roles_response['roles'][0]['id']
+        rv = glassfrog.getIdForRoleIdentifier(test_values.mock_glassfrogToken, mock_roleIdentifier)
+        assert rv == (True, mock_roleId, '')
+
+        # Test bad match
+        mock_roleIdentifier = "banana"
+        rv = glassfrog.getIdForRoleIdentifier(test_values.mock_glassfrogToken, mock_roleIdentifier)
+        assert rv == (False, -999, strings.no_role_matched.format(mock_roleIdentifier))
+
+        # Test error
+        mock_code = 401
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            mock_code, test_values.mock_401_responsebody)
+
+        mock_roleIdentifier = "banana"
+        rv = glassfrog.getIdForRoleIdentifier(test_values.mock_glassfrogToken, mock_roleIdentifier)
+        assert rv == (False, -999, test_values.mock_401_responsebody['message'])
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getRoleRoleId(self, mock_glassfrogApiHandler):

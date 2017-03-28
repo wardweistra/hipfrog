@@ -506,6 +506,35 @@ Business Development & Sales</a></li>
 </ul>
 '''
 
+mock_roles_response = {
+    "linked": {
+        "circles": [],
+        'accountabilities': [],
+        "people": [],
+        'domains': []
+    },
+    "roles": [
+        {
+            "id": 83866836,
+            "name": "Fulfillment Role",
+            "purpose": 'Exist',
+            "links": {}
+        },
+        {
+            "id": 83866837,
+            "name": "Entertainment Role",
+            "purpose": 'Dancing',
+            "links": {}
+        },
+        {
+            "id": 83866838,
+            "name": "Delivery secretary",
+            "purpose": 'Making sure everything gets noted down',
+            "links": {}
+        }
+    ]
+}
+
 mock_role_roleid_response = {
     "linked": {
         "circles": [
