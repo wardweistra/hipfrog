@@ -671,6 +671,39 @@ class GlassfrogTestCase(unittest.TestCase):
         assert return_messageDict == mock_messageDict
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
+    @mock.patch('glassfrog.getMentionsForRole')
+    @mock.patch('glassfrog.getIdForRoleIdentifier')
+    def test_atRole_string(self, mock_getIdForRoleIdentifier,
+                             mock_getMentionsForRole,
+                             mock_getInstallationFromOauthId):
+
+        mock_roleId = 1000
+        mock_roleIdentier = 'secretary'
+        mock_command = 'Beste @Role {}: Hoi!'.format(mock_roleIdentier)
+        mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
+
+        # Error code in retrieving roleId
+        mock_code = 401
+        mock_message = test_values.mock_401_responsebody['message']
+        mock_messageDict = messageFunctions.createMessageDict(
+            strings.error_color, mock_message)
+
+        mock_getMentionsForRole.return_value = (
+            401, test_values.mock_401_responsebody)
+        mock_getIdForRoleIdentifier.return_value = (False, -999, mock_message)
+
+        mock_headers = test_values.mock_authorization_headers()
+        mock_installation = self.defaultInstallation()
+        mock_getInstallationFromOauthId.return_value = mock_installation
+
+        rv = self.app.post('/atrole', follow_redirects=True, data=mock_messagedata,
+                           headers=mock_headers)
+        return_messageDict = json.loads(rv.get_data())
+
+        assert return_messageDict == mock_messageDict
+
+
+    @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getMentionsForCircle')
     def test_atCircle(self, mock_getMentionsForCircle, mock_getInstallationFromOauthId):
         mock_circleId = 1000
@@ -701,7 +734,6 @@ class GlassfrogTestCase(unittest.TestCase):
     def test_atCircle_string(self, mock_getIdForCircleIdentifier,
                              mock_getMentionsForCircle,
                              mock_getInstallationFromOauthId):
-
         mock_circleId = 1000
         mock_circleIdentier = 'sales'
         mock_command = 'Beste @Circle {}: Hoi!'.format(mock_circleIdentier)
