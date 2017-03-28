@@ -759,7 +759,5 @@ class GlassfrogTestCase(unittest.TestCase):
 
         assert return_messageDict == mock_messageDict
 
-# TODO test_atRole_string
-
 if __name__ == '__main__':
     unittest.main()
