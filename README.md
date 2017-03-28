@@ -1,7 +1,8 @@
 # HipFrog
-<img width=100px align=right src="/glassfrog/static/hipfrog.png">
-[![Build Status](https://travis-ci.org/wardweistra/hipfrog.svg?branch=master)](https://travis-ci.org/wardweistra/hipfrog)
-[![codecov](https://codecov.io/gh/wardweistra/hipfrog/branch/master/graph/badge.svg)](https://codecov.io/gh/wardweistra/hipfrog)
+<img width=100px align=right alt="Hipfrog" src="/glassfrog/static/hipfrog.png">
+<a href="https://travis-ci.org/wardweistra/hipfrog"><img alt="Build Status" src="https://travis-ci.org/wardweistra/hipfrog.svg?branch=master"></a>
+
+<a href="https://codecov.io/gh/wardweistra/hipfrog"><img alt="codecov" src="https://codecov.io/gh/wardweistra/hipfrog/branch/master/graph/badge.svg"></a>
 
 An open source [Hipchat](http://hipchat.com/) bot for accessing the [Holacracy](http://www.holacracy.org/) tool [Glassfrog](glassfrog.com).
 
