@@ -64,15 +64,16 @@ circles_missing_functionality = ("Sorry, the feature \'{}\' does not exist (yet)
                                  " Type <code>/hipfrog circle {}</code> to get a list of"
                                  " the available commands.")
 
+# Regex patterns for registering with Hipchat
 regex_hipfrog = "\\A\\/[hH][iI][pP][fF][rR][oO][gG]\\b"
-regex_at_role = "@[rR][oO][lL][eE]"
-regex_at_role_roleId = "@[rR][oO][lL][eE] (\w+)"
-regex_at_circle = "@[cC][iI][rR][cC][lL][eE]"
-regex_at_circle_circleId = "@[cC][iI][rR][cC][lL][eE] (\w+)"
-regex_slash_role = "/[rR][oO][lL][eE]"
-regex_slash_role_roleId = "/[rR][oO][lL][eE] (\w+)"
-regex_slash_circle = "/[cC][iI][rR][cC][lL][eE]"
-regex_slash_circle_circleId = "/[cC][iI][rR][cC][lL][eE] (\w+)"
+regex_slash_role = "\\A\\/[rR][oO][lL][eE][sS]?\\b"
+regex_slash_circle = "\\A\\/[cC][iI][rR][cC][lL][eE][sS]?\\b"
+regex_at_role = "@[rR][oO][lL][eE][sS]?\\b"
+regex_at_circle = "@[cC][iI][rR][cC][lL][eE][sS]?\\b"
+
+# Regex patterns for Python code
+regex_at_role_roleId = "@[rR][oO][lL][eE][sS]? ([\w-]+)"
+regex_at_circle_circleId = "@[cC][iI][rR][cC][lL][eE][sS]? ([\w-]+)"
 
 no_circle_matched = 'No circle name matched {}'
 no_role_matched = 'No role name matched {}'
