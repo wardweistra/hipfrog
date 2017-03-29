@@ -80,20 +80,6 @@ def uninstall(oauthId):
     return ('', 200)
 
 
-@app.route('/installedUrl', methods=['GET', 'POST'])
-def installedUrl():
-    if request.method == 'POST':
-        installdata = json.loads(request.get_data())
-    return ('', 200)
-
-
-@app.route('/uninstalledUrl', methods=['GET', 'POST'])
-def uninstalledUrl():
-    if request.method == 'POST':
-        installdata = json.loads(request.get_data())
-    return ('', 200)
-
-
 def getCircles(glassfrogToken):
     apiEndpoint = 'circles'
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()

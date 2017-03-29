@@ -67,16 +67,14 @@ def getCapabilitiesDict(publicUrl):
                         "view_room"
                     ],
                     "avatar": {
-                        "url": publicUrl+'/static/hipfrog.png'
-                        # , "url@2x": publicUrl+'/static/hipfrog.png'
+                        "url": publicUrl+'/static/hipfrog.png',
+                        "url@2x": publicUrl+'/static/hipfrog.png'
                     }
                 },
                 "installable": {
                     "allowGlobal": False,
                     "allowRoom": True,
-                    "callbackUrl": publicUrl+"/installed",
-                    "installedUrl": publicUrl+"/installedUrl",
-                    "uninstalledUrl": publicUrl+"/uninstalledUrl"
+                    "callbackUrl": publicUrl+"/installed"
                 },
                 "webhook": [
                     {
