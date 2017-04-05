@@ -154,6 +154,7 @@ def mock_messagedata(message):
         "webhook_id": 4965523
     }
 
+
 mock_401_flash_message = ('Encountered Error 401 when testing the Glassfrog Token.'
                           ' Message given: \'api key not specified or not valid\'.')
 

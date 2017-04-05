@@ -236,12 +236,14 @@ class GlassfrogTestCase(unittest.TestCase):
         # Test succesful match
         mock_circleIdentifier = "business-development"
         mock_circleId = test_values.mock_circles_response['circles'][2]['id']
-        rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
+        rv = glassfrog.getIdForCircleIdentifier(
+            test_values.mock_glassfrogToken, mock_circleIdentifier)
         assert rv == (True, mock_circleId, '')
 
         # Test bad match
         mock_circleIdentifier = "banana"
-        rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
+        rv = glassfrog.getIdForCircleIdentifier(
+            test_values.mock_glassfrogToken, mock_circleIdentifier)
         assert rv == (False, -999, strings.no_circle_matched.format(mock_circleIdentifier))
 
         # Test error
@@ -250,7 +252,8 @@ class GlassfrogTestCase(unittest.TestCase):
             mock_code, test_values.mock_401_responsebody)
 
         mock_circleIdentifier = "banana"
-        rv = glassfrog.getIdForCircleIdentifier(test_values.mock_glassfrogToken, mock_circleIdentifier)
+        rv = glassfrog.getIdForCircleIdentifier(
+            test_values.mock_glassfrogToken, mock_circleIdentifier)
         assert rv == (False, -999, test_values.mock_401_responsebody['message'])
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
@@ -674,8 +677,8 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.getMentionsForRole')
     @mock.patch('glassfrog.getIdForRoleIdentifier')
     def test_atRole_string(self, mock_getIdForRoleIdentifier,
-                             mock_getMentionsForRole,
-                             mock_getInstallationFromOauthId):
+                           mock_getMentionsForRole,
+                           mock_getInstallationFromOauthId):
 
         mock_roleId = 1000
         mock_roleIdentier = 'secretary'
@@ -701,7 +704,6 @@ class GlassfrogTestCase(unittest.TestCase):
         return_messageDict = json.loads(rv.get_data())
 
         assert return_messageDict == mock_messageDict
-
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getMentionsForCircle')
@@ -758,6 +760,7 @@ class GlassfrogTestCase(unittest.TestCase):
         return_messageDict = json.loads(rv.get_data())
 
         assert return_messageDict == mock_messageDict
+
 
 if __name__ == '__main__':
     unittest.main()
