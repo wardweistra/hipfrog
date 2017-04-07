@@ -72,8 +72,8 @@ regex_at_role = "@[rR][oO][lL][eE][sS]?\\b"
 regex_at_circle = "@[cC][iI][rR][cC][lL][eE][sS]?\\b"
 
 # Regex patterns for Python code
-regex_at_role_roleId = "@[rR][oO][lL][eE][sS]? ([\w-:]+)"
-regex_at_circle_circleId = "@[cC][iI][rR][cC][lL][eE][sS]? ([\w-]+)"
+regex_at_role_roleId = "@[rR][oO][lL][eE][sS]? ([\w\-\:]+)"
+regex_at_circle_circleId = "@[cC][iI][rR][cC][lL][eE][sS]? ([\w\-]+)"
 
 no_circle_matched = 'No circle name matched {}'
 no_role_matched = 'No role name matched {}'
