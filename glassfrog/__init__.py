@@ -168,10 +168,6 @@ def getIdForCircleIdentifier(glassfrogToken, circleIdentifier):
 
 def getIdForRoleIdentifier(glassfrogToken, roleIdentifier):
     def getRoleIdFromName(glassfrogToken, roleIdentifier, circleIdentifier=None):
-        apiEndpoint = 'roles'
-        glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
-        code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
-                                                                  glassfrogToken)
         message = ''
         success = True
 
@@ -179,6 +175,14 @@ def getIdForRoleIdentifier(glassfrogToken, roleIdentifier):
             success, circleId, message = getIdForCircleIdentifier(glassfrogToken, circleIdentifier)
             if not success:
                 return success, -999, message
+            else:
+                apiEndpoint = 'circles/{}/roles'.format(circleId)
+        else:
+            apiEndpoint = 'roles'
+
+        glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
+        code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
+                                                                  glassfrogToken)
 
         if code == 200:
             roleId = messageFunctions.getMatchingRole(responsebody['roles'], roleIdentifier)
