@@ -250,7 +250,6 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_code = 401
         mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
             mock_code, test_values.mock_401_responsebody)
-
         mock_circleIdentifier = "banana"
         rv = glassfrog.getIdForCircleIdentifier(
             test_values.mock_glassfrogToken, mock_circleIdentifier)
@@ -327,10 +326,37 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_code = 401
         mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
             mock_code, test_values.mock_401_responsebody)
-
         mock_roleIdentifier = "banana"
         rv = glassfrog.getIdForRoleIdentifier(test_values.mock_glassfrogToken, mock_roleIdentifier)
         assert rv == (False, -999, test_values.mock_401_responsebody['message'])
+
+    @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
+    @mock.patch('glassfrog.getIdForCircleIdentifier')
+    def test_getIdForRoleIdentifier_with_circle(self, mock_getIdForCircleIdentifier,
+                                                mock_glassfrogApiHandler):
+        # TODO test with circle
+        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+            200, test_values.mock_circle_roles_response)
+
+        # Test succesful match
+        mock_roleIdentifier = "circlename:finance"
+        mock_roleId = test_values.mock_circle_roles_response['roles'][0]['id']
+        mock_getIdForCircleIdentifier.return_value = (True, -999, '')
+        rv = glassfrog.getIdForRoleIdentifier(test_values.mock_glassfrogToken, mock_roleIdentifier)
+        assert rv == (True, mock_roleId, '')
+
+        # Test bad circle match
+        mock_roleIdentifier = "banana:finance"
+        mock_roleIdentifierCircle = mock_roleIdentifier.split(':')[0]
+        mock_getIdForCircleIdentifier.return_value = (
+            False, -999, strings.no_circle_matched.format(mock_roleIdentifierCircle))
+        rv = glassfrog.getIdForRoleIdentifier(test_values.mock_glassfrogToken, mock_roleIdentifier)
+        assert rv == (False, -999, strings.no_circle_matched.format(mock_roleIdentifierCircle))
+
+        # Test bad role match
+        mock_roleIdentifier = "banana"
+        rv = glassfrog.getIdForRoleIdentifier(test_values.mock_glassfrogToken, mock_roleIdentifier)
+        assert rv == (False, -999, strings.no_role_matched.format(mock_roleIdentifier))
 
     @mock.patch('glassfrog.apiCalls.GlassfrogApiHandler')
     def test_getRoleRoleId(self, mock_glassfrogApiHandler):
