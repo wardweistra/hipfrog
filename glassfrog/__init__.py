@@ -198,18 +198,23 @@ def getIdForRoleIdentifier(glassfrogToken, roleIdentifier):
     message = ''
     success = True
 
+    roleIdentifier = roleIdentifier.strip(':/\\\'\"')
+
     try:
         int(roleIdentifier)
         roleId = roleIdentifier
     except ValueError:
         roleIdentifierParts = roleIdentifier.split(':')
+        roleIdentifierRole = roleIdentifier
+        roleIdentifierCircle = None
+
         if len(roleIdentifierParts) > 1:
-            roleIdentifierCircle = roleIdentifierParts[0]
-            roleIdentifierRole = roleIdentifierParts[1]
-            success, roleId, message = getRoleIdFromName(
-                glassfrogToken, roleIdentifierRole, roleIdentifierCircle)
-        else:
-            success, roleId, message = getRoleIdFromName(glassfrogToken, roleIdentifier)
+            if (roleIdentifierParts[0] != '' and roleIdentifierParts[1] != ''):
+                roleIdentifierCircle = roleIdentifierParts[0]
+                roleIdentifierRole = roleIdentifierParts[1]
+
+        success, roleId, message = getRoleIdFromName(
+            glassfrogToken, roleIdentifierRole, roleIdentifierCircle)
 
     return success, roleId, message
 
