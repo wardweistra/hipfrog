@@ -51,11 +51,11 @@ def getMatchingRole(roles, keyword):
     closestDistance = 0
     closestMatch = -999  # no match
     for role in roles:
-        # TODO skip roles which are secretly circles (where supporting circle is not None)
-        for name in ['name']:
-            distance = getLevenshteinDistance(role[name], keyword)
-            if distance > 0.5 and distance > closestDistance:
-                closestDistance = distance
-                closestMatch = role['id']
-                matchfound = True
+        if not role['links']['supporting_circle']:
+            for name in ['name']:
+                distance = getLevenshteinDistance(role[name], keyword)
+                if distance > 0.5 and distance > closestDistance:
+                    closestDistance = distance
+                    closestMatch = role['id']
+                    matchfound = True
     return closestMatch

@@ -519,19 +519,25 @@ mock_roles_response = {
             "id": 83866836,
             "name": "Fulfillment Role",
             "purpose": 'Exist',
-            "links": {}
+            "links": {
+                'supporting_circle': None
+            }
         },
         {
             "id": 83866837,
             "name": "Entertainment Role",
             "purpose": 'Dancing',
-            "links": {}
+            "links": {
+                'supporting_circle': None
+            }
         },
         {
             "id": 83866838,
             "name": "Delivery secretary",
             "purpose": 'Making sure everything gets noted down',
-            "links": {}
+            "links": {
+                'supporting_circle': None
+            }
         }
     ]
 }
