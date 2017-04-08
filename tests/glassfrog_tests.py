@@ -260,10 +260,10 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_circleId = test_values.mock_circle_circleId_response['circles'][0]['id']
 
         # Succesfull call
-        mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
+        mock_glassfrogApiHandler.return_value.getCircleForCircleId.return_value = (
             200, test_values.mock_circle_circleId_response)
         rv = glassfrog.getCircleCircleId(test_values.mock_glassfrogToken, mock_circleId)
-        assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
+        assert mock_glassfrogApiHandler.return_value.getCircleForCircleId.called
 
         for circle in test_values.mock_circle_circleId_response['circles']:
             assert circle['name'] in rv[1]
@@ -665,6 +665,9 @@ class GlassfrogTestCase(unittest.TestCase):
         # Succesfull call
         mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
             200, test_values.mock_circle_members_response)
+        mock_glassfrogApiHandler.return_value.getCircleForCircleId.return_value = (
+            200, test_values.mock_circle_circleId_response)
+
         rv = glassfrog.getMentionsForCircle(mock_installation, mock_circleId)
         assert mock_glassfrogApiHandler.return_value.glassfrogApiCall.called
 

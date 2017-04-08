@@ -220,10 +220,9 @@ def getIdForRoleIdentifier(glassfrogToken, roleIdentifier):
 
 
 def getCircleCircleId(glassfrogToken, circleId):
-    apiEndpoint = 'circles/{}'.format(circleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
-    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
-                                                              glassfrogToken)
+    code, responsebody = glassfrogApiHandler.getCircleForCircleId(
+        circleId, glassfrogToken)
 
     if code == 200:
         message_list = []
@@ -465,84 +464,93 @@ def hipfrog():
 
 
 def getMentionsForRole(installation, roleId):
-    apiEndpoint = 'roles/{}'.format(roleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
-    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
-                                                              installation.glassfrogToken)
 
-    if code == 200:
-        role_names = []
+    # get role details
+    apiEndpoint = 'roles/{}'.format(roleId)
+    code, role_responsebody = glassfrogApiHandler.glassfrogApiCall(
+        apiEndpoint, installation.glassfrogToken)
+    if code != 200:
+        message = role_responsebody['message']
+        return code, message
 
-        # TODO Add circle name and remove hipfrog call
-        message = responsebody['roles'][0]['name'] + " (/hipfrog role {}) - ".format(roleId)
+    role_names = []
 
-        if responsebody['linked']['people'] != []:
-            # Get names of people in role
-            for person in responsebody['linked']['people']:
-                role_names += [person['name']]
-            # Get names of people in room
-            hipchatApiHandler = apiCalls.HipchatApiHandler()
-            room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
+    message = "{} in {}: ".format(
+        role_responsebody['roles'][0]['name'], role_responsebody['linked']['circles'][0]['name'])
 
-            mention_list = []
+    if role_responsebody['linked']['people'] != []:
+        # Get names of people in role
+        for person in role_responsebody['linked']['people']:
+            role_names += [person['name']]
+        # Get names of people in room
+        hipchatApiHandler = apiCalls.HipchatApiHandler()
+        room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
 
-            for role_name in role_names:
-                inroom = False
-                for room_member in room_members['items']:
-                    if room_member['name'] == role_name:
-                        mention_list += ['@'+room_member['mention_name']]
-                        inroom = True
-                        break
-                if not inroom:
-                    mention_list += [role_name]
+        mention_list = []
 
-            message += ", ".join(mention_list)
-        else:
-            message += "(not fullfilled)"
+        for role_name in role_names:
+            inroom = False
+            for room_member in room_members['items']:
+                if room_member['name'] == role_name:
+                    mention_list += ['@'+room_member['mention_name']]
+                    inroom = True
+                    break
+            if not inroom:
+                mention_list += [role_name]
+
+        message += ", ".join(mention_list)
     else:
-        message = responsebody['message']
+        message += "(not fullfilled)"
 
     return code, message
 
 
 def getMentionsForCircle(installation, circleId):
-    apiEndpoint = 'circles/{}/people'.format(circleId)
     glassfrogApiHandler = apiCalls.GlassfrogApiHandler()
-    code, responsebody = glassfrogApiHandler.glassfrogApiCall(apiEndpoint,
-                                                              installation.glassfrogToken)
 
-    if code == 200:
-        circle_names = []
+    # Get circle details
+    code, circle_responsebody = glassfrogApiHandler.getCircleForCircleId(
+        circleId, installation.glassfrogToken)
+    if code != 200:
+        message = circle_responsebody['message']
+        return code, message
 
-        # TODO add circle name and remove /hipfrog call
-        message = "Circle " + str(circleId) + \
-            " (/hipfrog circle {}) - ".format(circleId)
+    # Get circle members
+    apiEndpoint = 'circles/{}/people'.format(circleId)
+    code, members_responsebody = glassfrogApiHandler.glassfrogApiCall(
+        apiEndpoint, installation.glassfrogToken)
+    if code != 200:
+        message = members_responsebody['message']
+        return code, message
 
-        if responsebody['people'] != []:
-            # Get names of people in circle
-            for person in responsebody['people']:
-                circle_names += [person['name']]
-            # Get names of people in room
-            hipchatApiHandler = apiCalls.HipchatApiHandler()
-            room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
+    circle_names = []
 
-            mention_list = []
+    message = "{}: ".format(circle_responsebody['circles'][0]['name'])
 
-            for circle_name in circle_names:
-                inroom = False
-                for room_member in room_members['items']:
-                    if room_member['name'] == circle_name:
-                        mention_list += ['@'+room_member['mention_name']]
-                        inroom = True
-                        break
-                if not inroom:
-                    mention_list += [circle_name]
+    if members_responsebody['people'] != []:
+        # Get names of people in circle
+        for person in members_responsebody['people']:
+            circle_names += [person['name']]
+        # Get names of people in room
+        hipchatApiHandler = apiCalls.HipchatApiHandler()
+        room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
 
-            message += ", ".join(mention_list)
-        else:
-            message += "(not fullfilled)"
+        mention_list = []
+
+        for circle_name in circle_names:
+            inroom = False
+            for room_member in room_members['items']:
+                if room_member['name'] == circle_name:
+                    mention_list += ['@'+room_member['mention_name']]
+                    inroom = True
+                    break
+            if not inroom:
+                mention_list += [circle_name]
+
+        message += ", ".join(mention_list)
     else:
-        message = responsebody['message']
+        message += "(not fullfilled)"
 
     return code, message
 

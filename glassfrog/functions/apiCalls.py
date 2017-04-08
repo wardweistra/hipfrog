@@ -17,6 +17,11 @@ class GlassfrogApiHandler(object):
         responsebody = json.loads(apiResponse.text)
         return code, responsebody
 
+    def getCircleForCircleId(self, circleId, glassfrogToken):
+        apiEndpoint = 'circles/{}'.format(circleId)
+        code, responsebody = self.glassfrogApiCall(apiEndpoint, glassfrogToken)
+        return code, responsebody
+
 
 class HipchatApiHandler(object):
     def __init__(self):
