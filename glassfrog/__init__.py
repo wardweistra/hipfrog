@@ -473,6 +473,7 @@ def getMentionsForRole(installation, roleId):
     if code == 200:
         role_names = []
 
+        # TODO Add circle name and remove hipfrog call
         message = responsebody['roles'][0]['name'] + " (/hipfrog role {}) - ".format(roleId)
 
         if responsebody['linked']['people'] != []:
@@ -513,7 +514,7 @@ def getMentionsForCircle(installation, circleId):
     if code == 200:
         circle_names = []
 
-        # TODO add circle name
+        # TODO add circle name and remove /hipfrog call
         message = "Circle " + str(circleId) + \
             " (/hipfrog circle {}) - ".format(circleId)
 

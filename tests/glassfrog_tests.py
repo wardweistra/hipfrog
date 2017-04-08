@@ -334,7 +334,6 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.getIdForCircleIdentifier')
     def test_getIdForRoleIdentifier_with_circle(self, mock_getIdForCircleIdentifier,
                                                 mock_glassfrogApiHandler):
-        # TODO test with circle
         mock_glassfrogApiHandler.return_value.glassfrogApiCall.return_value = (
             200, test_values.mock_circle_roles_response)
 
