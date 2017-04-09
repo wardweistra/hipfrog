@@ -399,66 +399,9 @@ def hipfrog():
         message = strings.help_hipfrog
         message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
     elif len(callingMessage) > 1:
-        if callingMessage[1] == 'circles' or callingMessage[1] == 'circle':
-            if len(callingMessage) > 2:
-                circleIdentifier = callingMessage[2]
-                # Convert circleIdentifier to circleId if needed
-                success, circleId, message = getIdForCircleIdentifier(
-                    installation.glassfrogToken, circleIdentifier)
-                if not success:
-                    message_dict = messageFunctions.createMessageDict(strings.error_color, message)
-                else:
-                    if len(callingMessage) > 3:
-                        if callingMessage[3] == 'people' or callingMessage[3] == 'members':
-                            # /hipfrog [circles, circle] [circleId] [people, members]
-                            code, message = getCircleMembers(installation.glassfrogToken, circleId)
-                            color = strings.succes_color if code == 200 else strings.error_color
-                            message_dict = messageFunctions.createMessageDict(color,
-                                                                              message)
-                        elif callingMessage[3] == 'roles':
-                            # /hipfrog [circles, circle] [circleId] roles
-                            code, message = getCircleRoles(installation.glassfrogToken, circleId)
-                            color = strings.succes_color if code == 200 else strings.error_color
-                            message_dict = messageFunctions.createMessageDict(color,
-                                                                              message)
-                        else:
-                            # /hipfrog [circles, circle] [circleId] something
-                            message = strings.circles_missing_functionality.format(
-                                callingMessage[3], circleId)
-                            message_dict = messageFunctions.createMessageDict(strings.error_color,
-                                                                              message)
-                    else:
-                        # /hipfrog [circles, circle] [circleId]
-                        code, message = getCircleCircleId(installation.glassfrogToken, circleId)
-                        color = strings.succes_color if code == 200 else strings.error_color
-                        message_dict = messageFunctions.createMessageDict(color, message)
-            else:
-                # /hipfrog [circles, circle]
-                code, message = getCircles(installation.glassfrogToken)
-                message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
-        elif callingMessage[1] == 'roles' or callingMessage[1] == 'role':
-            if len(callingMessage) > 2:
-                roleIdentifier = callingMessage[2]
-                # Convert roleIdentifier to roleId if needed
-                success, roleId, message = getIdForRoleIdentifier(
-                    installation.glassfrogToken, roleIdentifier)
-                if not success:
-                    message_dict = messageFunctions.createMessageDict(strings.error_color, message)
-                else:
-                    # /hipfrog [roles, role] [roleId]
-                    code, message = getRoleRoleId(installation.glassfrogToken, roleId)
-                    color = strings.succes_color if code == 200 else strings.error_color
-                    message_dict = messageFunctions.createMessageDict(color, message)
-            else:
-                # TODO give help message for /hipfrog role
-                # /hipfrog [roles, role]
-                # code, message = getRoles(installation.glassfrogToken)
-                # message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
-                pass
-        else:
-            # /hipfrog something
-            message = strings.missing_functionality.format(callingMessage[1])
-            message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+        # /hipfrog something
+        message = strings.missing_functionality.format(callingMessage[1])
+        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
     # TODO Generate message_dict and color here
     return json.jsonify(message_dict)
 
@@ -627,14 +570,84 @@ def atCircle():
 
 @app.route('/slashcircle', methods=['GET', 'POST'])
 def slashCircle():
-    # TODO make slashCircle
-    pass
+    requestdata = json.loads(request.get_data())
+    callingMessage = requestdata['item']['message']['message'].lower().split()
+    oauthId = requestdata['oauth_client_id']
+    installation = messageFunctions.getInstallationFromOauthId(oauthId)
+
+    if installation.glassfrogToken is None:
+        message = strings.set_token_first
+        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+    elif len(callingMessage) > 1:
+        circleIdentifier = callingMessage[1]
+        # Convert circleIdentifier to circleId if needed
+        success, circleId, message = getIdForCircleIdentifier(
+            installation.glassfrogToken, circleIdentifier)
+        if not success:
+            message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+        else:
+            if len(callingMessage) > 2:
+                if callingMessage[2] == 'people' or callingMessage[2] == 'members':
+                    # /[circles, circle] [circleId] [people, members]
+                    code, message = getCircleMembers(installation.glassfrogToken, circleId)
+                    color = strings.succes_color if code == 200 else strings.error_color
+                    message_dict = messageFunctions.createMessageDict(color,
+                                                                      message)
+                elif callingMessage[2] == 'roles':
+                    # /[circles, circle] [circleId] roles
+                    code, message = getCircleRoles(installation.glassfrogToken, circleId)
+                    color = strings.succes_color if code == 200 else strings.error_color
+                    message_dict = messageFunctions.createMessageDict(color,
+                                                                      message)
+                else:
+                    # /[circles, circle] [circleId] something
+                    message = strings.circles_missing_functionality.format(
+                        callingMessage[2], circleId)
+                    message_dict = messageFunctions.createMessageDict(strings.error_color,
+                                                                      message)
+            else:
+                # /[circles, circle] [circleId]
+                code, message = getCircleCircleId(installation.glassfrogToken, circleId)
+                color = strings.succes_color if code == 200 else strings.error_color
+                message_dict = messageFunctions.createMessageDict(color, message)
+    else:
+        # /[circles, circle]
+        code, message = getCircles(installation.glassfrogToken)
+        message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
+
+    return json.jsonify(message_dict)
 
 
 @app.route('/slashrole', methods=['GET', 'POST'])
 def slashRole():
-    # TODO make slashRole
-    pass
+    requestdata = json.loads(request.get_data())
+    callingMessage = requestdata['item']['message']['message'].lower().split()
+    oauthId = requestdata['oauth_client_id']
+    installation = messageFunctions.getInstallationFromOauthId(oauthId)
+
+    if installation.glassfrogToken is None:
+        message = strings.set_token_first
+        message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+    elif len(callingMessage) > 1:
+        roleIdentifier = callingMessage[1]
+        # Convert roleIdentifier to roleId if needed
+        success, roleId, message = getIdForRoleIdentifier(
+            installation.glassfrogToken, roleIdentifier)
+        if not success:
+            message_dict = messageFunctions.createMessageDict(strings.error_color, message)
+        else:
+            # /[roles, role] [roleId]
+            code, message = getRoleRoleId(installation.glassfrogToken, roleId)
+            color = strings.succes_color if code == 200 else strings.error_color
+            message_dict = messageFunctions.createMessageDict(color, message)
+    else:
+        # TODO give help message for /hipfrog role
+        # /[roles, role]
+        # code, message = getRoles(installation.glassfrogToken)
+        # message_dict = messageFunctions.createMessageDict(strings.succes_color, message)
+        pass
+
+    return json.jsonify(message_dict)
 
 
 @app.route('/configure.html', methods=['GET', 'POST'])

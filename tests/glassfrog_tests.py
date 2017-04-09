@@ -419,8 +419,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircles')
-    def test_hipfrog_circles(self, mock_getCircles, mock_getInstallationFromOauthId):
-        mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog circles'))
+    def test_slash_circles(self, mock_getCircles, mock_getInstallationFromOauthId):
+        mock_messagedata = json.dumps(test_values.mock_messagedata('/circles'))
 
         mock_color = strings.succes_color
         mock_message = test_values.mock_circles_message
@@ -432,7 +432,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_installation = self.defaultInstallation()
         mock_getInstallationFromOauthId.return_value = mock_installation
 
-        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+        rv = self.app.post('/slashcircle', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
@@ -460,10 +460,10 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircleCircleId')
-    def test_hipfrog_circle_circleId(self, mock_getCircleCircleId,
-                                     mock_getInstallationFromOauthId):
+    def test_slash_circle_circleId(self, mock_getCircleCircleId,
+                                   mock_getInstallationFromOauthId):
         mock_circleId = 1000
-        mock_command = '/hipfrog circle {}'.format(mock_circleId)
+        mock_command = '/circle {}'.format(mock_circleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.succes_color
@@ -477,7 +477,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_installation = self.defaultInstallation()
         mock_getInstallationFromOauthId.return_value = mock_installation
 
-        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+        rv = self.app.post('/slashcircle', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
@@ -486,12 +486,12 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircleCircleId')
     @mock.patch('glassfrog.getIdForCircleIdentifier')
-    def test_hipfrog_circle_circleId_string(self, mock_getIdForCircleIdentifier,
-                                            mock_getCircleCircleId,
-                                            mock_getInstallationFromOauthId):
+    def test_slash_circle_circleId_string(self, mock_getIdForCircleIdentifier,
+                                          mock_getCircleCircleId,
+                                          mock_getInstallationFromOauthId):
         mock_circleId = 1000
         mock_circleIdentier = 'sales'
-        mock_command = '/hipfrog circle {}'.format(mock_circleIdentier)
+        mock_command = '/circle {}'.format(mock_circleIdentier)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         # Error code in retrieving circleId
@@ -508,7 +508,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_installation = self.defaultInstallation()
         mock_getInstallationFromOauthId.return_value = mock_installation
 
-        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+        rv = self.app.post('/slashcircle', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
@@ -516,8 +516,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircleMembers')
-    def test_hipfrog_circle_members(self, mock_getCircleMembers, mock_getInstallationFromOauthId):
-        mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog circle 1000 members'))
+    def test_slash_circle_members(self, mock_getCircleMembers, mock_getInstallationFromOauthId):
+        mock_messagedata = json.dumps(test_values.mock_messagedata('/circle 1000 members'))
 
         mock_color = strings.succes_color
         mock_message = test_values.mock_circle_members_message
@@ -529,7 +529,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_installation = self.defaultInstallation()
         mock_getInstallationFromOauthId.return_value = mock_installation
 
-        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+        rv = self.app.post('/slashcircle', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
@@ -537,8 +537,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getCircleRoles')
-    def test_hipfrog_circle_roles(self, mock_getCircleRoles, mock_getInstallationFromOauthId):
-        mock_messagedata = json.dumps(test_values.mock_messagedata('/hipfrog circle 1000 roles'))
+    def test_slash_circle_roles(self, mock_getCircleRoles, mock_getInstallationFromOauthId):
+        mock_messagedata = json.dumps(test_values.mock_messagedata('/circle 1000 roles'))
 
         mock_color = strings.succes_color
         mock_message = test_values.mock_circle_roles_message
@@ -550,18 +550,18 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_installation = self.defaultInstallation()
         mock_getInstallationFromOauthId.return_value = mock_installation
 
-        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+        rv = self.app.post('/slashcircle', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
         assert return_messageDict == mock_messageDict
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
-    def test_hipfrog_circle_missing_functionality(self, mock_getInstallationFromOauthId):
+    def test_slash_circle_missing_functionality(self, mock_getInstallationFromOauthId):
         mock_circleId = test_values.mock_circle_circleId_response['circles'][0]['id']
         mock_missing_functionality = 'something'
-        mock_command = message = '/hipfrog circle {} {}'.format(mock_circleId,
-                                                                mock_missing_functionality)
+        mock_command = message = '/circle {} {}'.format(mock_circleId,
+                                                        mock_missing_functionality)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.error_color
@@ -573,7 +573,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_installation = self.defaultInstallation()
         mock_getInstallationFromOauthId.return_value = mock_installation
 
-        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+        rv = self.app.post('/slashcircle', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
@@ -581,10 +581,10 @@ class GlassfrogTestCase(unittest.TestCase):
 
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getRoleRoleId')
-    def test_hipfrog_role_roleId(self, mock_getRoleRoleId,
-                                 mock_getInstallationFromOauthId):
+    def test_slash_role_roleId(self, mock_getRoleRoleId,
+                               mock_getInstallationFromOauthId):
         mock_roleId = 1000
-        mock_command = message = '/hipfrog role {}'.format(mock_roleId)
+        mock_command = message = '/role {}'.format(mock_roleId)
         mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
         mock_color = strings.succes_color
@@ -598,7 +598,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_installation = self.defaultInstallation()
         mock_getInstallationFromOauthId.return_value = mock_installation
 
-        rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+        rv = self.app.post('/slashrole', follow_redirects=True, data=mock_messagedata,
                            headers=mock_headers)
         return_messageDict = json.loads(rv.get_data())
 
@@ -607,12 +607,12 @@ class GlassfrogTestCase(unittest.TestCase):
     @mock.patch('glassfrog.functions.messageFunctions.getInstallationFromOauthId')
     @mock.patch('glassfrog.getRoleRoleId')
     @mock.patch('glassfrog.getIdForRoleIdentifier')
-    def test_hipfrog_role_roleId_string(self, mock_getIdForRoleIdentifier,
-                                        mock_getRoleRoleId,
-                                        mock_getInstallationFromOauthId):
+    def test_slash_role_roleId_string(self, mock_getIdForRoleIdentifier,
+                                      mock_getRoleRoleId,
+                                      mock_getInstallationFromOauthId):
             mock_roleId = 1000
             mock_roleIdentier = 'secretary'
-            mock_command = '/hipfrog role {}'.format(mock_roleIdentier)
+            mock_command = '/role {}'.format(mock_roleIdentier)
             mock_messagedata = json.dumps(test_values.mock_messagedata(mock_command))
 
             # Error code in retrieving roleId
@@ -629,7 +629,7 @@ class GlassfrogTestCase(unittest.TestCase):
             mock_installation = self.defaultInstallation()
             mock_getInstallationFromOauthId.return_value = mock_installation
 
-            rv = self.app.post('/hipfrog', follow_redirects=True, data=mock_messagedata,
+            rv = self.app.post('/slashrole', follow_redirects=True, data=mock_messagedata,
                                headers=mock_headers)
             return_messageDict = json.loads(rv.get_data())
 
