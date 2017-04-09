@@ -250,9 +250,10 @@ def getCircleCircleId(glassfrogToken, circleId):
             domains += ' ' + ', '.join(domain_list)
             message_list += [domains]
         # Parent circle
+        # TODO add circle name
         if responsebody['linked']['supported_roles'][0]['links']['circle'] is not None:
             message_list += [('<strong>Parent circle:</strong>'
-                              ' <code>/hipfrog circle {}</code>').format(
+                              ' <code>/circle {}</code>').format(
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
         # Follow up links
         message_list += [strings.help_hipfrog_circle_circleid.format(circleId)]
@@ -296,10 +297,10 @@ def getCircleRoles(glassfrogToken, circleId):
             supporting_circle_info = ''
             message += '<li>'
             if role['links']['supporting_circle'] is not None:
-                message += '<code>/hipfrog circle {}</code>'.format(
+                message += '<code>/circle {}</code>'.format(
                     role['links']['supporting_circle'])
             else:
-                message += ('<code>/hipfrog role {0}</code>').format(str(role['id']))
+                message += ('<code>/role {0}</code>').format(str(role['id']))
             message += (' - <a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
                         ).format(str(role['id']), role['name'])
             message += '</li>'
@@ -340,7 +341,7 @@ def getRoleRoleId(glassfrogToken, roleId):
             message_list += [domains]
         # Circle
         if responsebody['linked']['circles'] != []:
-            message_list += [('<strong>Circle:</strong> <code>/hipfrog circle {0}</code>'
+            message_list += [('<strong>Circle:</strong> <code>/circle {0}</code>'
                               ' - <a href="https://app.glassfrog.com/circles/{0}">{1}</a>').format(
                 responsebody['linked']['circles'][0]['id'],
                 responsebody['linked']['circles'][0]['name'])]
@@ -525,8 +526,7 @@ def atRole():
                 message_format = "text"
         except AttributeError:
             code = 404
-            message = ("Please specify a Role ID after @role. "
-                       "Type <code>/hipfrog</code> to find it.")
+            message = ("Please specify a role name after @role.")
 
         color = strings.succes_color if code == 200 else strings.error_color
         message_dict = messageFunctions.createMessageDict(color, message, message_format)
@@ -560,8 +560,7 @@ def atCircle():
                 message_format = "text"
         except AttributeError:
             code = 404
-            message = ("Please specify a Circle ID after @circle. "
-                       "Type <code>/hipfrog</code> to find it.")
+            message = ("Please specify a circle name after @circle.")
 
         color = strings.succes_color if code == 200 else strings.error_color
         message_dict = messageFunctions.createMessageDict(color, message, message_format)
@@ -641,7 +640,7 @@ def slashRole():
             color = strings.succes_color if code == 200 else strings.error_color
             message_dict = messageFunctions.createMessageDict(color, message)
     else:
-        # TODO give help message for /hipfrog role
+        # TODO give help message for /role
         # /[roles, role]
         # code, message = getRoles(installation.glassfrogToken)
         # message_dict = messageFunctions.createMessageDict(strings.succes_color, message)

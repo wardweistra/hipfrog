@@ -232,11 +232,11 @@ mock_circles_response = {
 
 mock_circles_message = '''The following circles are in your organization:<br />
 <ul>
-<li><code>/hipfrog circle 8495</code> -
+<li><code>/circle 8495</code> -
  <a href="https://app.glassfrog.com/circles/8495">The Hyve Company Circle</a></li>
-<li><code>/hipfrog circle 9032</code> -
+<li><code>/circle 9032</code> -
  <a href="https://app.glassfrog.com/circles/9032">Delivery</a></li>
-<li><code>/hipfrog circle 15512</code> -
+<li><code>/circle 15512</code> -
  <a href="https://app.glassfrog.com/circles/15512">Business Development & Sales</a></li>
 </ul>'''
 
@@ -315,10 +315,10 @@ mock_circle_circleId_message = '''
  Create and sustain cBioPortal as a great product and a thriving open source community, by making
  it the default for translational oncology data visualization portal<br/>
 <strong>Domains:</strong> cBioPortal Architecture roadmap, cBioPortal Community engagement<br/>
-<strong>Parent circle:</strong> <code>/hipfrog circle 8996</code><br/>
+<strong>Parent circle:</strong> <code>/circle 8996</code><br/>
 <strong>More:</strong>
-<ul><li><code>/hipfrog circle {0} members</code> - List the members of this circle</li>
-<li><code>/hipfrog circle {0} roles</code> - List the roles in this circle</li>
+<ul><li><code>/circle {0} members</code> - List the members of this circle</li>
+<li><code>/circle {0} roles</code> - List the roles in this circle</li>
 </ul>'''
 
 mock_circle_members_response = {
@@ -610,7 +610,7 @@ mock_role_roleId_message = '''
 <br/><br/>
 <strong>Purpose:</strong> Exist<br/>
 <strong>Domain:</strong> Role assignments within the Circle<br/>
-<strong>Circle:</strong> <code>/hipfrog circle 582240928</code> -
+<strong>Circle:</strong> <code>/circle 582240928</code> -
  <a href="https://app.glassfrog.com/circles/582240928">Operations</a><br/>
 <strong>Accountabilities:</strong><ul>
 <li>Assigning Partners to the Circleâs Roles; monitoring the fit; offering feedback to enhance
@@ -650,10 +650,10 @@ mock_room_members_response = {
     "startIndex": 0
 }
 
-mock_atrole_mentions = '''Fulfillment Role (/hipfrog role {0}) - @HenkdeVries'''
+mock_atrole_mentions = '''Fulfillment Role (/role {0}) - @HenkdeVries'''
 mock_atrole_message = ('@WardWeistra said: Beste @Role {0}: Hoi! /cc '
-                       'Fulfillment Role (/hipfrog role {0}) - @HenkdeVries')
-mock_atcircle_mentions = ('Circle {0} (/hipfrog circle {0}) - Someone van Something,'
+                       'Fulfillment Role (/role {0}) - @HenkdeVries')
+mock_atcircle_mentions = ('Circle {0} (/circle {0}) - Someone van Something,'
                           ' @WardWeistra')
 mock_atcircle_message = ('@WardWeistra said: Beste @Circle {0}: Hoi! /cc '
-                         'Circle {1} (/hipfrog circle {1}) - Someone van Something, @WardWeistra')
+                         'Circle {1} (/circle {1}) - Someone van Something, @WardWeistra')
