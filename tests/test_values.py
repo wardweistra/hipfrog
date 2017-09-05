@@ -232,12 +232,9 @@ mock_circles_response = {
 
 mock_circles_message = '''The following circles are in your organization:<br />
 <ul>
-<li><code>/circle 8495</code> -
- <a href="https://app.glassfrog.com/circles/8495">The Hyve Company Circle</a></li>
-<li><code>/circle 9032</code> -
- <a href="https://app.glassfrog.com/circles/9032">Delivery</a></li>
-<li><code>/circle 15512</code> -
- <a href="https://app.glassfrog.com/circles/15512">Business Development & Sales</a></li>
+<li><a href="https://app.glassfrog.com/circles/8495">The Hyve Company Circle</a></li>
+<li><a href="https://app.glassfrog.com/circles/9032">Delivery</a></li>
+<li><a href="https://app.glassfrog.com/circles/15512">Business Development & Sales</a></li>
 </ul>'''
 
 mock_circle_circleId_response = {
@@ -315,7 +312,7 @@ mock_circle_circleId_message = '''
  Create and sustain cBioPortal as a great product and a thriving open source community, by making
  it the default for translational oncology data visualization portal<br/>
 <strong>Domains:</strong> cBioPortal Architecture roadmap, cBioPortal Community engagement<br/>
-<strong>Parent circle:</strong> <code>/circle 8996</code><br/>
+<strong><a href="https://app.glassfrog.com/circles/8996">Parent circle</a></strong><br/>
 <strong>More:</strong>
 <ul><li><code>/circle {0} members</code> - List the members of this circle</li>
 <li><code>/circle {0} roles</code> - List the roles in this circle</li>
@@ -618,8 +615,7 @@ mock_role_roleId_message = '''
 <li>Allocating the Circleâs resources across its various Projects and/or Roles</li>
 </ul>
 <br/>
-<strong>Person: </strong><code>811765527</code> -
- <a href="https://app.glassfrog.com/people/811765527">Carlos Aldrich</a>'''
+<strong>Person: </strong><a href="https://app.glassfrog.com/people/811765527">Carlos Aldrich</a>'''
 
 mock_room_members_response = {
     "items": [

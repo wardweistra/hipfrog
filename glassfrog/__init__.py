@@ -114,7 +114,6 @@ def getCircles(glassfrogToken):
             for circleId in circle_hierarchy:
                 circle = getCircleWithId(circleId)
                 message += ('<li><a href="https://app.glassfrog.com/circles/{0}">{1}</a>'
-                            ' - <code>{0}</code>'
                             ).format(str(circle['id']), circle['name'])
                 if circle_hierarchy[circleId] != {}:
                     message += '<ul>'
@@ -252,11 +251,12 @@ def getCircleCircleId(glassfrogToken, circleId):
         # Parent circle
         # TODO add circle name
         if responsebody['linked']['supported_roles'][0]['links']['circle'] is not None:
-            message_list += [('<strong>Parent circle:</strong>'
-                              ' <code>/circle {}</code>').format(
+            message_list += [('<strong><a href="https://app.glassfrog.com/circles/{}">'
+                              'Parent circle</a></strong>').format(
                 responsebody['linked']['supported_roles'][0]['links']['circle'])]
         # Follow up links
-        message_list += [strings.help_hipfrog_circle_circleid.format(circleId)]
+        message_list += [strings.help_hipfrog_circle_circleid.format(
+            messageFunctions.makeMentionName(responsebody['circles'][0]['name']))]
         # Joining with new lines
         message = '<br/>'.join(message_list)
     else:
@@ -275,8 +275,8 @@ def getCircleMembers(glassfrogToken, circleId):
         message = 'The following people are in this circle:<br /><ul>'
 
         for person in sorted(responsebody['people'], key=lambda k: k['name']):
-            message += ('<li><code>{0}</code>'
-                        ' - <a href="https://app.glassfrog.com/people/{0}">{1}</a>'
+            message += ('<li>'
+                        '<a href="https://app.glassfrog.com/people/{0}">{1}</a>'
                         '</li>').format(str(person['id']), person['name'])
         message += '</ul>'
     else:
@@ -292,19 +292,35 @@ def getCircleRoles(glassfrogToken, circleId):
                                                               glassfrogToken)
 
     if code == 200:
-        message = 'The following roles and subcircles are in this circle:<br /><ul>'
+
+        subcircles = []
+        roles = []
+        message = ""
+
         for role in sorted(responsebody['roles'], key=lambda k: k['name']):
-            supporting_circle_info = ''
-            message += '<li>'
             if role['links']['supporting_circle'] is not None:
-                message += '<code>/circle {}</code>'.format(
-                    role['links']['supporting_circle'])
+                roles += [role]
             else:
-                message += ('<code>/role {0}</code>').format(str(role['id']))
-            message += (' - <a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
-                        ).format(str(role['id']), role['name'])
-            message += '</li>'
-        message += '</ul>'
+                subcircles += [role]
+
+        if subcircles != []:
+            message += 'The following subcircles are in this circle:<br /><ul>'
+            for subcircle in subcircles:
+                message += '<li>'
+                message += ('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
+                            ).format(str(subcircle['id']), subcircle['name'])
+                message += '</li>'
+            message += '</ul>'
+
+        if roles != []:
+            message += 'The following roles are in this circle:<br /><ul>'
+            for role in roles:
+                message += '<li>'
+                message += ('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
+                            ).format(str(role['id']), role['name'])
+                message += '</li>'
+            message += '</ul>'
+
         message += help_hipfrog_circle_circleid_roles
     else:
         message = responsebody['message']
@@ -341,8 +357,8 @@ def getRoleRoleId(glassfrogToken, roleId):
             message_list += [domains]
         # Circle
         if responsebody['linked']['circles'] != []:
-            message_list += [('<strong>Circle:</strong> <code>/circle {0}</code>'
-                              ' - <a href="https://app.glassfrog.com/circles/{0}">{1}</a>').format(
+            message_list += [('<strong>Circle:</strong> '
+                              '<a href="https://app.glassfrog.com/circles/{0}">{1}</a>').format(
                 responsebody['linked']['circles'][0]['id'],
                 responsebody['linked']['circles'][0]['name'])]
         # Accountabilities
@@ -369,15 +385,17 @@ def getRoleRoleId(glassfrogToken, roleId):
             for person in responsebody['linked']['people']:
                 if len(responsebody['linked']['people']) > 1:
                     people += '<li>'
-                people += ('<code>{0}</code>'
-                           ' - <a href="https://app.glassfrog.com/people/{0}">{1}</a>'
+                people += ('<a href="https://app.glassfrog.com/people/{0}">{1}</a>'
                            ).format(str(person['id']), person['name'])
                 if len(responsebody['linked']['people']) > 1:
                     people += '</li>'
             if len(responsebody['linked']['people']) > 1:
                 people += '</ul>'
             message_list += [people]
-        message_list += [help_hipfrog_role_roleid.format(roleId)]
+        message_list += [help_hipfrog_role_roleid.format(
+                messageFunctions.makeMentionName(responsebody['linked']['circles'][0]['name']),
+                messageFunctions.makeMentionName(responsebody['roles'][0]['name'])
+            )]
         # Joining with new lines
         message = '<br/>'.join(message_list)
     else:

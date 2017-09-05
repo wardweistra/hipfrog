@@ -6,21 +6,21 @@ install_message = 'Install HipFrog in your Hipchat room'
 
 help_hipfrog = '''Use one of the following commands to learn more:
 <ul>
-<li><code>/circles ([circle-name] (members/roles))</code>
+<li><code>/circle [circle-name [members/roles]]</code>
  - List the circles in your organization</li>
 <li><code>/role [role-name]</code>
  - Get the details for a role</li>
-<li><code>@role [role-name]</code>
+<li><code>@role [circle-name:]role-name</code>
  - Mention the people in the current room fullfilling the specified role</li>
-<li><code>@circle [circle-name]</code>
+<li><code>@circle circle-name</code>
  - Mention the people in the current room in the specified circle</li>
 </ul>'''
 
 help_hipfrog_circle = '''<strong>More</strong>:
 <ul>
-<li><code>/circle [circle-name] (members/roles)</code>
+<li><code>/circle circle-name [members/roles]</code>
  - Get the details for the specified circle</li>
-<li><code>@circle [circle-name]</code>
+<li><code>@circle circle-name</code>
  - Mention the people in the current room in the specified circle</li>
 </ul>'''
 
@@ -36,15 +36,15 @@ help_hipfrog_circle_circleid = '''<strong>More:</strong>
 
 help_hipfrog_circle_circleid_roles = '''<strong>More:</strong>
 <ul>
-<li><code>@role [role-name]</code>
+<li><code>@role [circle-name:]role-name</code>
   - Mention the people in the current room fullfilling the specified role</li>
-<li><code>@circle [role-name]</code>
+<li><code>@circle circle-name</code>
  - Mention the people in the current room in the specified circle</li>
 </ul>'''
 
 help_hipfrog_role_roleid = '''<strong>More:</strong>
 <ul>
-<li><code>@role {0}</code>
+<li><code>@role {0}:{1}</code>
   - Mention the people in the current room fullfilling the specified role</li>
 </ul>'''
 

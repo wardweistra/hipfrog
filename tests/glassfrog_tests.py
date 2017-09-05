@@ -267,7 +267,8 @@ class GlassfrogTestCase(unittest.TestCase):
 
         for circle in test_values.mock_circle_circleId_response['circles']:
             assert circle['name'] in rv[1]
-            assert strings.help_hipfrog_circle_circleid.format(circle['id']) in rv[1]
+            assert strings.help_hipfrog_circle_circleid.format(
+                messageFunctions.makeMentionName(circle['name'])) in rv[1]
         for supported_role in \
                 test_values.mock_circle_circleId_response['linked']['supported_roles']:
             assert supported_role['purpose'] in rv[1]

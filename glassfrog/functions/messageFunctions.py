@@ -59,3 +59,8 @@ def getMatchingRole(roles, keyword):
                     closestMatch = role['id']
                     matchfound = True
     return closestMatch
+
+
+def makeMentionName(name):
+    mentionName = name.lower().replace(' ', '-')
+    return mentionName
