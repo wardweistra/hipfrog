@@ -322,10 +322,10 @@ def getCircleRoles(glassfrogToken, circleId):
             message += '</ul><br />'
 
         message += "<strong>More:</strong><ul>"
-        if roles != []:
-            message += help_hipfrog_circle_circleid_roles
         if subcircles != []:
             message += help_hipfrog_circle_circleid_subcircles
+        if roles != []:
+            message += help_hipfrog_circle_circleid_roles
         message += "</ul>"
     else:
         message = responsebody['message']
