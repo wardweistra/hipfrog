@@ -310,7 +310,7 @@ def getCircleRoles(glassfrogToken, circleId):
                 message += ('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
                             ).format(str(subcircle['id']), subcircle['name'])
                 message += '</li>'
-            message += '</ul>'
+            message += '</ul><br />'
 
         if roles != []:
             message += '<strong>Roles:</strong><br /><ul>'
@@ -319,9 +319,14 @@ def getCircleRoles(glassfrogToken, circleId):
                 message += ('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
                             ).format(str(role['id']), role['name'])
                 message += '</li>'
-            message += '</ul>'
+            message += '</ul><br />'
 
-        message += help_hipfrog_circle_circleid_roles
+        message += "<strong>More:</strong><ul>"
+        if roles != []:
+            message += help_hipfrog_circle_circleid_roles
+        if subcircles != []:
+            message += help_hipfrog_circle_circleid_subcircles
+        message += "</ul>"
     else:
         message = responsebody['message']
 

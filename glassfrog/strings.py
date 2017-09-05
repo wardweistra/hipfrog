@@ -34,13 +34,17 @@ help_hipfrog_circle_circleid = '''<strong>More:</strong>
   - Mention the people in the current room in the specified circle</li>
 </ul>'''
 
-help_hipfrog_circle_circleid_roles = '''<strong>More:</strong>
-<ul>
+help_hipfrog_circle_circleid_roles = '''
 <li><code>@role [circle-name:]role-name</code>
   - Mention the people in the current room fullfilling the specified role</li>
 <li><code>@circle circle-name</code>
- - Mention the people in the current room in the specified circle</li>
-</ul>'''
+ - Mention the people in the current room in the specified circle</li>'''
+
+help_hipfrog_circle_circleid_subcircles = '''
+<li><code>@role [circle-name:]role-name</code>
+  - Mention the people in the current room fullfilling the specified role</li>
+<li><code>@circle circle-name</code>
+ - Mention the people in the current room in the specified circle</li>'''
 
 help_hipfrog_role_roleid = '''<strong>More:</strong>
 <ul>
