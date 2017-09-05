@@ -304,22 +304,28 @@ def getCircleRoles(glassfrogToken, circleId):
                 roles += [role]
 
         if subcircles != []:
-            message += '<strong>Subcircles:</strong><br /><ul>'
+            message += '<strong>Subcircles:</strong><br />'
+            # message += '<ul><li>'
+            subcircle_list = []
             for subcircle in subcircles:
-                message += '<li>'
-                message += ('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
-                            ).format(str(subcircle['id']), subcircle['name'])
-                message += '</li>'
-            message += '</ul><br />'
+                subcircle_list += [('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
+                                    ).format(str(subcircle['id']), subcircle['name'])]
+            message += ', '.join(subcircle_list)
+            # message += '</li><li>'.join(subcircle_list)
+            # message += '</li></ul>'
+            message += '<br />'
 
         if roles != []:
             message += '<strong>Roles:</strong><br /><ul>'
+            # message += '<ul><li>'
+            role_list = []
             for role in roles:
-                message += '<li>'
-                message += ('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
-                            ).format(str(role['id']), role['name'])
-                message += '</li>'
-            message += '</ul><br />'
+                role_list += [('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
+                               ).format(str(role['id']), role['name'])]
+            message += ', '.join(role_list)
+            # message += '</li><li>'.join(role_list)
+            # message += '</li></ul>'
+            message += '<br />'
 
         message += "<strong>More:</strong><ul>"
         if subcircles != []:
