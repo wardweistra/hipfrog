@@ -299,12 +299,12 @@ def getCircleRoles(glassfrogToken, circleId):
 
         for role in sorted(responsebody['roles'], key=lambda k: k['name']):
             if role['links']['supporting_circle'] is not None:
-                roles += [role]
-            else:
                 subcircles += [role]
+            else:
+                roles += [role]
 
         if subcircles != []:
-            message += 'The following subcircles are in this circle:<br /><ul>'
+            message += '<strong>Subcircles:</strong><br /><ul>'
             for subcircle in subcircles:
                 message += '<li>'
                 message += ('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
@@ -313,7 +313,7 @@ def getCircleRoles(glassfrogToken, circleId):
             message += '</ul>'
 
         if roles != []:
-            message += 'The following roles are in this circle:<br /><ul>'
+            message += '<strong>Roles:</strong><br /><ul>'
             for role in roles:
                 message += '<li>'
                 message += ('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
