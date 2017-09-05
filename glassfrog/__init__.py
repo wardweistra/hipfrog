@@ -369,7 +369,7 @@ def getRoleRoleId(glassfrogToken, roleId):
         # People
         if responsebody['linked']['people'] != []:
             if len(responsebody['linked']['people']) > 1:
-                people = '<strong>People:</strong>'
+                people = '<strong>People:</strong> '
             else:
                 people = '<strong>Person:</strong> '
             person_list = []
