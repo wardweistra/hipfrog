@@ -272,13 +272,13 @@ def getCircleMembers(glassfrogToken, circleId):
                                                               glassfrogToken)
 
     if code == 200:
-        message = 'The following people are in this circle:<br /><ul>'
+        message = '<strong>Members</strong>: '
 
+        person_list = []
         for person in sorted(responsebody['people'], key=lambda k: k['name']):
-            message += ('<li>'
-                        '<a href="https://app.glassfrog.com/people/{0}">{1}</a>'
-                        '</li>').format(str(person['id']), person['name'])
-        message += '</ul>'
+            person_list += [('<a href="https://app.glassfrog.com/people/{0}">{1}</a>'
+                             ).format(str(person['id']), person['name'])]
+        message += ', '.join(person_list)
     else:
         message = responsebody['message']
 
@@ -304,27 +304,21 @@ def getCircleRoles(glassfrogToken, circleId):
                 roles += [role]
 
         if subcircles != []:
-            message += '<strong>Subcircles:</strong>'
-            # message += '<ul><li>'
+            message += '<strong>Subcircles:</strong> '
             subcircle_list = []
             for subcircle in subcircles:
                 subcircle_list += [('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
                                     ).format(str(subcircle['id']), subcircle['name'])]
             message += ', '.join(subcircle_list)
-            # message += '</li><li>'.join(subcircle_list)
-            # message += '</li></ul>'
             message += '<br />'
 
         if roles != []:
-            message += '<strong>Roles:</strong>'
-            # message += '<ul><li>'
+            message += '<strong>Roles:</strong> '
             role_list = []
             for role in roles:
                 role_list += [('<a href="https://app.glassfrog.com/roles/{0}">{1}</a>'
                                ).format(str(role['id']), role['name'])]
             message += ', '.join(role_list)
-            # message += '</li><li>'.join(role_list)
-            # message += '</li></ul>'
             message += '<br />'
 
         message += "<strong>More:</strong><ul>"
