@@ -304,7 +304,7 @@ def getCircleRoles(glassfrogToken, circleId):
                 roles += [role]
 
         if subcircles != []:
-            message += '<strong>Subcircles:</strong><br />'
+            message += '<strong>Subcircles:</strong>'
             # message += '<ul><li>'
             subcircle_list = []
             for subcircle in subcircles:
@@ -316,7 +316,7 @@ def getCircleRoles(glassfrogToken, circleId):
             message += '<br />'
 
         if roles != []:
-            message += '<strong>Roles:</strong><br /><ul>'
+            message += '<strong>Roles:</strong>'
             # message += '<ul><li>'
             role_list = []
             for role in roles:
