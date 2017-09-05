@@ -8,7 +8,7 @@ help_hipfrog = '''Use one of the following commands to learn more:
 <ul>
 <li><code>/circle [circle-name [members/roles]]</code>
  - List the circles in your organization</li>
-<li><code>/role [role-name]</code>
+<li><code>/role role-name</code>
  - Get the details for a role</li>
 <li><code>@role [circle-name:]role-name</code>
  - Mention the people in the current room fullfilling the specified role</li>
@@ -35,14 +35,14 @@ help_hipfrog_circle_circleid = '''<strong>More:</strong>
 </ul>'''
 
 help_hipfrog_circle_circleid_roles = '''
+<li><code>/role role-name</code>
+ - Get the details for a role</li>
 <li><code>@role [circle-name:]role-name</code>
-  - Mention the people in the current room fullfilling the specified role</li>
-<li><code>@circle circle-name</code>
- - Mention the people in the current room in the specified circle</li>'''
+  - Mention the people in the current room fullfilling the specified role</li>'''
 
 help_hipfrog_circle_circleid_subcircles = '''
-<li><code>@role [circle-name:]role-name</code>
-  - Mention the people in the current room fullfilling the specified role</li>
+<li><code>/circle [circle-name [members/roles]]</code>
+ - List the circles in your organization</li>
 <li><code>@circle circle-name</code>
  - Mention the people in the current room in the specified circle</li>'''
 
