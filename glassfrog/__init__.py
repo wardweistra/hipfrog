@@ -366,6 +366,18 @@ def getRoleRoleId(glassfrogToken, roleId):
                               '<a href="https://app.glassfrog.com/circles/{0}">{1}</a>').format(
                 responsebody['linked']['circles'][0]['id'],
                 responsebody['linked']['circles'][0]['name'])]
+        # People
+        if responsebody['linked']['people'] != []:
+            if len(responsebody['linked']['people']) > 1:
+                people = '<strong>People:</strong>'
+            else:
+                people = '<strong>Person:</strong> '
+            person_list = []
+            for person in responsebody['linked']['people']:
+                person_list += [('<a href="https://app.glassfrog.com/people/{0}">{1}</a>'
+                                 ).format(str(person['id']), person['name'])]
+            people += ', '.join(person_list)
+            message_list += [people]
         # Accountabilities
         if responsebody['linked']['accountabilities'] != []:
             if len(responsebody['linked']['accountabilities']) > 1:
@@ -381,22 +393,6 @@ def getRoleRoleId(glassfrogToken, roleId):
             if len(responsebody['linked']['accountabilities']) > 1:
                 accountabilities += '</ul>'
             message_list += [accountabilities]
-        # People
-        if responsebody['linked']['people'] != []:
-            if len(responsebody['linked']['people']) > 1:
-                people = '<strong>People:</strong><ul>'
-            else:
-                people = '<strong>Person: </strong>'
-            for person in responsebody['linked']['people']:
-                if len(responsebody['linked']['people']) > 1:
-                    people += '<li>'
-                people += ('<a href="https://app.glassfrog.com/people/{0}">{1}</a>'
-                           ).format(str(person['id']), person['name'])
-                if len(responsebody['linked']['people']) > 1:
-                    people += '</li>'
-            if len(responsebody['linked']['people']) > 1:
-                people += '</ul>'
-            message_list += [people]
         message_list += [help_hipfrog_role_roleid.format(
                 messageFunctions.makeMentionName(responsebody['linked']['circles'][0]['name']),
                 messageFunctions.makeMentionName(responsebody['roles'][0]['name'])
