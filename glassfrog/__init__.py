@@ -15,6 +15,13 @@ app.config.from_object(config)
 app.config.from_envvar('HIPFROG_SETTINGS', silent=True)
 db.init_app(app)
 
+if not app.debug:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    file_handler = RotatingFileHandler('log.txt', maxBytes=1024, backupCount=5)
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+
 
 @app.route('/')
 def home():
@@ -498,6 +505,9 @@ def getMentionsForCircle(installation, circleId):
         # Get names of people in room
         hipchatApiHandler = apiCalls.HipchatApiHandler()
         room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
+
+        app.logger.info('circle_names %s', circle_names)
+        app.logger.info('room_members %s', room_members)
 
         mention_list = []
 
