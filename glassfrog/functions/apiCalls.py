@@ -43,7 +43,7 @@ class HipchatApiHandler(object):
                                         data=data)
 
     def getRoomMembers(self, installation):
-        requestUrl = '{}/room/{}/member'.format(installation.hipchatApiProvider_url,
+        requestUrl = '{}/room/{}/participant'.format(installation.hipchatApiProvider_url,
                                                 installation.roomId)
         token_header = {"Authorization": "Bearer "+installation.access_token}
         messageresponse = requests.get(requestUrl, headers=token_header)
