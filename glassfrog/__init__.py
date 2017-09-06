@@ -500,9 +500,6 @@ def getMentionsForCircle(installation, circleId):
         hipchatApiHandler = apiCalls.HipchatApiHandler()
         room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
 
-        app.logger.debug('circle_names %s', circle_names)
-        app.logger.debug('room_members %s', room_members)
-
         mention_list = []
 
         for circle_name in circle_names:
