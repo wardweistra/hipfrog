@@ -120,7 +120,7 @@ class GlassfrogTestCase(unittest.TestCase):
         mock_requests_get.return_value = mock_response
 
         rv = hipchatApiHandler.getRoomMembers(installation=mock_installation)
-        mock_requestUrl = '{}/room/{}/member'.format(mock_installation.hipchatApiProvider_url,
+        mock_requestUrl = '{}/room/{}/participant'.format(mock_installation.hipchatApiProvider_url,
                                                      mock_installation.roomId)
         mock_token_header = {"Authorization": "Bearer "+mock_installation.access_token}
 
