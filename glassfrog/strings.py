@@ -64,8 +64,8 @@ configured_successfully = "Configured successfully. Type <code>/hipfrog</code> t
 missing_functionality = ("Sorry, the feature \'{}\' does not exist (yet)."
                          " Type <code>/hipfrog</code> to get a list of the available commands.")
 
-circles_missing_functionality = ("Sorry, the feature \'{}\' does not exist (yet)."
-                                 " Type <code>/circle {}</code> to get a list of"
+circles_missing_functionality = ("Sorry, the feature \'{0}\' does not exist (yet)."
+                                 " Type <code>/circle {1}</code> to get a list of"
                                  " the available commands.")
 
 # Regex patterns for registering with Hipchat

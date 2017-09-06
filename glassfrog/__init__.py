@@ -620,7 +620,7 @@ def slashCircle():
                 else:
                     # /[circles, circle] [circleId] something
                     message = strings.circles_missing_functionality.format(
-                        callingMessage[2], circleId)
+                        callingMessage[2], circleIdentifier)
                     message_dict = messageFunctions.createMessageDict(strings.error_color,
                                                                       message)
             else:
