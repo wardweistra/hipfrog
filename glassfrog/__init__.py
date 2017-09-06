@@ -3,6 +3,7 @@ from flask import Flask, json, request, render_template, flash
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import re
+import sys
 
 from .functions import apiCalls
 from .functions import messageFunctions as messageFunctions
@@ -14,13 +15,6 @@ app = Flask(__name__)
 app.config.from_object(config)
 app.config.from_envvar('HIPFROG_SETTINGS', silent=True)
 db.init_app(app)
-
-if not app.debug:
-    import logging
-    from logging.handlers import RotatingFileHandler
-    file_handler = RotatingFileHandler('log.txt', maxBytes=1024, backupCount=5)
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)
 
 
 @app.route('/')
@@ -506,8 +500,8 @@ def getMentionsForCircle(installation, circleId):
         hipchatApiHandler = apiCalls.HipchatApiHandler()
         room_code, room_members = hipchatApiHandler.getRoomMembers(installation=installation)
 
-        app.logger.info('circle_names %s', circle_names)
-        app.logger.info('room_members %s', room_members)
+        app.logger.debug('circle_names %s', circle_names)
+        app.logger.debug('room_members %s', room_members)
 
         mention_list = []
 
