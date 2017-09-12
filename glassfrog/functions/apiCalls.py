@@ -58,8 +58,8 @@ class HipchatApiHandler(object):
             requestUrl = '{}/room/{}/participant'.format(installation.hipchatApiProvider_url,
                                                          installation.roomId)
         elif privacy == 'private':
-            requestUrl = '{}/room/{}/members'.format(installation.hipchatApiProvider_url,
-                                                     installation.roomId)
+            requestUrl = '{}/room/{}/member'.format(installation.hipchatApiProvider_url,
+                                                    installation.roomId)
         messageresponse = requests.get(requestUrl, headers=token_header)
 
         return messageresponse.status_code, json.loads(messageresponse.text)

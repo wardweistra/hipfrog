@@ -134,7 +134,7 @@ class GlassfrogTestCase(unittest.TestCase):
             mock_members_requestUrl = '{}/room/{}/participant'.format(
                 mock_installation.hipchatApiProvider_url, mock_installation.roomId)
         elif privacy == 'private':
-            mock_members_requestUrl = '{}/room/{}/members'.format(
+            mock_members_requestUrl = '{}/room/{}/member'.format(
                 mock_installation.hipchatApiProvider_url, mock_installation.roomId)
         mock_token_header = {"Authorization": "Bearer "+mock_installation.access_token}
 
