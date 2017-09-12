@@ -617,6 +617,10 @@ mock_role_roleId_message = '''
 <br/>
 <strong>Person: </strong><a href="https://app.glassfrog.com/people/811765527">Carlos Aldrich</a>'''
 
+mock_room_response = {
+    'privacy': 'private'
+}
+
 mock_room_members_response = {
     "items": [
         {

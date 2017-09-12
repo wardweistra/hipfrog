@@ -43,10 +43,25 @@ class HipchatApiHandler(object):
                                         data=data)
 
     def getRoomMembers(self, installation):
-        requestUrl = '{}/room/{}/participant'.format(installation.hipchatApiProvider_url,
-                                                     installation.roomId)
         token_header = {"Authorization": "Bearer "+installation.access_token}
+
+        requestUrl = '{}/room/{}'.format(installation.hipchatApiProvider_url,
+                                         installation.roomId)
         messageresponse = requests.get(requestUrl, headers=token_header)
+
+        if messageresponse.status_code != 200:
+            return messageresponse.status_code, json.loads(messageresponse.text)
+
+        privacy = json.loads(messageresponse.text)['privacy']
+
+        if privacy == 'public':
+            requestUrl = '{}/room/{}/participant'.format(installation.hipchatApiProvider_url,
+                                                         installation.roomId)
+        elif privacy == 'private':
+            requestUrl = '{}/room/{}/members'.format(installation.hipchatApiProvider_url,
+                                                     installation.roomId)
+        messageresponse = requests.get(requestUrl, headers=token_header)
+
         return messageresponse.status_code, json.loads(messageresponse.text)
 
 

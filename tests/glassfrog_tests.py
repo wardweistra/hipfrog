@@ -114,20 +114,35 @@ class GlassfrogTestCase(unittest.TestCase):
 
         hipchatApiHandler = apiCalls.HipchatApiHandler()
 
-        mock_response = mock.Mock()
-        mock_response.status_code = 200
-        mock_response.text = json.dumps(test_values.mock_room_members_response)
-        mock_requests_get.return_value = mock_response
+        mock_response_room = mock.Mock()
+        mock_response_room.status_code = 200
+        mock_response_room.text = json.dumps(test_values.mock_room_response)
+
+        mock_response_members = mock.Mock()
+        mock_response_members.status_code = 200
+        mock_response_members.text = json.dumps(test_values.mock_room_members_response)
+
+        mock_requests_get.side_effect = [mock_response_room, mock_response_members]
 
         rv = hipchatApiHandler.getRoomMembers(installation=mock_installation)
-        mock_requestUrl = '{}/room/{}/participant'.format(mock_installation.hipchatApiProvider_url,
-                                                          mock_installation.roomId)
+
+        mock_room_requestUrl = '{}/room/{}'.format(
+            mock_installation.hipchatApiProvider_url, mock_installation.roomId)
+
+        privacy = test_values.mock_room_response['privacy']
+        if privacy == 'public':
+            mock_members_requestUrl = '{}/room/{}/participant'.format(
+                mock_installation.hipchatApiProvider_url, mock_installation.roomId)
+        elif privacy == 'private':
+            mock_members_requestUrl = '{}/room/{}/members'.format(
+                mock_installation.hipchatApiProvider_url, mock_installation.roomId)
         mock_token_header = {"Authorization": "Bearer "+mock_installation.access_token}
 
-        mock_requests_get.assert_called_with(mock_requestUrl,
-                                             headers=mock_token_header)
+        mock_requests_get.assert_has_calls([
+            mock.call(mock_room_requestUrl, headers=mock_token_header),
+            mock.call(mock_members_requestUrl, headers=mock_token_header)])
 
-        assert rv == (mock_response.status_code, test_values.mock_room_members_response)
+        assert rv == (mock_response_members.status_code, test_values.mock_room_members_response)
 
     @mock.patch('glassfrog.apiCalls.requests')
     def test_sendMessage(self, mock_requests):
