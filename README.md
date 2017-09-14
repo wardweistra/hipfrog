@@ -4,10 +4,10 @@
 
 <a href="https://codecov.io/gh/wardweistra/hipfrog"><img alt="codecov" src="https://codecov.io/gh/wardweistra/hipfrog/branch/master/graph/badge.svg"></a>
 
-An open source [Hipchat](http://hipchat.com/) bot for accessing the [Holacracy](http://www.holacracy.org/) tool [Glassfrog](glassfrog.com).
+An open source [Hipchat](http://hipchat.com/) bot for accessing the [Holacracy](http://www.holacracy.org/) tool [Glassfrog](https://glassfrog.com).
 
 ## Installation in your Hipchat room
-Follow [this link](https://www.hipchat.com/addons/install?url=https://host.wardweistra.nl/hipfrog/capabilities.json) to install the plugin in your Hipchat room.
+Follow https://marketplace.atlassian.com/plugins/hipfrog to install the plugin in your Hipchat room.
 
 ## Development
 Hipfrog is using [Glassfrog API V3 beta](https://github.com/holacracyone/glassfrog-api/tree/API_v3). Tested on Python 3.5.2.
@@ -17,6 +17,10 @@ Hipfrog is using [Glassfrog API V3 beta](https://github.com/holacracyone/glassfr
 * Create and upgrade the database with [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/). Tested on Postgres.  
 * Test: `python3 tests/glassfrog_tests.py`  
 * Run: `python3 runserver.py --debug`  
+
+## Environment settings
+
+Default settings are found at [glassfrog/settings/config.py](glassfrog/settings/config.py). Set your own by following the steps in [settings.cfg](settings.cfg).
 
 ## Deployment
 Hipfrog can be deployed to run your own managed version of it with Apache2.
